@@ -180,7 +180,7 @@
 		_anchor2.y = anchor2.y * PTM_RATIO;
 		
 		// update the display properties to match
-		[self setPosition:ccp((_anchor1.x + _anchor1.x) / 2, (_anchor2.x + _anchor2.x) / 2)];
+		[self setPosition:ccp((_anchor1.x + _anchor2.x) / 2, (_anchor1.y + _anchor2.y) / 2)];
 		
 		// if the joint is not fixed
 		if (!_fixed)

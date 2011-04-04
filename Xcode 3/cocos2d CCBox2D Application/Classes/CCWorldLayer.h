@@ -25,7 +25,11 @@
 #import "Box2D.h"
 #import "cocos2d.h"
 
+// pixels to meters ratio
 #define PTM_RATIO 32
+
+// grams to kilograms ratio
+#define GTKG_RATIO 1000
 
 
 @class CCBodySprite;

@@ -228,7 +228,7 @@
 			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
 			
 			// set the shape density
-			shape->SetDensity(_density);
+			shape->SetDensity(_density * PTM_RATIO * PTM_RATIO / GTKG_RATIO);
 		}
 	}
 	else
@@ -241,7 +241,7 @@
 			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
 			
 			// set the shape data density
-			shapeData->density = _density;
+			shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
 		}
 	}
 }
@@ -257,7 +257,7 @@
 		// if the shape exists
 		if (shape)
 		{
-			shape->SetDensity(newDensity);
+			shape->SetDensity(newDensity * PTM_RATIO * PTM_RATIO / GTKG_RATIO);
 		}
 	}
 	else
@@ -269,7 +269,7 @@
 		if (shapeData)
 		{
 			// set the shape data density
-			shapeData->density = newDensity;
+			shapeData->density = newDensity * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
 		}
 	}
 }
@@ -476,7 +476,7 @@
 	if (_body)
 	{
 		// get force and location in world coordinates
-		b2Vec2 force(force.x / PTM_RATIO, force.y / PTM_RATIO);
+		b2Vec2 force(force.x / PTM_RATIO * GTKG_RATIO, force.y / PTM_RATIO * GTKG_RATIO);
 		b2Vec2 location(location.x / PTM_RATIO, location.y / PTM_RATIO);
 		
 		// if the force should be an instantaneous impulse
@@ -519,12 +519,12 @@
 		if (impulse)
 		{
 			// apply an instant linear impulse
-			_body->ApplyAngularImpulse(torque / PTM_RATIO / PTM_RATIO);
+			_body->ApplyAngularImpulse(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
 		}
 		else
 		{
 			// apply the torque
-			_body->ApplyTorque(torque / PTM_RATIO / PTM_RATIO);
+			_body->ApplyTorque(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
 		}
 	}
 }

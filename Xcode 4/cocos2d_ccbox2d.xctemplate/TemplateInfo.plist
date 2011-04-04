@@ -39,6 +39,13 @@
 			<key>TargetIndices</key>
 			<array/>
 		</dict>
+        <key>CCBox2D.h</key>
+		<dict>
+			<key>Path</key>
+			<string>CCBox2D.h</string>
+			<key>TargetIndices</key>
+			<array/>
+		</dict>
 		<key>CCBodySprite.h</key>
 		<dict>
 			<key>Path</key>
@@ -141,6 +148,7 @@
 	<array>
 		<string>Prefix.pch</string>
 		<string>main.m</string>
+		<string>CCBox2D.h</string>
 		<string>CCBodySprite.h</string>
 		<string>CCBodySprite.mm</string>
 		<string>CCMotorSprite.h</string>

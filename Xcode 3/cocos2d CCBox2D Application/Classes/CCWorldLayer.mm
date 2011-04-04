@@ -79,8 +79,8 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	}
 	
 	// adjust the force units
-	force *= PTM_RATIO;
-	frictionForce *= PTM_RATIO;
+	force *= PTM_RATIO / GTKG_RATIO;
+	frictionForce *= PTM_RATIO / GTKG_RATIO;
 	
 	// notify the physics sprites
 	[sprite1 onCollideBody:sprite2 withForce:force withFrictionForce:frictionForce];

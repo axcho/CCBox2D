@@ -6,12 +6,9 @@
 //  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
 //
 
-
 // Import the interfaces
 #import "HelloWorldLayer.h"
-#import "CCBodySprite.h"
-#import "CCMotorSprite.h"
-#import "CCSpringSprite.h"
+
 
 // enums that will be used as tags
 enum {
@@ -144,7 +141,7 @@ enum {
 		//[motor setBody:_lastBox andBody:sprite];
 		//motor.running = YES;
 		//motor.speed = 100;
-		//motor.power = 10000;
+		//motor.power = 100;
 		//[self addChild:motor];
 	}
 	
@@ -191,9 +188,27 @@ enum {
 	[super dealloc];
 }
 
+-(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+{
+	// check if two boxes have started to overlap
+	if (sprite1.collisionType == kBoxCollisionType && sprite2.collisionType == kBoxCollisionType) {
+		
+		//CCLOG(@"Two boxes have overlapped. Cool.");
+	}
+}
+
+-(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+{
+	// check if two boxes are no longer overlapping
+	if (sprite1.collisionType == kBoxCollisionType && sprite2.collisionType == kBoxCollisionType) {
+		
+		//CCLOG(@"Two boxes stopped overlapping. That's okay too.");
+	}
+}
+
 -(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce
 {
-	// check if two boxes have collided
+	// check if two boxes have collided in the last update
 	if (sprite1.collisionType == kBoxCollisionType && sprite2.collisionType == kBoxCollisionType) {
 		
 		//CCLOG(@"Two boxes have collided, yay!");

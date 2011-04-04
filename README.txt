@@ -19,7 +19,9 @@ CCWorldLayer wraps a Box2D b2World in a cocos2d CCLayer.
 
 This is enough to make a passable Angry Birds clone, or a game with all the ropes and ragdolls and vehicles you could possibly want.
 
-For compatibility with cocos2d, CCBox2D uses pixels (or points) instead of meters, and degrees instead of radians, unlike Box2D. For example, motor speed is measured in degrees per second, rather than radians per second. Motor torque is measured in kilograms times pixels squared per seconds squared, rather than in newton meters.
+For compatibility with cocos2d, CCBox2D uses pixels (or points) instead of meters, and degrees instead of radians, unlike Box2D. For example, motor speed is measured in degrees per second, rather than radians per second.
+
+CCBox2D also measures mass in grams, instead of kilograms like Box2D, to compensate for pixels being smaller than meters. For example, motor torque is measured in grams times pixels squared over seconds squared, rather than in kilograms times meters squared over seconds squared (newton meters).
 
 GETTING STARTED
 
@@ -68,9 +70,9 @@ Inside the "Xcode 4" folder, there is a folder called "cocos2d_ccbox2d.xctemplat
 
 To install it, copy the "cocos2d_ccbox2d.xctemplate" folder into ~/Library/Developer/Xcode/Templates/cocos2d/ alongside the other cocos2d template folders.
 
-Then whenever you start a new project in Xcode 4, you can click on the "cocos2d category under iOS, and choose "ccbox2d" as your project template.
+Then whenever you start a new project in Xcode 4, you can click on the "cocos2d category under iOS, and choose "cocos2d_ccbox2d" as your project template.
 
-This will give you a starting point for working with CCBox2D. If you click the "Build and Run" button, a simple physics demo should appear in the iPhone simulator. You can then poke around in the HelloWorldLayer.mm code to get a feel for how CCBox2D can be used.
+This will give you a starting point for working with CCBox2D. If you click the "Run" button, a simple physics demo should appear in the iPhone simulator. You can then poke around in the HelloWorldLayer.mm code to get a feel for how CCBox2D can be used.
 
 NOTES
 
