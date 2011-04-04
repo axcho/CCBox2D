@@ -539,7 +539,7 @@
 	// set up the data for the shape
 	b2FixtureDef *shapeData = new b2FixtureDef();
 	shapeData->shape = shape;
-	shapeData->density = _density;
+	shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
 	shapeData->friction = _friction;
 	shapeData->restitution = _bounce;
 	shapeData->isSensor = !_solid;
