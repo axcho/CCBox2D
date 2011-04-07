@@ -20,6 +20,9 @@
  misrepresented as being the original software.
  3. This notice may not be removed or altered from any source distribution.
  
+ Modifications by Andreas Loew / http://www.physicseditor.de 
+ * Added support for debug drawing
+ 
  */
 
 #import "Box2D.h"
