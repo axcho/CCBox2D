@@ -87,6 +87,10 @@ typedef enum
 -(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize;
 -(void) addBoxWithName:(NSString *)shapeName;
 
+-(void) addShapeFromCache:(NSString*)shapeName;
+
+-(void) addShapeData:(b2FixtureDef*)shapeData withName:(NSString *)shapeName;
+
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation;
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius;
 -(void) addCircleWithName:(NSString *)shapeName;
