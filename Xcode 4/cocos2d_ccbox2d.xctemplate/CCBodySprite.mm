@@ -574,6 +574,9 @@
 	{
 		// add it to the list of shapes
 		[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
+		
+		// delete the shape data
+		delete shapeData;
 	}
 	else
 	{
