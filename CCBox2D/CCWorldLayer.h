@@ -24,12 +24,14 @@
 
 #import "Box2D.h"
 #import "cocos2d.h"
+#import "GLES-Render.h"
 
 // pixels to meters ratio
 #define PTM_RATIO 32
 
 // grams to kilograms ratio
 #define GTKG_RATIO 1000
+
 
 
 @class CCBodySprite;
@@ -59,8 +61,9 @@ public:
 	int _positionIterations, _velocityIterations;
 	CGPoint _gravity;
 	b2World *_world;
-	
+	GLESDebugDraw *_debugDraw;
 	ContactConduit *_conduit;
+    uint32 _debugDrawFlags;
 }
 
 @property (nonatomic) int positionIterations;
@@ -71,6 +74,12 @@ public:
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
 -(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
 -(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+
+- (void) debugDrawShapes:(BOOL)draw;
+- (void) debugDrawJoints:(BOOL)draw;
+- (void) debugDrawAABB:(BOOL)draw;
+- (void) debugDrawPair:(BOOL)draw;
+- (void) debugDrawCenterOfMass:(BOOL)draw;
 
 @end
 

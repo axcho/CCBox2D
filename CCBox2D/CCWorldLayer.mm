@@ -20,6 +20,9 @@
  misrepresented as being the original software.
  3. This notice may not be removed or altered from any source distribution.
  
+ Modifications by Andreas Loew / http://www.physicseditor.de 
+ * Added debug drawing
+ 
  */
 
 #import "CCWorldLayer.h"
@@ -132,7 +135,8 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 		
 		// update every frame
 		[self scheduleUpdate];
-	}
+
+    }
 	return self;
 }
 
@@ -146,14 +150,91 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	}
 }
 
+-(void) setDebugBit:(uint32)bit onOff:(BOOL)onOff
+{
+    if(onOff)
+    {
+        _debugDrawFlags |= bit;
+    }
+    else
+    {
+        _debugDrawFlags &= ~bit;
+    }    
+    
+    if(_debugDrawFlags && !_debugDraw)
+    {
+		_debugDraw = new GLESDebugDraw( PTM_RATIO );
+		_world->SetDebugDraw(_debugDraw);        
+		_debugDraw->SetFlags(_debugDrawFlags);
+    }
+    else if(!_debugDrawFlags && _debugDraw)
+    {
+        _world->SetDebugDraw(0);
+        delete _debugDraw;
+        _debugDraw=0;
+    }
+}
+
+- (void) debugDrawShapes:(BOOL)draw
+{
+    [self setDebugBit:b2DebugDraw::e_shapeBit onOff:draw];
+}
+
+- (void) debugDrawJoints:(BOOL)draw
+{
+    [self setDebugBit:b2DebugDraw::e_jointBit onOff:draw];
+}
+
+- (void) debugDrawAABB:(BOOL)draw
+{
+    [self setDebugBit:b2DebugDraw::e_aabbBit onOff:draw];
+}
+
+- (void) debugDrawPair:(BOOL)draw
+{
+    [self setDebugBit:b2DebugDraw::e_pairBit onOff:draw];
+}
+
+- (void) debugDrawCenterOfMass:(BOOL)draw
+{
+    [self setDebugBit:b2DebugDraw::e_centerOfMassBit onOff:draw];
+}
+
+
 - (void) dealloc
 {
 	// delete Box2D stuff
 	delete _conduit;
 	delete _world;
 	
+    if(_debugDraw)
+    {
+        delete _debugDraw;
+    }
+    
 	// don't forget to call "super dealloc"
 	[super dealloc];
+}
+
+-(void) draw
+{
+    if(_debugDraw)
+    {
+        [super draw];
+        // Default GL states: GL_TEXTURE_2D, GL_VERTEX_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
+        // Needed states:  GL_VERTEX_ARRAY, 
+        // Unneeded states: GL_TEXTURE_2D, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
+        glDisable(GL_TEXTURE_2D);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        
+        _world->DrawDebugData();
+        
+        // restore default GL states
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);        
+    }
 }
 
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
