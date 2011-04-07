@@ -1,9 +1,9 @@
 //
 //  HelloWorldLayer.mm
-//  Untitled2
+//  ___PROJECTNAME___
 //
-//  Created by Alex on 4/7/11.
-//  Copyright __MyCompanyName__ 2011. All rights reserved.
+//  Created by ___FULLUSERNAME___ on ___DATE___.
+//  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
 //
 
 // Import the interfaces
