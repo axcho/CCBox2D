@@ -20,16 +20,11 @@
  misrepresented as being the original software.
  3. This notice may not be removed or altered from any source distribution.
  
- Modifications by Andreas Loew / http://www.physicseditor.de 
- * Added support for PhysicsEditor
- * Fix rotation bug
- * Fixed memory leak
- 
  */
 
 #import "CCBodySprite.h"
 #import "CCWorldLayer.h"
-#import "CCShapeCache.h"
+
 
 @implementation CCBodySprite
 
@@ -471,7 +466,7 @@
 	if (_body)
 	{
 		// set the body rotation in radians
-		_body->SetTransform(_body->GetPosition(), -1 * CC_DEGREES_TO_RADIANS(rotation_));
+		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(rotation_));
 	}
 }
 
@@ -539,8 +534,16 @@
 	[self applyTorque:torque asImpulse:NO];
 }
 
--(void) addShapeData:(b2FixtureDef*)shapeData withName:(NSString *)shapeName 
+-(void) addShape:(b2Shape *)shape withName:(NSString *)shapeName
 {
+	// set up the data for the shape
+	b2FixtureDef *shapeData = new b2FixtureDef();
+	shapeData->shape = shape;
+	shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
+	shapeData->friction = _friction;
+	shapeData->restitution = _bounce;
+	shapeData->isSensor = !_solid;
+	
 	// start with no shape object
 	b2Fixture* shapeObject = NULL;
 	
@@ -558,16 +561,12 @@
 			
 		}
 		
+		// set the collision type of the shape
+		shapeData->filter.categoryBits = _collisionType;
+		shapeData->filter.maskBits = _collidesWithType;
+		
 		// add the shape to the body and get the shape object
 		shapeObject = _body->CreateFixture(shapeData);
-        
-        // if the shape exists
-        if (shapeData->shape)
-        {
-            // delete the shape
-            delete shapeData->shape;
-        }
-        delete shapeData;
 	}
 	
 	// if the shape object exists
@@ -598,28 +597,6 @@
 		// save the new shape data
 		[_shapeData setObject:[NSValue valueWithPointer:shapeData] forKey:shapeName];
 	}			
-}
-
--(void) addShape:(b2Shape *)shape withName:(NSString *)shapeName
-{
-	// set up the data for the shape
-	b2FixtureDef *shapeData = new b2FixtureDef();
-	shapeData->shape = shape;
-	shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
-	shapeData->friction = _friction;
-	shapeData->restitution = _bounce;
-	shapeData->isSensor = !_solid;
-	
-    // set the collision type of the shape
-    shapeData->filter.categoryBits = _collisionType;
-    shapeData->filter.maskBits = _collidesWithType;
-    
-    [self addShapeData:shapeData withName:shapeName];
-}
-
--(void) addShapeFromCache:(NSString*)shapeName
-{    
-    [[CCShapeCache sharedShapeCache] addFixturesToCCBodySprite:self forShapeName:shapeName];
 }
 
 -(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize atLocation:(CGPoint)shapeLocation
@@ -882,6 +859,10 @@
 				// get the shape data
 				b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
 				
+				// set the collision type of the shape
+				shapeData->filter.categoryBits = _collisionType;
+				shapeData->filter.maskBits = _collidesWithType;
+				
 				// add the shape to the body and get the shape object
 				b2Fixture* shapeObject = _body->CreateFixture(shapeData);
 				
@@ -969,7 +950,7 @@
 			// update the display properties to match
 			b2Vec2 bodyPosition = _body->GetPosition();
 			[self setPosition:ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO)];
-			[self setRotation:-1 * CC_RADIANS_TO_DEGREES(_body->GetAngle())];
+			[self setRotation:CC_RADIANS_TO_DEGREES(_body->GetAngle())];
 			
 			// check if the body is awake
 			_awake = _body->IsAwake();
