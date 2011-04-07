@@ -1,9 +1,9 @@
 //
 //  HelloWorldLayer.mm
-//  ___PROJECTNAME___
+//  Untitled2
 //
-//  Created by ___FULLUSERNAME___ on ___DATE___.
-//  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
+//  Created by Alex on 4/7/11.
+//  Copyright __MyCompanyName__ 2011. All rights reserved.
 //
 
 // Import the interfaces
@@ -131,7 +131,7 @@ enum {
 	if (_lastBox)
 	{
 		// add a spring between this and the last box!
-		//CCSpringSprite *spring = [CCSpringSprite node];
+		//CCSpringSprite *spring = [CCSpringSprite spriteWithFile:@"Icon-Small.png"];
 		//[spring setBody:_lastBox andBody:sprite];
 		//spring.length = 32;
 		//[self addChild:spring];
