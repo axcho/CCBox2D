@@ -471,7 +471,7 @@
 	if (_body)
 	{
 		// set the body rotation in radians
-		_body->SetTransform(_body->GetPosition(), -1 * CC_DEGREES_TO_RADIANS(rotation_));
+		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
 	}
 }
 
@@ -969,7 +969,7 @@
 			// update the display properties to match
 			b2Vec2 bodyPosition = _body->GetPosition();
 			[self setPosition:ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO)];
-			[self setRotation:-1 * CC_RADIANS_TO_DEGREES(_body->GetAngle())];
+			[self setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
 			
 			// check if the body is awake
 			_awake = _body->IsAwake();

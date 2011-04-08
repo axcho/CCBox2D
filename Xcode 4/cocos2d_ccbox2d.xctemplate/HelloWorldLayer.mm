@@ -131,7 +131,7 @@ enum {
 	if (_lastBox)
 	{
 		// add a spring between this and the last box!
-		//CCSpringSprite *spring = [CCSpringSprite node];
+		//CCSpringSprite *spring = [CCSpringSprite spriteWithFile:@"Icon-Small.png"];
 		//[spring setBody:_lastBox andBody:sprite];
 		//spring.length = 32;
 		//[self addChild:spring];

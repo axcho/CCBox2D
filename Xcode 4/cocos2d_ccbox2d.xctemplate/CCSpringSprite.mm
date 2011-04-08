@@ -187,7 +187,7 @@
 		{
 			// adjust the angle to match too
 			float angle = atan2f(_anchor1.y - _anchor2.y, _anchor1.x - _anchor2.x);
-			[self setRotation:CC_RADIANS_TO_DEGREES(angle)];
+			[self setRotation:CC_RADIANS_TO_DEGREES(-angle)];
 		}
 	}
 }

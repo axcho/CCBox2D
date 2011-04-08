@@ -430,7 +430,7 @@
 	if (_body)
 	{
 		// set the body angular velocity in radians
-		_body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(_angularVelocity));
+		_body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-_angularVelocity));
 	}
 }
 
@@ -466,7 +466,7 @@
 	if (_body)
 	{
 		// set the body rotation in radians
-		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(rotation_));
+		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
 	}
 }
 
@@ -574,6 +574,9 @@
 	{
 		// add it to the list of shapes
 		[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
+		
+		// delete the shape data
+		delete shapeData;
 	}
 	else
 	{
@@ -830,11 +833,11 @@
 			// set up the data for the body
 			b2BodyDef bodyData;
 			bodyData.linearVelocity = b2Vec2(_velocity.x / PTM_RATIO, _velocity.y / PTM_RATIO);
-			bodyData.angularVelocity = CC_DEGREES_TO_RADIANS(_angularVelocity);
+			bodyData.angularVelocity = CC_DEGREES_TO_RADIANS(-_angularVelocity);
 			bodyData.angularDamping = _angularDamping;
 			bodyData.linearDamping = _damping;
 			bodyData.position = b2Vec2(position_.x / PTM_RATIO, position_.y / PTM_RATIO);
-			bodyData.angle = CC_DEGREES_TO_RADIANS(rotation_);
+			bodyData.angle = CC_DEGREES_TO_RADIANS(-rotation_);
 			_active = true;
 			bodyData.active = _active;
 			bodyData.allowSleep = _sleepy;
@@ -950,7 +953,7 @@
 			// update the display properties to match
 			b2Vec2 bodyPosition = _body->GetPosition();
 			[self setPosition:ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO)];
-			[self setRotation:CC_RADIANS_TO_DEGREES(_body->GetAngle())];
+			[self setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
 			
 			// check if the body is awake
 			_awake = _body->IsAwake();
