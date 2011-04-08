@@ -576,6 +576,7 @@
 		[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
 		
 		// delete the shape data
+		delete shapeData->shape;
 		delete shapeData;
 	}
 	else
