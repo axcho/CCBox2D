@@ -100,7 +100,7 @@
 	if (_revoluteJoint)
 	{
 		// set the revolute joint limits
-		_revoluteJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_minRotation), CC_DEGREES_TO_RADIANS(-_maxRotation));
+		_revoluteJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxRotation), CC_DEGREES_TO_RADIANS(-_minRotation));
 	}
 }
 
@@ -112,7 +112,7 @@
 	if (_revoluteJoint)
 	{
 		// set the revolute joint limits
-		_revoluteJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_minRotation), CC_DEGREES_TO_RADIANS(-_maxRotation));
+		_revoluteJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxRotation), CC_DEGREES_TO_RADIANS(-_minRotation));
 	}
 }
 
@@ -169,8 +169,8 @@
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = CC_DEGREES_TO_RADIANS(-_motorSpeed);
 			jointData.maxMotorTorque = _maxTorque / PTM_RATIO / PTM_RATIO * GTKG_RATIO;
-			jointData.lowerAngle = CC_DEGREES_TO_RADIANS(-_minRotation);
-			jointData.upperAngle = CC_DEGREES_TO_RADIANS(-_maxRotation);
+			jointData.lowerAngle = CC_DEGREES_TO_RADIANS(-_maxRotation);
+			jointData.upperAngle = CC_DEGREES_TO_RADIANS(-_minRotation);
 			jointData.collideConnected = false;
 			
 			// create the joint
