@@ -971,6 +971,14 @@
 	if (_joints)
 		[_joints release];
 	
+	// remove the shape dictionary
+	if (_shapes)
+		[_shapes release];
+	
+	// remove the shape data dictionary
+	if (_shapeData)
+		[_shapeData release];
+	
 	// don't forget to call "super dealloc"
 	[super dealloc];
 }
