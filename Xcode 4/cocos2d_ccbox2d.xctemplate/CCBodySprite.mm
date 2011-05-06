@@ -577,6 +577,7 @@
 		
 		// delete the shape data
 		delete shapeData->shape;
+		shapeData->shape = NULL;
 		delete shapeData;
 	}
 	else
@@ -587,11 +588,15 @@
 		// if the shape data was already in the list
 		if (oldShapeData)
 		{
+			// remove the old shape data from the list
+			[_shapeData removeObjectForKey:shapeName];
+			
 			// if the shape exists
 			if (oldShapeData->shape)
 			{
 				// delete the shape
 				delete oldShapeData->shape;
+				oldShapeData->shape = NULL;
 			}
 			
 			// delete the old shape data
@@ -687,17 +692,20 @@
 		// if the shape is already in the list
 		if (oldShape)
 		{
-			// remove the old shape from the body
-			_body->DestroyFixture(oldShape);
-			
 			// remove the shape from the list
 			[_shapes removeObjectForKey:shapeName];
+			
+			// remove the old shape from the body
+			_body->DestroyFixture(oldShape);
 		}
 	}
 	else
 	{
 		// get the shape data with the given name
 		b2FixtureDef *oldShapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
+		
+		// remove the old shape data from the list
+		[_shapeData removeObjectForKey:shapeName];
 		
 		// if the shape data was already in the list
 		if (oldShapeData)
@@ -707,14 +715,12 @@
 			{
 				// delete the shape
 				delete oldShapeData->shape;
+				oldShapeData->shape = NULL;
 			}
 			
 			// delete the old shape data
 			delete oldShapeData;
 		}
-		
-		// remove the shape data from the list
-		[_shapeData removeObjectForKey:shapeName];
 	}
 }
 
@@ -729,6 +735,9 @@
 		{
 			// get the shape
 			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
+			
+			// remove the shape from the list
+			[_shapes removeObjectForKey:shapeName];
 			
 			// remove the shape from the body
 			_body->DestroyFixture(shape);
@@ -746,11 +755,15 @@
 			// get the shape data
 			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
 			
+			// remove the shape data from the list
+			[_shapeData removeObjectForKey:shapeName];
+			
 			// if the shape exists
 			if (shapeData->shape)
 			{
 				// delete the shape
 				delete shapeData->shape;
+				shapeData->shape = NULL;
 			}
 			
 			// delete the shape data
@@ -873,11 +886,15 @@
 				// add the shape object to the map
 				[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
 				
+				// remove the shape data from the list
+				[_shapeData removeObjectForKey:shapeName];
+				
 				// if the shape exists
 				if (shapeData->shape)
 				{
 					// delete the shape
 					delete shapeData->shape;
+					shapeData->shape = NULL;
 				}
 				
 				// delete the shape data
@@ -970,14 +987,6 @@
 	// remove joints array
 	if (_joints)
 		[_joints release];
-	
-	// remove the shape dictionary
-	if (_shapes)
-		[_shapes release];
-	
-	// remove the shape data dictionary
-	if (_shapeData)
-		[_shapeData release];
 	
 	// don't forget to call "super dealloc"
 	[super dealloc];
