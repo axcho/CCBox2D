@@ -783,7 +783,7 @@
 		// if joint list does not exist
 		if (!_joints)
 		{
-			_joints = [CCArray array];
+			_joints = [[CCArray array] retain];
 		}
 		
 		// add the joint to the list of joints
