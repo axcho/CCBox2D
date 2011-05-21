@@ -35,6 +35,7 @@
 @synthesize body1 = _body1;
 @synthesize body2 = _body2;
 @synthesize world = _world;
+@synthesize collideConnected = _collideConnected;
 
 -(b2Joint *) joint
 {
@@ -134,7 +135,7 @@
 				_length = jointData.length * PTM_RATIO;
 			jointData.dampingRatio = _damping;
 			jointData.frequencyHz = _frequency;
-			jointData.collideConnected = true;
+			jointData.collideConnected = _collideConnected;
 			
 			// create the joint
 			_distanceJoint = (b2DistanceJoint *)(_world.world->CreateJoint(&jointData));
