@@ -27,7 +27,7 @@
 
 @interface CCSpringSprite : CCSprite <CCJointSprite>
 {
-	BOOL _fixed;
+	BOOL _fixed, _collideConnected;
 	float _length, _damping, _frequency;
 	CGPoint _anchor1, _anchor2;
 	b2DistanceJoint *_distanceJoint;
@@ -39,6 +39,7 @@
 @property (nonatomic) float length;
 @property (nonatomic) float damping;
 @property (nonatomic) float frequency;
+@property (nonatomic) BOOL collideConnected;
 
 -(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
 -(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
