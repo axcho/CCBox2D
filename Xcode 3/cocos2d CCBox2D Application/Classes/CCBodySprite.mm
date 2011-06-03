@@ -476,19 +476,19 @@
 	if (_body)
 	{
 		// get force and location in world coordinates
-		b2Vec2 force(force.x / PTM_RATIO * GTKG_RATIO, force.y / PTM_RATIO * GTKG_RATIO);
-		b2Vec2 location(location.x / PTM_RATIO, location.y / PTM_RATIO);
+		b2Vec2 b2Force(force.x / PTM_RATIO * GTKG_RATIO, force.y / PTM_RATIO * GTKG_RATIO);
+		b2Vec2 b2Location(location.x / PTM_RATIO, location.y / PTM_RATIO);
 		
 		// if the force should be an instantaneous impulse
 		if (impulse)
 		{
 			// apply an instant linear impulse
-			_body->ApplyLinearImpulse(force, location);
+			_body->ApplyLinearImpulse(b2Force, b2Location);
 		}
 		else
 		{
 			// apply the force
-			_body->ApplyForce(force, location);
+			_body->ApplyForce(b2Force, b2Location);
 		}
 	}
 }
