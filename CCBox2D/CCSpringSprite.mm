@@ -106,6 +106,7 @@
 	{
 		// destroy the joint
 		_distanceJoint->GetBodyA()->GetWorld()->DestroyJoint(_distanceJoint);
+		_distanceJoint = NULL;
 	}
 }
 
