@@ -27,7 +27,7 @@
 
 @interface CCSpringSprite : CCSprite <CCJointSprite>
 {
-	BOOL _fixed, _collideConnected;
+	BOOL _fixed;
 	float _length, _damping, _frequency;
 	CGPoint _anchor1, _anchor2;
 	b2DistanceJoint *_distanceJoint;
