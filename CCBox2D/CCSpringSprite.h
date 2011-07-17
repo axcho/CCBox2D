@@ -39,7 +39,6 @@
 @property (nonatomic) float length;
 @property (nonatomic) float damping;
 @property (nonatomic) float frequency;
-@property (nonatomic) BOOL collideConnected;
 
 -(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
 -(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
