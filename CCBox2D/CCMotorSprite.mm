@@ -143,6 +143,7 @@
 	{
 		// destroy the joint
 		_revoluteJoint->GetBodyA()->GetWorld()->DestroyJoint(_revoluteJoint);
+		_revoluteJoint = NULL;
 	}
 }
 
