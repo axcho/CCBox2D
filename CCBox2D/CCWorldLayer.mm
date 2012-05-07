@@ -121,7 +121,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	if ((self = [super init]))
 	{
 		// set up Box2D stuff for collisions
-		_world = new b2World(b2Vec2(), false);
+		_world = new b2World(b2Vec2());
 		_conduit = new ContactConduit(self);
 		_world->SetContactListener(_conduit);
 		[self setGravity:CGPointZero];

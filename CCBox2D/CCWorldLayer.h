@@ -22,8 +22,8 @@
  
  */
 
-#import "Box2D.h"
-#import "cocos2d.h"
+#import <Box2D/Box2D.h>
+#import <Cocos2DKit/Cocos2DKit.h>
 
 // pixels to meters ratio
 #define PTM_RATIO 32

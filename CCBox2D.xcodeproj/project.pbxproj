@@ -1,0 +1,279 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B6A87DE1155843680034591E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87DE0155843680034591E /* Foundation.framework */; };
+		B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF1155843B70034591E /* CCBodySprite.h */; };
+		B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF2155843B70034591E /* CCBodySprite.mm */; };
+		B6A87DFC155843B70034591E /* CCBox2D.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF3155843B70034591E /* CCBox2D.h */; };
+		B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF4155843B70034591E /* CCMotorSprite.h */; };
+		B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF5155843B70034591E /* CCMotorSprite.mm */; };
+		B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF6155843B70034591E /* CCSpringSprite.h */; };
+		B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF7155843B70034591E /* CCSpringSprite.mm */; };
+		B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF8155843B70034591E /* CCWorldLayer.h */; };
+		B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF9155843B70034591E /* CCWorldLayer.mm */; };
+		B6A87E04155843C30034591E /* Cocos2DKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87E03155843C30034591E /* Cocos2DKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B6A87DDD155843680034591E /* libCCBox2D.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCCBox2D.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6A87DE0155843680034591E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CCBox2D-Prefix.pch"; sourceTree = "<group>"; };
+		B6A87DF1155843B70034591E /* CCBodySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBodySprite.h; sourceTree = "<group>"; };
+		B6A87DF2155843B70034591E /* CCBodySprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCBodySprite.mm; sourceTree = "<group>"; };
+		B6A87DF3155843B70034591E /* CCBox2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBox2D.h; sourceTree = "<group>"; };
+		B6A87DF4155843B70034591E /* CCMotorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMotorSprite.h; sourceTree = "<group>"; };
+		B6A87DF5155843B70034591E /* CCMotorSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCMotorSprite.mm; sourceTree = "<group>"; };
+		B6A87DF6155843B70034591E /* CCSpringSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSpringSprite.h; sourceTree = "<group>"; };
+		B6A87DF7155843B70034591E /* CCSpringSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSpringSprite.mm; sourceTree = "<group>"; };
+		B6A87DF8155843B70034591E /* CCWorldLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCWorldLayer.h; sourceTree = "<group>"; };
+		B6A87DF9155843B70034591E /* CCWorldLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCWorldLayer.mm; sourceTree = "<group>"; };
+		B6A87E03155843C30034591E /* Cocos2DKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocos2DKit.framework; path = Vendor/Frameworks/Cocos2DKit.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B6A87DDA155843680034591E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6A87DE1155843680034591E /* Foundation.framework in Frameworks */,
+				B6A87E04155843C30034591E /* Cocos2DKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B6A87DD2155843680034591E = {
+			isa = PBXGroup;
+			children = (
+				B6A87DE2155843680034591E /* CCBox2D */,
+				B6A87DDF155843680034591E /* Frameworks */,
+				B6A87DDE155843680034591E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B6A87DDE155843680034591E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DDD155843680034591E /* libCCBox2D.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B6A87DDF155843680034591E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87E03155843C30034591E /* Cocos2DKit.framework */,
+				B6A87DE0155843680034591E /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B6A87DE2155843680034591E /* CCBox2D */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DF1155843B70034591E /* CCBodySprite.h */,
+				B6A87DF2155843B70034591E /* CCBodySprite.mm */,
+				B6A87DF3155843B70034591E /* CCBox2D.h */,
+				B6A87DF4155843B70034591E /* CCMotorSprite.h */,
+				B6A87DF5155843B70034591E /* CCMotorSprite.mm */,
+				B6A87DF6155843B70034591E /* CCSpringSprite.h */,
+				B6A87DF7155843B70034591E /* CCSpringSprite.mm */,
+				B6A87DF8155843B70034591E /* CCWorldLayer.h */,
+				B6A87DF9155843B70034591E /* CCWorldLayer.mm */,
+				B6A87DE3155843680034591E /* Supporting Files */,
+			);
+			path = CCBox2D;
+			sourceTree = "<group>";
+		};
+		B6A87DE3155843680034591E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B6A87DDB155843680034591E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */,
+				B6A87DFC155843B70034591E /* CCBox2D.h in Headers */,
+				B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */,
+				B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */,
+				B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B6A87DDC155843680034591E /* CCBox2D */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B6A87DEA155843680034591E /* Build configuration list for PBXNativeTarget "CCBox2D" */;
+			buildPhases = (
+				B6A87DD9155843680034591E /* Sources */,
+				B6A87DDA155843680034591E /* Frameworks */,
+				B6A87DDB155843680034591E /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CCBox2D;
+			productName = CCBox2D;
+			productReference = B6A87DDD155843680034591E /* libCCBox2D.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B6A87DD4155843680034591E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Marketcircle Inc";
+			};
+			buildConfigurationList = B6A87DD7155843680034591E /* Build configuration list for PBXProject "CCBox2D" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B6A87DD2155843680034591E;
+			productRefGroup = B6A87DDE155843680034591E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B6A87DDC155843680034591E /* CCBox2D */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B6A87DD9155843680034591E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */,
+				B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */,
+				B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */,
+				B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B6A87DE8155843680034591E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B6A87DE9155843680034591E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B6A87DEB155843680034591E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/CCBox2D.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CCBox2D/CCBox2D-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/include";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B6A87DEC155843680034591E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/CCBox2D.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CCBox2D/CCBox2D-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/include";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B6A87DD7155843680034591E /* Build configuration list for PBXProject "CCBox2D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6A87DE8155843680034591E /* Debug */,
+				B6A87DE9155843680034591E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B6A87DEA155843680034591E /* Build configuration list for PBXNativeTarget "CCBox2D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6A87DEB155843680034591E /* Debug */,
+				B6A87DEC155843680034591E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B6A87DD4155843680034591E /* Project object */;
+}
