@@ -22,11 +22,16 @@
  
  */
 
+#import <Box2D/Box2D.h>
+
 #import "CCBodySprite.h"
 #import "CCWorldLayer.h"
+#import "CCBox2DPrivate.h"
 
 
-@implementation CCBodySprite
+@implementation CCBodySprite {
+    b2Body *_body;
+}
 
 @synthesize physicsType = _physicsType;
 @synthesize collisionType = _collisionType;
@@ -44,8 +49,11 @@
 @synthesize angularDamping = _angularDamping;
 @synthesize angularVelocity = _angularVelocity;
 @synthesize velocity = _velocity;
-@synthesize body = _body;
 @synthesize world = _world;
+
+- (b2Body *)body {
+    return _body;
+}
 
 -(void) setPhysicsType:(PhysicsType)newPhysicsType
 {

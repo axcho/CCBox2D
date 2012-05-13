@@ -24,9 +24,13 @@
 
 #import "CCSpringSprite.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
+#import <Box2D/Box2D.h>
 
 
-@implementation CCSpringSprite
+@implementation CCSpringSprite {
+    b2DistanceJoint *_distanceJoint;
+}
 
 @synthesize fixed = _fixed;
 @synthesize length = _length;

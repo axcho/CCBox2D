@@ -24,9 +24,11 @@
 
 #import "CCMotorSprite.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
 
-
-@implementation CCMotorSprite
+@implementation CCMotorSprite {
+	b2RevoluteJoint *_revoluteJoint;
+}
 
 @synthesize fixed = _fixed;
 @synthesize running = _running;

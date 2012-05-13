@@ -10,7 +10,7 @@
 		B6A87DE1155843680034591E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87DE0155843680034591E /* Foundation.framework */; };
 		B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF1155843B70034591E /* CCBodySprite.h */; };
 		B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF2155843B70034591E /* CCBodySprite.mm */; };
-		B6A87DFC155843B70034591E /* CCBox2D.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF3155843B70034591E /* CCBox2D.h */; };
+		B6A87DFC155843B70034591E /* CCBox2D.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF3155843B70034591E /* CCBox2D.h */; settings = {ATTRIBUTES = (); }; };
 		B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF4155843B70034591E /* CCMotorSprite.h */; };
 		B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF5155843B70034591E /* CCMotorSprite.mm */; };
 		B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF6155843B70034591E /* CCSpringSprite.h */; };
@@ -21,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBox2DPrivate.h; sourceTree = "<group>"; };
 		B6A87DDD155843680034591E /* libCCBox2D.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCCBox2D.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A87DE0155843680034591E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CCBox2D-Prefix.pch"; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 				B6A87DF8155843B70034591E /* CCWorldLayer.h */,
 				B6A87DF9155843B70034591E /* CCWorldLayer.mm */,
 				B6A87DE3155843680034591E /* Supporting Files */,
+				B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */,
 			);
 			path = CCBox2D;
 			sourceTree = "<group>";

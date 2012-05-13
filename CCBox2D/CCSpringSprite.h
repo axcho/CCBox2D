@@ -30,7 +30,6 @@
 	BOOL _fixed;
 	float _length, _damping, _frequency;
 	CGPoint _anchor1, _anchor2;
-	b2DistanceJoint *_distanceJoint;
 	CCBodySprite *_body1;
 	CCBodySprite *_body2;
 	CCWorldLayer *_world;

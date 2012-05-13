@@ -22,7 +22,6 @@
 
  */
 
-#import <Box2D/Box2D.h>
 #import <Cocos2DKit/Cocos2DKit.h>
 
 
@@ -39,13 +38,12 @@ typedef enum
 @interface CCBodySprite : CCSprite
 {
 	PhysicsType _physicsType;
-	uint16 _collisionType, _collidesWithType;
+	unsigned short _collisionType, _collidesWithType;
 	BOOL _active, _sleepy, _awake, _solid, _fixed, _bullet;
 	float _density, _friction, _bounce;
 	float _damping, _angularDamping;
 	float _angularVelocity;
 	CGPoint _velocity;
-	b2Body *_body;
 	CCArray *_joints;
 	CCWorldLayer *_world;
 	
@@ -54,8 +52,8 @@ typedef enum
 }
 
 @property (nonatomic) PhysicsType physicsType;
-@property (nonatomic) uint16 collisionType;
-@property (nonatomic) uint16 collidesWithType;
+@property (nonatomic) unsigned short collisionType;
+@property (nonatomic) unsigned short collidesWithType;
 @property (nonatomic) BOOL active;
 @property (nonatomic) BOOL sleepy;
 @property (nonatomic) BOOL awake;
@@ -69,7 +67,6 @@ typedef enum
 @property (nonatomic) float angularDamping;
 @property (nonatomic) float angularVelocity;
 @property (nonatomic) CGPoint velocity;
-@property (nonatomic, readonly) b2Body *body;
 @property (nonatomic, assign) CCWorldLayer *world;
 
 -(void) setDensity:(float)newDensity forShape:(NSString *)shapeName;

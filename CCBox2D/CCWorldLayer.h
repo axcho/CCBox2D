@@ -22,7 +22,6 @@
  
  */
 
-#import <Box2D/Box2D.h>
 #import <Cocos2DKit/Cocos2DKit.h>
 
 // pixels to meters ratio
@@ -42,31 +41,15 @@
 
 @end
 
-class ContactConduit : public b2ContactListener
-{
-public:
-    ContactConduit(id<ContactListenizer> listenizer);
-    
-	virtual void BeginContact(b2Contact* contact);
-	virtual void EndContact(b2Contact* contact);
-	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
-	
-	id<ContactListenizer> listener;
-};
-
 @interface CCWorldLayer : CCLayer <ContactListenizer>
 {
 	int _positionIterations, _velocityIterations;
 	CGPoint _gravity;
-	b2World *_world;
-	
-	ContactConduit *_conduit;
 }
 
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
-@property (nonatomic, readonly) b2World *world;
 
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
 -(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
@@ -77,7 +60,6 @@ public:
 @protocol CCJointSprite
 
 @property (nonatomic) BOOL fixed;
-@property (nonatomic, readonly) b2Joint *joint;
 @property (nonatomic, readonly) CCBodySprite *body1;
 @property (nonatomic, readonly) CCBodySprite *body2;
 @property (nonatomic, assign) CCWorldLayer *world;

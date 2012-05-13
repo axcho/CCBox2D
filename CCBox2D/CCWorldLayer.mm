@@ -24,6 +24,7 @@
 
 #import "CCWorldLayer.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
 
 
 ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
@@ -90,12 +91,18 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	[listener onCollideBody:sprite1 andBody:sprite2 withForce:force withFrictionForce:frictionForce];
 }
 
-@implementation CCWorldLayer
+@implementation CCWorldLayer {
+    b2World *_world;
+	ContactConduit *_conduit;
+}
 
 @synthesize positionIterations = _positionIterations;
 @synthesize velocityIterations = _velocityIterations;
 @synthesize gravity = _gravity;
-@synthesize world = _world;
+
+- (b2World *)world {
+    return _world;
+}
 
 -(void) setGravity:(CGPoint)newGravity
 {

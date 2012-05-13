@@ -31,7 +31,6 @@
 	BOOL _running, _limited;
 	float _motorSpeed, _maxTorque, _minRotation, _maxRotation;
 	CGPoint _anchor;
-	b2RevoluteJoint *_revoluteJoint;
 	CCBodySprite *_body1;
 	CCBodySprite *_body2;
 	CCWorldLayer *_world;
