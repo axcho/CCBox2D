@@ -454,6 +454,24 @@
 	}
 }
 
+- (CGPoint)velocity {
+
+    CGPoint result;
+
+    if(_body)
+    {
+        b2Vec2 vel = _body->GetLinearVelocity();
+        result.x = vel.x;
+        result.y = vel.y;
+    }
+    else
+    {
+        result = _velocity;
+    }
+    
+    return result;
+}
+
 -(void) setPosition:(CGPoint)newPosition
 {
 	super.position = newPosition;
@@ -687,6 +705,15 @@
 	
 	// add it
 	[self addShape:polygonShape withName:shapeName];
+}
+
+-(void) addChainWithName:(NSString *)shapeName withVertices:(CGPoint *)chainVertices count:(NSUInteger)count {
+    
+    b2ChainShape *chainShape = new b2ChainShape();
+    
+    chainShape->CreateLoop((b2Vec2 *)chainVertices, count);
+    
+    [self addShape:chainShape withName:shapeName];
 }
 
 -(void) removeShapeWithName:(NSString *)shapeName

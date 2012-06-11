@@ -90,10 +90,14 @@ typedef enum
 
 -(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices;
 
+-(void) addChainWithName:(NSString *)shapeName withVertices:(CGPoint *)chainVertices count:(NSUInteger)count;
+
 -(void) removeShapeWithName:(NSString *)shapeName;
 -(void) removeShapes;
 
 -(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;
+
+-(void) update:(ccTime)delta;
 
 -(void) onOverlapBody:(CCBodySprite *)sprite;
 -(void) onSeparateBody:(CCBodySprite *)sprite;
