@@ -23,7 +23,7 @@
  */
 
 #import "CCWorldLayer.h"
-#import "CCBodySprite.h"
+#import "CCBodyNode.h"
 #import "CCBox2DPrivate.h"
 #import "Render.h"
 
@@ -37,8 +37,8 @@ ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
 void ContactConduit::BeginContact(b2Contact* contact)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+	CCBodyNode *sprite1 = (CCBodyNode *)contact->GetFixtureA()->GetBody()->GetUserData();
+	CCBodyNode *sprite2 = (CCBodyNode *)contact->GetFixtureB()->GetBody()->GetUserData();
 	
 	// notify the physics sprites
 	[sprite1 onOverlapBody:sprite2];
@@ -51,8 +51,8 @@ void ContactConduit::BeginContact(b2Contact* contact)
 void ContactConduit::EndContact(b2Contact* contact)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+	CCBodyNode *sprite1 = (CCBodyNode *)contact->GetFixtureA()->GetBody()->GetUserData();
+	CCBodyNode *sprite2 = (CCBodyNode *)contact->GetFixtureB()->GetBody()->GetUserData();
 	
 	// notify the physics sprites
 	[sprite1 onSeparateBody:sprite2];
@@ -65,8 +65,8 @@ void ContactConduit::EndContact(b2Contact* contact)
 void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+	CCBodyNode *sprite1 = (CCBodyNode *)contact->GetFixtureA()->GetBody()->GetUserData();
+	CCBodyNode *sprite2 = (CCBodyNode *)contact->GetFixtureB()->GetBody()->GetUserData();
 	
 	// get the forces involved
 	float force = 0.0f;
@@ -196,15 +196,15 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	[super dealloc];
 }
 
--(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+-(void) onOverlapBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2
 {
 }
 
--(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+-(void) onSeparateBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2
 {
 }
 
--(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+-(void) onCollideBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 {
 }
 
