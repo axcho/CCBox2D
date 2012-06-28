@@ -133,11 +133,12 @@
 		// set the body active
 		_body->SetActive(_active);
 	}
-	else
-	{
-		// sprite cannot be active without body
-		_active = NO;
-	}
+    // This makes no sense! Doesn't matter if it's active when it has no body, but when it creates one, it should honour this setting!!!@!
+//	else
+//	{
+//		// sprite cannot be active without body
+//		_active = NO;
+//	}
 }
 
 -(void) setSleepy:(BOOL)newSleepy
@@ -450,7 +451,7 @@
 	if (_body)
 	{
 		// set the body velocity
-		_body->SetLinearVelocity(b2Vec2(_velocity.x / PTM_RATIO, _velocity.y / PTM_RATIO));
+		_body->SetLinearVelocity(b2Vec2(_velocity.x * InvPTMRatio, _velocity.y * InvPTMRatio));
 	}
 }
 
@@ -475,12 +476,18 @@
 -(void) setPosition:(CGPoint)newPosition
 {
 	super.position = newPosition;
+    
+    NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
 	
 	// if body exists
 	if (_body)
 	{
+        CGPoint worldPosition = [self.parent convertToWorldSpace:newPosition];
+        
+        NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
+        
 		// set the body position in world coordinates
-		_body->SetTransform(b2Vec2(position_.x / PTM_RATIO, position_.y / PTM_RATIO), _body->GetAngle());
+		_body->SetTransform(b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio), _body->GetAngle());
 	}
 }
 
@@ -502,8 +509,8 @@
 	if (_body)
 	{
 		// get force and location in world coordinates
-		b2Vec2 b2Force(force.x / PTM_RATIO * GTKG_RATIO, force.y / PTM_RATIO * GTKG_RATIO);
-		b2Vec2 b2Location(location.x / PTM_RATIO, location.y / PTM_RATIO);
+		b2Vec2 b2Force(force.x * InvPTMRatio * GTKG_RATIO, force.y * InvPTMRatio * GTKG_RATIO);
+		b2Vec2 b2Location(location.x * InvPTMRatio, location.y * InvPTMRatio);
 		
 		// if the force should be an instantaneous impulse
 		if (impulse)
@@ -545,12 +552,12 @@
 		if (impulse)
 		{
 			// apply an instant linear impulse
-			_body->ApplyAngularImpulse(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
+			_body->ApplyAngularImpulse(torque * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
 		}
 		else
 		{
 			// apply the torque
-			_body->ApplyTorque(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
+			_body->ApplyTorque(torque * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
 		}
 	}
 }
@@ -638,7 +645,7 @@
 {
 	// create a box shape
 	b2PolygonShape *boxShape = new b2PolygonShape();
-	boxShape->SetAsBox(shapeSize.width / 2 / PTM_RATIO, shapeSize.height / 2 / PTM_RATIO, b2Vec2((shapeLocation.x - position_.x) / PTM_RATIO, (shapeLocation.y - position_.y) / PTM_RATIO), 0);
+	boxShape->SetAsBox(shapeSize.width / 2 * InvPTMRatio, shapeSize.height / 2 * InvPTMRatio, b2Vec2((shapeLocation.x - position_.x) * InvPTMRatio, (shapeLocation.y - position_.y) * InvPTMRatio), 0);
 	
 	// add it
 	[self addShape:boxShape withName:shapeName];
@@ -658,8 +665,8 @@
 {
 	// create a circle shape
 	b2CircleShape *circleShape = new b2CircleShape();
-	circleShape->m_radius = shapeRadius / PTM_RATIO;
-	circleShape->m_p.Set((shapeLocation.x - position_.x) / PTM_RATIO, (shapeLocation.y - position_.y) / PTM_RATIO);
+	circleShape->m_radius = shapeRadius * InvPTMRatio;
+	circleShape->m_p.Set((shapeLocation.x - position_.x) * InvPTMRatio, (shapeLocation.y - position_.y) * InvPTMRatio);
 	
 	// add it
 	[self addShape:circleShape withName:shapeName];
@@ -693,7 +700,7 @@
 	{
 		// save the vertex in world coordinates
 		CGPoint point = [vertex CGPointValue];
-		vertices[i] = b2Vec2((point.x - position_.x) / PTM_RATIO, (point.y - position_.y) / PTM_RATIO);
+		vertices[i] = b2Vec2((point.x - position_.x) * InvPTMRatio, (point.y - position_.y) * InvPTMRatio);
 		
 		// next vertex
 		i++;
@@ -879,15 +886,17 @@
 				[self destroyBody];
 			}
 			
+            CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
+
 			// set up the data for the body
 			b2BodyDef bodyData;
-			bodyData.linearVelocity = b2Vec2(_velocity.x / PTM_RATIO, _velocity.y / PTM_RATIO);
+			bodyData.linearVelocity = b2Vec2(_velocity.x * InvPTMRatio, _velocity.y * InvPTMRatio);
 			bodyData.angularVelocity = CC_DEGREES_TO_RADIANS(-_angularVelocity);
 			bodyData.angularDamping = _angularDamping;
 			bodyData.linearDamping = _damping;
-			bodyData.position = b2Vec2(position_.x / PTM_RATIO, position_.y / PTM_RATIO);
+			bodyData.position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
 			bodyData.angle = CC_DEGREES_TO_RADIANS(-rotation_);
-			_active = true;
+//			_active = true;
 			bodyData.active = _active;
 			bodyData.allowSleep = _sleepy;
 			bodyData.awake = _awake;
@@ -968,7 +977,7 @@
 		_physicsType = kDynamic;
 		_collisionType = 0xFFFF;
 		_collidesWithType = 0xFFFF;
-		_active = NO;
+		_active = YES;
 		_sleepy = YES;
 		_awake = YES;
 		_solid = YES;
@@ -1005,8 +1014,15 @@
 		{
 			// update the display properties to match
 			b2Vec2 bodyPosition = _body->GetPosition();
-			[self setPosition:ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO)];
-			[self setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
+            CGPoint worldPosition = ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO);
+            CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
+            
+            if([self.parent isKindOfClass:[CCWorldLayer class]] && !CGPointEqualToPoint(worldPosition, localPosition))
+//                NSAssert(CGPointEqualToPoint(worldPosition, localPosition), @"Calculation Error");
+                [self.parent convertToNodeSpace:worldPosition];
+            
+			[super setPosition:localPosition];
+			[super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
 			
 			// check if the body is awake
 			_awake = _body->IsAwake();

@@ -42,6 +42,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
 #if TARGET_OS_IPHONE
     glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
     glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    
 #else
 	glBegin(GL_LINE_LOOP);
 	for (int32 i = 0; i < vertexCount; ++i)
@@ -54,13 +55,14 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
 
 void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
 
 #if TARGET_OS_IPHONE    
     glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+
+    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
+	glColor4f(color.r, color.g, color.b, 1.0f);
     glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 
 #else
@@ -87,6 +89,7 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 	const int32 k_segments = 16;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
+    
 	glColor4f(color.r, color.g, color.b, 1.0f);
     
 #if TARGET_OS_IPHONE
@@ -119,8 +122,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 	const int32 k_segments = 16;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 	glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
     
 #if TARGET_OS_IPHONE
@@ -133,8 +135,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     }
     
     glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, k_segments);
-    
+    glDrawArrays(GL_LINE_LOOP, 0, k_segments);    
     free(vertices);
 
     
@@ -146,6 +147,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     line[2] = p.x;
     line[3] = p.y;
     
+	glColor4f(color.r, color.g, color.b, 1.0f);
     glVertexPointer(2, GL_FLOAT, 0, line);
     glDrawArrays(GL_LINES, 0, 2);
     
