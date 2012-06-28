@@ -28,6 +28,11 @@
 #import "Render.h"
 
 
+
+const CGFloat PTMRatio = PTM_RATIO;
+const CGFloat InvPTMRatio = 1.0f / PTM_RATIO;
+
+
 ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
 {
 	// save the physics listener
@@ -102,8 +107,19 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 @synthesize velocityIterations = _velocityIterations;
 @synthesize gravity = _gravity;
 
++ (void)initialize {
+    
+}
+
 - (b2World *)world {
     return _world;
+}
+
+- (void)setPosition:(CGPoint)position {
+    CGPoint oldPosition = position_;
+    [super setPosition:position];
+    // apply the transformation delta to the b2World
+    _world->ShiftOrigin(b2Vec2((oldPosition.x - position.x) * InvPTMRatio, (oldPosition.y - position.y) * InvPTMRatio));
 }
 
 -(void) setGravity:(CGPoint)newGravity
@@ -114,7 +130,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	if (_world)
 	{
 		// set the world gravity
-		_world->SetGravity(b2Vec2(_gravity.x / PTM_RATIO, _gravity.y / PTM_RATIO));
+		_world->SetGravity(b2Vec2(_gravity.x * InvPTMRatio, _gravity.y * InvPTMRatio));
 		
 		// for each body in the world
 		for (b2Body *body = _world->GetBodyList(); body; body = body->GetNext())
@@ -132,7 +148,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 - (void)setDebugDrawing:(BOOL)debugDrawing {
     if(debugDrawing && !_debugDraw) {
         _debugDraw = new DebugDraw();
-        _debugDraw->SetFlags(b2Draw::e_shapeBit|b2Draw::e_jointBit|b2Draw::e_aabbBit|b2Draw::e_centerOfMassBit);
+        _debugDraw->SetFlags(b2Draw::e_shapeBit|b2Draw::e_jointBit|b2Draw::e_aabbBit /*|b2Draw::e_centerOfMassBit*/);
         _world->SetDebugDraw(_debugDraw);
     }
     else if(!debugDrawing && _debugDraw) {
@@ -177,6 +193,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_COLOR_ARRAY);
     glScalef(PTM_RATIO, PTM_RATIO, PTM_RATIO);
+    glTranslatef(-position_.x * InvPTMRatio, -position_.y * InvPTMRatio, 0);
     _world->DrawDebugData();
     glEnableClientState(GL_COLOR_ARRAY);
     glEnable(GL_TEXTURE_2D);

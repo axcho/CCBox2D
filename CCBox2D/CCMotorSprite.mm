@@ -90,7 +90,7 @@
 	if (_revoluteJoint)
 	{
 		// set the revolute joint power
-		_revoluteJoint->SetMaxMotorTorque(_maxTorque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
+		_revoluteJoint->SetMaxMotorTorque(_maxTorque * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
 	}
 }
 
@@ -166,12 +166,13 @@
 			
 			// set up the data for the joint
 			b2RevoluteJointDef jointData;
-			b2Vec2 anchor(_anchor.x / PTM_RATIO, _anchor.y / PTM_RATIO);
+            CGPoint p = [self.parent convertToWorldSpace:_anchor];
+			b2Vec2 anchor(p.x * InvPTMRatio, p.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor);
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = CC_DEGREES_TO_RADIANS(-_motorSpeed);
-			jointData.maxMotorTorque = _maxTorque / PTM_RATIO / PTM_RATIO * GTKG_RATIO;
+			jointData.maxMotorTorque = _maxTorque * InvPTMRatio * InvPTMRatio * GTKG_RATIO;
 			jointData.lowerAngle = CC_DEGREES_TO_RADIANS(-_maxRotation);
 			jointData.upperAngle = CC_DEGREES_TO_RADIANS(-_minRotation);
 			jointData.collideConnected = false;

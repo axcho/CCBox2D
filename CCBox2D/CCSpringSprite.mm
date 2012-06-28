@@ -53,7 +53,7 @@
 	if (_distanceJoint)
 	{
 		// set the distance joint length
-		_distanceJoint->SetLength(_length / PTM_RATIO);
+		_distanceJoint->SetLength(_length * InvPTMRatio);
 	}
 }
 
@@ -130,11 +130,11 @@
 			
 			// set up the data for the joint
 			b2DistanceJointDef jointData;
-			b2Vec2 anchor1(_anchor1.x / PTM_RATIO, _anchor1.y / PTM_RATIO);
-			b2Vec2 anchor2(_anchor2.x / PTM_RATIO, _anchor2.y / PTM_RATIO);
+			b2Vec2 anchor1(_anchor1.x * InvPTMRatio, _anchor1.y * InvPTMRatio);
+			b2Vec2 anchor2(_anchor2.x * InvPTMRatio, _anchor2.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor1, anchor2);
 			if (_length >= 0)
-				jointData.length = _length / PTM_RATIO;
+				jointData.length = _length * InvPTMRatio;
 			else
 				_length = jointData.length * PTM_RATIO;
 			jointData.dampingRatio = _damping;

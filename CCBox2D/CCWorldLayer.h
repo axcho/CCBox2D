@@ -31,6 +31,10 @@
 #define GTKG_RATIO 1000
 
 
+extern const CGFloat PTMRatio;
+extern const CGFloat InvPTMRatio;
+
+
 @class CCBodySprite;
 
 @protocol ContactListenizer
