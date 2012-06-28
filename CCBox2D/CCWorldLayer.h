@@ -31,13 +31,13 @@
 #define GTKG_RATIO 1000
 
 
-@class CCBodyNode;
+@class CCBodySprite;
 
 @protocol ContactListenizer
 
--(void) onOverlapBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) onSeparateBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) onCollideBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+-(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end
 
@@ -51,17 +51,17 @@
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
 
--(void) onOverlapBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) onSeparateBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) onCollideBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+-(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end
 
-@protocol CCJointNode
+@protocol CCJointSprite
 
 @property (nonatomic) BOOL fixed;
-@property (nonatomic, readonly) CCBodyNode *body1;
-@property (nonatomic, readonly) CCBodyNode *body2;
+@property (nonatomic, readonly) CCBodySprite *body1;
+@property (nonatomic, readonly) CCBodySprite *body2;
 @property (nonatomic, assign) CCWorldLayer *world;
 
 @end

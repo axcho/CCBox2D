@@ -25,13 +25,13 @@
 #import "CCWorldLayer.h"
 
 
-@interface CCSpringNode : CCNode <CCJointNode>
+@interface CCSpringSprite : CCSprite <CCJointSprite>
 {
 	BOOL _fixed;
 	float _length, _damping, _frequency;
 	CGPoint _anchor1, _anchor2;
-	CCBodyNode *_body1;
-	CCBodyNode *_body2;
+	CCBodySprite *_body1;
+	CCBodySprite *_body2;
 	CCWorldLayer *_world;
 }
 
@@ -39,7 +39,7 @@
 @property (nonatomic) float damping;
 @property (nonatomic) float frequency;
 
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
 
 @end

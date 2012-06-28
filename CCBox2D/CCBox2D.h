@@ -22,7 +22,7 @@
  
  */
 
-#import "CCBodyNode.h"
-#import "CCMotorNode.h"
-#import "CCSpringNode.h"
+#import "CCBodySprite.h"
+#import "CCMotorSprite.h"
+#import "CCSpringSprite.h"
 #import "CCWorldLayer.h"

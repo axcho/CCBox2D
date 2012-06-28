@@ -11,13 +11,13 @@
 		B665118215866D8E00C4139A /* Render.h in Headers */ = {isa = PBXBuildFile; fileRef = B665118015866D8E00C4139A /* Render.h */; };
 		B665118515866E5B00C4139A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B665118415866E5B00C4139A /* OpenGLES.framework */; };
 		B6A87DE1155843680034591E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87DE0155843680034591E /* Foundation.framework */; };
-		B6A87DFA155843B70034591E /* CCBodyNode.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF1155843B70034591E /* CCBodyNode.h */; };
-		B6A87DFB155843B70034591E /* CCBodyNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF2155843B70034591E /* CCBodyNode.mm */; };
+		B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF1155843B70034591E /* CCBodySprite.h */; };
+		B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF2155843B70034591E /* CCBodySprite.mm */; };
 		B6A87DFC155843B70034591E /* CCBox2D.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF3155843B70034591E /* CCBox2D.h */; settings = {ATTRIBUTES = (); }; };
-		B6A87DFD155843B70034591E /* CCMotorNode.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF4155843B70034591E /* CCMotorNode.h */; };
-		B6A87DFE155843B70034591E /* CCMotorNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF5155843B70034591E /* CCMotorNode.mm */; };
-		B6A87DFF155843B70034591E /* CCSpringNode.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF6155843B70034591E /* CCSpringNode.h */; };
-		B6A87E00155843B70034591E /* CCSpringNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF7155843B70034591E /* CCSpringNode.mm */; };
+		B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF4155843B70034591E /* CCMotorSprite.h */; };
+		B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF5155843B70034591E /* CCMotorSprite.mm */; };
+		B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF6155843B70034591E /* CCSpringSprite.h */; };
+		B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF7155843B70034591E /* CCSpringSprite.mm */; };
 		B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF8155843B70034591E /* CCWorldLayer.h */; };
 		B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF9155843B70034591E /* CCWorldLayer.mm */; };
 		B6A87E04155843C30034591E /* Cocos2DKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87E03155843C30034591E /* Cocos2DKit.framework */; };
@@ -31,13 +31,13 @@
 		B6A87DDD155843680034591E /* libCCBox2D.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCCBox2D.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A87DE0155843680034591E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CCBox2D-Prefix.pch"; sourceTree = "<group>"; };
-		B6A87DF1155843B70034591E /* CCBodyNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBodyNode.h; sourceTree = "<group>"; };
-		B6A87DF2155843B70034591E /* CCBodyNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCBodyNode.mm; sourceTree = "<group>"; };
+		B6A87DF1155843B70034591E /* CCBodySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBodySprite.h; sourceTree = "<group>"; };
+		B6A87DF2155843B70034591E /* CCBodySprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCBodySprite.mm; sourceTree = "<group>"; };
 		B6A87DF3155843B70034591E /* CCBox2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBox2D.h; sourceTree = "<group>"; };
-		B6A87DF4155843B70034591E /* CCMotorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMotorNode.h; sourceTree = "<group>"; };
-		B6A87DF5155843B70034591E /* CCMotorNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCMotorNode.mm; sourceTree = "<group>"; };
-		B6A87DF6155843B70034591E /* CCSpringNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSpringNode.h; sourceTree = "<group>"; };
-		B6A87DF7155843B70034591E /* CCSpringNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSpringNode.mm; sourceTree = "<group>"; };
+		B6A87DF4155843B70034591E /* CCMotorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMotorSprite.h; sourceTree = "<group>"; };
+		B6A87DF5155843B70034591E /* CCMotorSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCMotorSprite.mm; sourceTree = "<group>"; };
+		B6A87DF6155843B70034591E /* CCSpringSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSpringSprite.h; sourceTree = "<group>"; };
+		B6A87DF7155843B70034591E /* CCSpringSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSpringSprite.mm; sourceTree = "<group>"; };
 		B6A87DF8155843B70034591E /* CCWorldLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCWorldLayer.h; sourceTree = "<group>"; };
 		B6A87DF9155843B70034591E /* CCWorldLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCWorldLayer.mm; sourceTree = "<group>"; };
 		B6A87E03155843C30034591E /* Cocos2DKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocos2DKit.framework; path = Vendor/Frameworks/Cocos2DKit.framework; sourceTree = "<group>"; };
@@ -98,13 +98,13 @@
 		B6A87DE2155843680034591E /* CCBox2D */ = {
 			isa = PBXGroup;
 			children = (
-				B6A87DF1155843B70034591E /* CCBodyNode.h */,
-				B6A87DF2155843B70034591E /* CCBodyNode.mm */,
+				B6A87DF1155843B70034591E /* CCBodySprite.h */,
+				B6A87DF2155843B70034591E /* CCBodySprite.mm */,
 				B6A87DF3155843B70034591E /* CCBox2D.h */,
-				B6A87DF4155843B70034591E /* CCMotorNode.h */,
-				B6A87DF5155843B70034591E /* CCMotorNode.mm */,
-				B6A87DF6155843B70034591E /* CCSpringNode.h */,
-				B6A87DF7155843B70034591E /* CCSpringNode.mm */,
+				B6A87DF4155843B70034591E /* CCMotorSprite.h */,
+				B6A87DF5155843B70034591E /* CCMotorSprite.mm */,
+				B6A87DF6155843B70034591E /* CCSpringSprite.h */,
+				B6A87DF7155843B70034591E /* CCSpringSprite.mm */,
 				B6A87DF8155843B70034591E /* CCWorldLayer.h */,
 				B6A87DF9155843B70034591E /* CCWorldLayer.mm */,
 				B6A87DE3155843680034591E /* Supporting Files */,
@@ -128,10 +128,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6A87DFA155843B70034591E /* CCBodyNode.h in Headers */,
+				B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */,
 				B6A87DFC155843B70034591E /* CCBox2D.h in Headers */,
-				B6A87DFD155843B70034591E /* CCMotorNode.h in Headers */,
-				B6A87DFF155843B70034591E /* CCSpringNode.h in Headers */,
+				B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */,
+				B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */,
 				B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */,
 				B665118215866D8E00C4139A /* Render.h in Headers */,
 			);
@@ -188,9 +188,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6A87DFB155843B70034591E /* CCBodyNode.mm in Sources */,
-				B6A87DFE155843B70034591E /* CCMotorNode.mm in Sources */,
-				B6A87E00155843B70034591E /* CCSpringNode.mm in Sources */,
+				B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */,
+				B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */,
+				B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */,
 				B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */,
 				B665118115866D8E00C4139A /* Render.cpp in Sources */,
 			);

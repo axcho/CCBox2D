@@ -22,13 +22,13 @@
  
  */
 
-#import "CCSpringNode.h"
-#import "CCBodyNode.h"
+#import "CCSpringSprite.h"
+#import "CCBodySprite.h"
 #import "CCBox2DPrivate.h"
 #import <Box2D/Box2D.h>
 
 
-@implementation CCSpringNode {
+@implementation CCSpringSprite {
     b2DistanceJoint *_distanceJoint;
 }
 
@@ -81,12 +81,12 @@
 	}
 }
 
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
 {
 	[self setBody:sprite1 andBody:sprite2 atAnchor:sprite1.position andAnchor:sprite2.position];
 }
 
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2
 {
 	_body1 = sprite1;
 	_body2 = sprite2;

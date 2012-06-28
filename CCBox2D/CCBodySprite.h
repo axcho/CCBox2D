@@ -26,7 +26,7 @@
 
 
 @class CCWorldLayer;
-@protocol CCJointNode;
+@protocol CCJointSprite;
 
 typedef enum
 {
@@ -35,7 +35,7 @@ typedef enum
 	kDynamic
 } PhysicsType;
 
-@interface CCBodyNode : CCNode
+@interface CCBodySprite : CCSprite
 {
 	PhysicsType _physicsType;
 	unsigned short _collisionType, _collidesWithType;
@@ -82,11 +82,11 @@ typedef enum
 
 -(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize atLocation:(CGPoint)shapeLocation;
 -(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize;
-//-(void) addBoxWithName:(NSString *)shapeName;
+-(void) addBoxWithName:(NSString *)shapeName;
 
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation;
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius;
-//-(void) addCircleWithName:(NSString *)shapeName;
+-(void) addCircleWithName:(NSString *)shapeName;
 
 -(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices;
 
@@ -95,12 +95,12 @@ typedef enum
 -(void) removeShapeWithName:(NSString *)shapeName;
 -(void) removeShapes;
 
--(void) addedToJoint:(CCNode<CCJointNode> *)sprite;
+-(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;
 
 -(void) update:(ccTime)delta;
 
--(void) onOverlapBody:(CCBodyNode *)sprite;
--(void) onSeparateBody:(CCBodyNode *)sprite;
--(void) onCollideBody:(CCBodyNode *)sprite withForce:(float)force withFrictionForce:(float)frictionForce;
+-(void) onOverlapBody:(CCBodySprite *)sprite;
+-(void) onSeparateBody:(CCBodySprite *)sprite;
+-(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end

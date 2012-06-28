@@ -24,12 +24,12 @@
 
 #import <Box2D/Box2D.h>
 
-#import "CCBodyNode.h"
+#import "CCBodySprite.h"
 #import "CCWorldLayer.h"
 #import "CCBox2DPrivate.h"
 
 
-@implementation CCBodyNode {
+@implementation CCBodySprite {
     b2Body *_body;
 }
 
@@ -649,10 +649,10 @@
 	[self addBoxWithName:shapeName ofSize:shapeSize atLocation:position_];
 }
 
-//-(void) addBoxWithName:(NSString *)shapeName
-//{
-//	[self addBoxWithName:shapeName ofSize:rect_.size];
-//}
+-(void) addBoxWithName:(NSString *)shapeName
+{
+	[self addBoxWithName:shapeName ofSize:rect_.size];
+}
 
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation
 {
@@ -670,13 +670,13 @@
 	[self addCircleWithName:shapeName ofRadius:shapeRadius atLocation:position_];
 }
 
-//-(void) addCircleWithName:(NSString *)shapeName
-//{
-//	float width = rect_.size.width;
-//	float height = rect_.size.height;
-//	float diameter = (width < height) ? width : height;
-//	[self addCircleWithName:shapeName ofRadius:(diameter / 2)];
-//}
+-(void) addCircleWithName:(NSString *)shapeName
+{
+	float width = rect_.size.width;
+	float height = rect_.size.height;
+	float diameter = (width < height) ? width : height;
+	[self addCircleWithName:shapeName ofRadius:(diameter / 2)];
+}
 
 -(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices
 {
@@ -810,7 +810,7 @@
 	}
 }
 
--(void) addedToJoint:(CCNode<CCJointNode> *)sprite
+-(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite
 {
 	// if the body does not yet exist
 	if (!_body)
@@ -845,7 +845,7 @@
 			nextJoint = joint->next;
 			
 			// get the joint sprite
-			CCNode<CCJointNode> *sprite = (CCNode<CCJointNode> *)(joint->joint->GetUserData());
+			CCSprite<CCJointSprite> *sprite = (CCSprite<CCJointSprite> *)(joint->joint->GetUserData());
 			
 			// if the sprite exists
 			if (sprite)
@@ -943,7 +943,7 @@
 			if (_joints)
 			{
 				// for each associated joint sprite
-				CCNode *sprite;
+				CCSprite *sprite;
 				CCARRAY_FOREACH(_joints, sprite)
 				{
 					// if the joint is already added
@@ -1073,15 +1073,15 @@
 	_world = nil;
 }
 
--(void) onOverlapBody:(CCBodyNode *)sprite
+-(void) onOverlapBody:(CCBodySprite *)sprite
 {
 }
 
--(void) onSeparateBody:(CCBodyNode *)sprite
+-(void) onSeparateBody:(CCBodySprite *)sprite
 {
 }
 
--(void) onCollideBody:(CCBodyNode *)sprite withForce:(float)force withFrictionForce:(float)frictionForce
+-(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce
 {
 }
 

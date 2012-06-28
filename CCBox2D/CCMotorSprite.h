@@ -25,14 +25,14 @@
 #import "CCWorldLayer.h"
 
 
-@interface CCMotorNode : CCNode <CCJointNode>
+@interface CCMotorSprite : CCSprite <CCJointSprite>
 {
 	BOOL _fixed;
 	BOOL _running, _limited;
 	float _motorSpeed, _maxTorque, _minRotation, _maxRotation;
 	CGPoint _anchor;
-	CCBodyNode *_body1;
-	CCBodyNode *_body2;
+	CCBodySprite *_body1;
+	CCBodySprite *_body2;
 	CCWorldLayer *_world;
 }
 
@@ -43,7 +43,7 @@
 @property (nonatomic) float minRotation;
 @property (nonatomic) float maxRotation;
 
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2;
--(void) setBody:(CCBodyNode *)sprite1 andBody:(CCBodyNode *)sprite2 atAnchor:(CGPoint)anchor;
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor;
 
 @end

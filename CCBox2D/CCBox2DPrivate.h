@@ -9,12 +9,12 @@
 #ifndef CCBox2D_CCBox2DPrivate_h
 #define CCBox2D_CCBox2DPrivate_h
 
-#import "CCBodyNode.h"
+#import "CCBodySprite.h"
 #import "CCWorldLayer.h"
 #import <Box2D/Box2D.h>
 
 
-@interface CCBodyNode (CCBox2DPrivate)
+@interface CCBodySprite (CCBox2DPrivate)
 @property (nonatomic, readonly) b2Body *body;
 @end
 
