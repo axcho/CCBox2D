@@ -1017,10 +1017,6 @@
             CGPoint worldPosition = ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO);
             CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
             
-            if([self.parent isKindOfClass:[CCWorldLayer class]] && !CGPointEqualToPoint(worldPosition, localPosition))
-//                NSAssert(CGPointEqualToPoint(worldPosition, localPosition), @"Calculation Error");
-                [self.parent convertToNodeSpace:worldPosition];
-            
 			[super setPosition:localPosition];
 			[super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
 			
