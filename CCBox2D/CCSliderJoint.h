@@ -15,7 +15,6 @@
    BOOL _running, _limited;
 	float _motorSpeed, _maxForce, _minRotation, _maxRotation;
 	CGPoint _anchor;
-	b2PrismaticJoint *_prismaticJoint;
 	CCBodySprite *_body1;
 	CCBodySprite *_body2;
 	CCWorldLayer *_world;

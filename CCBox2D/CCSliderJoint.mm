@@ -8,8 +8,12 @@
 
 #import "CCSliderJoint.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
 
-@implementation CCSliderJoint
+@implementation CCSliderJoint {
+    b2PrismaticJoint *_prismaticJoint;
+}
+
 @synthesize fixed = _fixed;
 @synthesize running = _running;
 @synthesize limited = _limited;
