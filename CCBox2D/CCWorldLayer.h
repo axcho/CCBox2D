@@ -37,6 +37,7 @@ extern const CGFloat InvPTMRatio;
 
 @class CCBodySprite;
 
+
 @protocol ContactListenizer
 
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
@@ -54,10 +55,6 @@ extern const CGFloat InvPTMRatio;
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
-
--(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end
 

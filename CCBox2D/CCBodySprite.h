@@ -25,53 +25,44 @@
 #import <Cocos2DKit/Cocos2DKit.h>
 
 
-@class CCWorldLayer;
+@class CCWorldLayer, CCBodySprite, CCShape;
 @protocol CCJointSprite;
 
 typedef enum
 {
-	kStatic,
+	kStatic = 0,
 	kKinematic,
 	kDynamic
 } PhysicsType;
 
+
+typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString *otherShapeName);
+
+
+
 @interface CCBodySprite : CCSprite
 {
-	PhysicsType _physicsType;
-	unsigned short _collisionType, _collidesWithType;
-	BOOL _active, _sleepy, _awake, _solid, _fixed, _bullet;
-	float _density, _friction, _bounce;
-	float _damping, _angularDamping;
-	float _angularVelocity;
-	CGPoint _velocity;
 	CCArray *_joints;
 	CCWorldLayer *_world;
 	
 	NSMutableDictionary *_shapes;
-	NSMutableDictionary *_shapeData;
+    
+    BOOL _active;
 }
 
 @property (nonatomic) PhysicsType physicsType;
-@property (nonatomic) unsigned short collisionType;
-@property (nonatomic) unsigned short collidesWithType;
+
 @property (nonatomic) BOOL active;
 @property (nonatomic) BOOL sleepy;
 @property (nonatomic) BOOL awake;
-@property (nonatomic) BOOL solid;
 @property (nonatomic) BOOL fixed;
 @property (nonatomic) BOOL bullet;
-@property (nonatomic) float density;
-@property (nonatomic) float friction;
-@property (nonatomic) float bounce;
 @property (nonatomic) float damping;
 @property (nonatomic) float angularDamping;
 @property (nonatomic) float angularVelocity;
 @property (nonatomic) CGPoint velocity;
 @property (nonatomic, assign) CCWorldLayer *world;
 
--(void) setDensity:(float)newDensity forShape:(NSString *)shapeName;
--(void) setFriction:(float)newFriction forShape:(NSString *)shapeName;
--(void) setBounce:(float)newBounce forShape:(NSString *)shapeName;
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse;
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location;
@@ -80,19 +71,9 @@ typedef enum
 -(void) applyTorque:(float)torque asImpulse:(BOOL)impulse;
 -(void) applyTorque:(float)torque;
 
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize atLocation:(CGPoint)shapeLocation;
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize;
--(void) addBoxWithName:(NSString *)shapeName;
-
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation;
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius;
--(void) addCircleWithName:(NSString *)shapeName;
-
--(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices;
-
--(void) addChainWithName:(NSString *)shapeName withVertices:(CGPoint *)chainVertices count:(NSUInteger)count;
-
--(void) removeShapeWithName:(NSString *)shapeName;
+- (CCShape *)shapeNamed:(NSString *)name;
+- (void)addShape:(CCShape *)shape named:(NSString *)name;
+-(void) removeShapeNamed:(NSString *)name;
 -(void) removeShapes;
 
 -(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;

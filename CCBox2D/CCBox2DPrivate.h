@@ -9,6 +9,7 @@
 #ifndef CCBox2D_CCBox2DPrivate_h
 #define CCBox2D_CCBox2DPrivate_h
 
+#import "CCShape.h"
 #import "CCBodySprite.h"
 #import "CCWorldLayer.h"
 #import <Box2D/Box2D.h>

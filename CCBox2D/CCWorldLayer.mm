@@ -42,8 +42,10 @@ ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
 void ContactConduit::BeginContact(b2Contact* contact)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
+	CCBodySprite *sprite1 = (CCBodySprite *)fixtureA->GetBody()->GetUserData();
+	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
 	
 	// notify the physics sprites
 	[sprite1 onOverlapBody:sprite2];
@@ -56,8 +58,10 @@ void ContactConduit::BeginContact(b2Contact* contact)
 void ContactConduit::EndContact(b2Contact* contact)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
+	CCBodySprite *sprite1 = (CCBodySprite *)fixtureA->GetBody()->GetUserData();
+	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
 	
 	// notify the physics sprites
 	[sprite1 onSeparateBody:sprite2];
@@ -70,8 +74,10 @@ void ContactConduit::EndContact(b2Contact* contact)
 void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
 	// extract the physics sprites from the contact
-	CCBodySprite *sprite1 = (CCBodySprite *)contact->GetFixtureA()->GetBody()->GetUserData();
-	CCBodySprite *sprite2 = (CCBodySprite *)contact->GetFixtureB()->GetBody()->GetUserData();
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
+	CCBodySprite *sprite1 = (CCBodySprite *)fixtureA->GetBody()->GetUserData();
+	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
 	
 	// get the forces involved
 	float force = 0.0f;

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 848F360615AC9D570079D84D /* CCSliderJoint.h */; };
 		848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848F360715AC9D570079D84D /* CCSliderJoint.mm */; };
+		849273C115AF6256004DCA73 /* CCShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 849273BF15AF6256004DCA73 /* CCShape.h */; };
+		849273C215AF6256004DCA73 /* CCShape.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849273C015AF6256004DCA73 /* CCShape.mm */; };
 		B665118115866D8E00C4139A /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B665117F15866D8E00C4139A /* Render.cpp */; };
 		B665118215866D8E00C4139A /* Render.h in Headers */ = {isa = PBXBuildFile; fileRef = B665118015866D8E00C4139A /* Render.h */; };
 		B665118515866E5B00C4139A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B665118415866E5B00C4139A /* OpenGLES.framework */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		848F360615AC9D570079D84D /* CCSliderJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSliderJoint.h; sourceTree = "<group>"; };
 		848F360715AC9D570079D84D /* CCSliderJoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSliderJoint.mm; sourceTree = "<group>"; };
+		849273BF15AF6256004DCA73 /* CCShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCShape.h; sourceTree = "<group>"; };
+		849273C015AF6256004DCA73 /* CCShape.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCShape.mm; sourceTree = "<group>"; };
 		B61AC3381587D4B9005A7467 /* Box2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		B61AC33A1587D4B9005A7467 /* b2BroadPhase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2BroadPhase.h; sourceTree = "<group>"; };
 		B61AC33B1587D4B9005A7467 /* b2Collision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2Collision.h; sourceTree = "<group>"; };
@@ -283,6 +287,8 @@
 				B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */,
 				B6A87DF4155843B70034591E /* CCMotorSprite.h */,
 				B6A87DF5155843B70034591E /* CCMotorSprite.mm */,
+				849273BF15AF6256004DCA73 /* CCShape.h */,
+				849273C015AF6256004DCA73 /* CCShape.mm */,
 				848F360615AC9D570079D84D /* CCSliderJoint.h */,
 				848F360715AC9D570079D84D /* CCSliderJoint.mm */,
 				B6A87DF6155843B70034591E /* CCSpringSprite.h */,
@@ -316,6 +322,7 @@
 				B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */,
 				B665118215866D8E00C4139A /* Render.h in Headers */,
 				848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */,
+				849273C115AF6256004DCA73 /* CCShape.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +383,7 @@
 				B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */,
 				B665118115866D8E00C4139A /* Render.cpp in Sources */,
 				848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */,
+				849273C215AF6256004DCA73 /* CCShape.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
