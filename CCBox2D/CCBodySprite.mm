@@ -38,6 +38,11 @@
 }
 
 #pragma mark - Properties
+@synthesize startContact=_startContact;
+@synthesize endContact=_endContact;
+@synthesize collision=_collision;
+@synthesize world;
+
 @dynamic physicsType;
 @dynamic active;
 @dynamic sleepy;
@@ -48,7 +53,6 @@
 @dynamic angularDamping;
 @dynamic angularVelocity;
 @dynamic velocity;
-@dynamic world;
 
 
 #pragma mark - Accessors
@@ -364,7 +368,7 @@
         // give it a reference to this sprite
         _body->SetUserData(self);
         
-        for (CCShape *shape in _shapes)
+        for (CCShape *shape in [_shapes allValues])
             [shape addFixtureToBody:self];
         
         // if there are any joints
@@ -390,6 +394,9 @@
 	[self destroyBody];
     [_joints release], _joints = nil;
     [_shapes release], _shapes = nil;
+    self.startContact = nil;
+    self.endContact = nil;
+    self.collision = nil;
 	[super dealloc];
 }
 
@@ -404,7 +411,7 @@
         _bodyDef->allowSleep = YES;
         _bodyDef->userData = self;
 
-        _active = _bodyDef->active = YES;
+        _wasActive = _bodyDef->active = YES;
 
 		_shapes = [[NSMutableDictionary alloc] init];
 	}
@@ -415,25 +422,22 @@
 #pragma mark - Updating
 -(void) update:(ccTime)delta
 {
-	// if body exists
-	if (_body)
-	{
-		// check if the body is active
-		BOOL wasActive = _active;
-		_active = _body->IsActive();
-		
-		// if the body is or was active
-		if (_active || wasActive)
-		{
-			// update the display properties to match
-			b2Vec2 bodyPosition = _body->GetPosition();
-            CGPoint worldPosition = ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO);
-            CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
-            
-			[super setPosition:localPosition];
-			[super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
-		}
-	}
+	if(!_body)
+        return;
+    
+    BOOL active = _body->IsActive();
+    
+    if(!active && !_wasActive)
+        return;
+    
+    b2Vec2 bodyPosition = _body->GetPosition();
+    CGPoint worldPosition = ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO);
+    CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
+    
+    [super setPosition:localPosition];
+    [super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
+    
+    _wasActive = active;
 }
 
 
@@ -455,23 +459,6 @@
 	[super onExit];
     [self destroyBody];
 	_world = nil;
-}
-
-
-#pragma mark - CCBodySprite
-
-
-#pragma mark - CCBodySprite (should be a category or a protocol)
--(void) onOverlapBody:(CCBodySprite *)sprite
-{
-}
-
--(void) onSeparateBody:(CCBodySprite *)sprite
-{
-}
-
--(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce
-{
 }
 
 @end

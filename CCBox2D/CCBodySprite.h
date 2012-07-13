@@ -37,6 +37,7 @@ typedef enum
 
 
 typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString *otherShapeName);
+typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 friction);
 
 
 
@@ -47,7 +48,11 @@ typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString 
 	
 	NSMutableDictionary *_shapes;
     
-    BOOL _active;
+    ContactBlock _startContact;
+    ContactBlock _endContact;
+    CollideBlock _collision;
+    
+    BOOL _wasActive;
 }
 
 @property (nonatomic) PhysicsType physicsType;
@@ -61,7 +66,12 @@ typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString 
 @property (nonatomic) float angularDamping;
 @property (nonatomic) float angularVelocity;
 @property (nonatomic) CGPoint velocity;
+
 @property (nonatomic, assign) CCWorldLayer *world;
+
+@property (nonatomic, copy) id startContact; // actually a ContactBlock
+@property (nonatomic, copy) id endContact;   // ditto
+@property (nonatomic, copy) id collision;
 
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse;
@@ -79,9 +89,5 @@ typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString 
 -(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;
 
 -(void) update:(ccTime)delta;
-
--(void) onOverlapBody:(CCBodySprite *)sprite;
--(void) onSeparateBody:(CCBodySprite *)sprite;
--(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end
