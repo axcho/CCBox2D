@@ -48,8 +48,12 @@ void ContactConduit::BeginContact(b2Contact* contact)
 	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
 	
 	// notify the physics sprites
-	[sprite1 onOverlapBody:sprite2];
-	[sprite2 onOverlapBody:sprite1];
+    ContactBlock startContact = sprite1.startContact;
+    
+    startContact(sprite2, nil, nil);
+    
+    startContact = sprite2.startContact;
+    startContact(sprite1, nil, nil);
 	
 	// notify the physics listener
 	[listener onOverlapBody:sprite1 andBody:sprite2];
@@ -64,8 +68,10 @@ void ContactConduit::EndContact(b2Contact* contact)
 	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
 	
 	// notify the physics sprites
-	[sprite1 onSeparateBody:sprite2];
-	[sprite2 onSeparateBody:sprite1];
+    ContactBlock endContact = sprite1.endContact;
+    endContact(sprite2, nil, nil);
+    endContact = sprite2.endContact;
+    endContact(sprite1, nil, nil);
 	
 	// notify the physics listener;
 	[listener onSeparateBody:sprite1 andBody:sprite2];
@@ -96,8 +102,10 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	frictionForce *= PTM_RATIO / GTKG_RATIO;
 	
 	// notify the physics sprites
-	[sprite1 onCollideBody:sprite2 withForce:force withFrictionForce:frictionForce];
-	[sprite2 onCollideBody:sprite1 withForce:force withFrictionForce:frictionForce];
+    CollideBlock collision = sprite1.collision;
+    collision(sprite2, force, frictionForce);
+    collision = sprite2.collision;
+    collision(sprite1, force, frictionForce);
 	
 	// notify the physics listener
 	[listener onCollideBody:sprite1 andBody:sprite2 withForce:force withFrictionForce:frictionForce];
