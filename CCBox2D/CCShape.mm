@@ -34,7 +34,7 @@
 - (id)initWithShape:(b2Shape *)shape {
     self = [super init];
     if(self) {
-        _fixtureDef = new b2FixtureDef;
+        _fixtureDef = new b2FixtureDef();
         _fixtureDef->shape = shape;
         _fixtureDef->filter.categoryBits = 0xFFFF;
         _fixtureDef->filter.maskBits = 0xFFFF;
@@ -112,6 +112,7 @@
 - (void)addFixtureToBody:(CCBodySprite *)body {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
     body.body->CreateFixture(_fixtureDef);
+    delete _fixtureDef->shape;
     delete _fixtureDef;
     _fixtureDef = NULL;
 }
@@ -124,25 +125,25 @@
 
 + (CCShape *)boxWithRect:(CGRect)rect {
     
-    b2PolygonShape polygon;
+    b2PolygonShape *polygon = new b2PolygonShape();
     b2Vec2 center = b2Vec2(CGRectGetMidX(rect)*InvPTMRatio, CGRectGetMidY(rect)*InvPTMRatio);
     
     // TODO: add angle support
-    polygon.SetAsBox(rect.size.width*0.5f*InvPTMRatio, rect.size.height*0.5f*InvPTMRatio, center, 0);
+    polygon->SetAsBox(rect.size.width*0.5f*InvPTMRatio, rect.size.height*0.5f*InvPTMRatio, center, 0);
     
-    CCShape *ccShape = [[self alloc] initWithShape:&polygon];
+    CCShape *ccShape = [[self alloc] initWithShape:polygon];
     
     return [ccShape autorelease];
 }
 
 + (CCShape *)circleWithCenter:(CGPoint)center radius:(Float32)radius {
     
-    b2CircleShape circle;
+    b2CircleShape *circle = new b2CircleShape();
     
-    circle.m_radius = radius * InvPTMRatio;
-    circle.m_p = b2Vec2(center.x*InvPTMRatio, center.y*InvPTMRatio);
+    circle->m_radius = radius * InvPTMRatio;
+    circle->m_p = b2Vec2(center.x*InvPTMRatio, center.y*InvPTMRatio);
     
-    return [[[self alloc] initWithShape:&circle] autorelease];
+    return [[[self alloc] initWithShape:circle] autorelease];
 }
 
 + (CCShape *)polygonWithVertices:(CCArray *)shapeVertices bodyPosition:(CGPoint)position {
