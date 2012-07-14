@@ -50,10 +50,10 @@ void ContactConduit::BeginContact(b2Contact* contact)
 	// notify the physics sprites
     ContactBlock startContact = sprite1.startContact;
     
-    startContact(sprite2, nil, nil);
+    if(startContact) startContact(sprite2, nil, nil);
     
     startContact = sprite2.startContact;
-    startContact(sprite1, nil, nil);
+    if(startContact) startContact(sprite1, nil, nil);
 	
 	// notify the physics listener
 	[listener onOverlapBody:sprite1 andBody:sprite2];
@@ -69,9 +69,9 @@ void ContactConduit::EndContact(b2Contact* contact)
 	
 	// notify the physics sprites
     ContactBlock endContact = sprite1.endContact;
-    endContact(sprite2, nil, nil);
+    if(endContact) endContact(sprite2, nil, nil);
     endContact = sprite2.endContact;
-    endContact(sprite1, nil, nil);
+    if(endContact) endContact(sprite1, nil, nil);
 	
 	// notify the physics listener;
 	[listener onSeparateBody:sprite1 andBody:sprite2];
@@ -103,9 +103,9 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	
 	// notify the physics sprites
     CollideBlock collision = sprite1.collision;
-    collision(sprite2, force, frictionForce);
+    if(collision) collision(sprite2, force, frictionForce);
     collision = sprite2.collision;
-    collision(sprite1, force, frictionForce);
+    if(collision) collision(sprite1, force, frictionForce);
 	
 	// notify the physics listener
 	[listener onCollideBody:sprite1 andBody:sprite2 withForce:force withFrictionForce:frictionForce];
@@ -120,6 +120,8 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 @synthesize positionIterations = _positionIterations;
 @synthesize velocityIterations = _velocityIterations;
 @synthesize gravity = _gravity;
+
+@dynamic debugDrawing;
 
 + (void)initialize {
     

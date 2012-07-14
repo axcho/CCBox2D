@@ -60,11 +60,13 @@
 }
 
 - (Float32)density {
-    return _fixtureDef->density;
+    const static Float32 conversionFactor = InvPTMRatio * InvPTMRatio * GTKG_RATIO;
+    return conversionFactor * _fixtureDef->density;
 }
 
 - (void)setDensity:(Float32)density {
-    _fixtureDef->density = density;
+    const static Float32 conversionFactor = PTM_RATIO * PTM_RATIO / GTKG_RATIO;
+    _fixtureDef->density = density * conversionFactor;
 }
 
 - (Float32)friction {
@@ -111,6 +113,30 @@
 #pragma mark - CCShape
 - (void)addFixtureToBody:(CCBodySprite *)body {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
+    
+    // offset the shape using the body's position
+    b2Vec2 offset = b2Vec2(body.position.x * InvPTMRatio, body.position.y * InvPTMRatio);
+    b2FixtureDef *fixtureDef = _fixtureDef;
+    
+    switch ( fixtureDef->shape->GetType()) {
+        case b2Shape::e_polygon:
+            ((b2PolygonShape *)(fixtureDef->shape))->m_centroid = offset;
+            break;
+            
+        case b2Shape::e_circle:
+            ((b2CircleShape *)(fixtureDef->shape))->m_p = offset;
+            break;
+            
+        case b2Shape::e_chain:
+            break;
+            
+        case b2Shape::e_edge:
+            break;
+            
+        default:
+            break;
+    }
+   
     body.body->CreateFixture(_fixtureDef);
     delete _fixtureDef->shape;
     delete _fixtureDef;
@@ -146,7 +172,7 @@
     return [[[self alloc] initWithShape:circle] autorelease];
 }
 
-+ (CCShape *)polygonWithVertices:(CCArray *)shapeVertices bodyPosition:(CGPoint)position {
++ (CCShape *)polygonWithVertices:(CCArray *)shapeVertices {
     
     // the number of vertices should be within limits
 	assert([shapeVertices count] <= b2_maxPolygonVertices);
@@ -161,7 +187,7 @@
 	{
 		// save the vertex in world coordinates
 		CGPoint point = [vertex CGPointValue];
-		vertices[i] = b2Vec2((point.x - position.x) * InvPTMRatio, (point.y - position.y) * InvPTMRatio);
+		vertices[i] = b2Vec2(point.x * InvPTMRatio, point.y * InvPTMRatio);
 		
 		// next vertex
 		i++;
@@ -175,7 +201,7 @@
     return [[[self alloc] initWithShape:polygonShape] autorelease];
 }
 
-+ (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count sensor:(BOOL)sensor {
++ (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count {
     
     b2ChainShape *chainShape = new b2ChainShape();
     

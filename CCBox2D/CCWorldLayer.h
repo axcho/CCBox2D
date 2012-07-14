@@ -55,6 +55,7 @@ extern const CGFloat InvPTMRatio;
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
+@property (nonatomic) BOOL debugDrawing;
 
 @end
 

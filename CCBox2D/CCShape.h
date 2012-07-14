@@ -30,7 +30,7 @@
 
 + (CCShape *)boxWithRect:(CGRect)rect;
 + (CCShape *)circleWithCenter:(CGPoint)center radius:(Float32)radius;
-+ (CCShape *)polygonWithVertices:(CCArray *)shapeVertices bodyPosition:(CGPoint)position;
-+ (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count sensor:(BOOL)sensor;
++ (CCShape *)polygonWithVertices:(CCArray *)shapeVertices;
++ (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count;
 
 @end

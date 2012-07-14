@@ -41,7 +41,7 @@
 @synthesize startContact=_startContact;
 @synthesize endContact=_endContact;
 @synthesize collision=_collision;
-@synthesize world;
+@synthesize world=_world;
 
 @dynamic physicsType;
 @dynamic active;
@@ -360,7 +360,7 @@
         CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
         
         // create the body
-        _bodyDef->position = b2Vec2(worldPosition.x, worldPosition.y);
+        _bodyDef->position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
         _body = _world.world->CreateBody(_bodyDef);
         delete _bodyDef;
         _bodyDef = NULL;
@@ -431,7 +431,7 @@
         return;
     
     b2Vec2 bodyPosition = _body->GetPosition();
-    CGPoint worldPosition = ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO);
+    CGPoint worldPosition = ccp(bodyPosition.x * PTMRatio, bodyPosition.y * PTMRatio);
     CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
     
     [super setPosition:localPosition];
