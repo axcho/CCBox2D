@@ -113,30 +113,6 @@
 #pragma mark - CCShape
 - (void)addFixtureToBody:(CCBodySprite *)body {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
-    
-    // offset the shape using the body's position
-    b2Vec2 offset = b2Vec2(body.position.x * InvPTMRatio, body.position.y * InvPTMRatio);
-    b2FixtureDef *fixtureDef = _fixtureDef;
-    
-    switch ( fixtureDef->shape->GetType()) {
-        case b2Shape::e_polygon:
-            ((b2PolygonShape *)(fixtureDef->shape))->m_centroid = offset;
-            break;
-            
-        case b2Shape::e_circle:
-            ((b2CircleShape *)(fixtureDef->shape))->m_p = offset;
-            break;
-            
-        case b2Shape::e_chain:
-            break;
-            
-        case b2Shape::e_edge:
-            break;
-            
-        default:
-            break;
-    }
-   
     body.body->CreateFixture(_fixtureDef);
     delete _fixtureDef->shape;
     delete _fixtureDef;
