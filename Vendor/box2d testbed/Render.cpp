@@ -104,6 +104,7 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
     glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
     glDrawArrays(GL_LINE_LOOP, 0, k_segments);
     
+    delete [] vertices;
     
 #else
 	glBegin(GL_LINE_LOOP);
@@ -136,8 +137,9 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     
     glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
     glDrawArrays(GL_LINE_LOOP, 0, k_segments);    
-    free(vertices);
 
+    delete [] vertices;
+    
     
 	b2Vec2 p = center + radius * axis;
     GLfloat line[4];
