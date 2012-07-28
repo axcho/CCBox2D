@@ -110,6 +110,191 @@
 }
 
 
+#pragma mark - NSCoding
+- (void)decodeCircleWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    
+    b2CircleShape *circle = new b2CircleShape();
+    CGPoint position = [aDecoder decodeCGPointForKey:@"circle_position"];
+    
+    circle->m_p = b2Vec2(position.x, position.y);
+    
+    _fixtureDef->shape = circle;
+}
+
+- (void)decodeEdgeWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    
+    b2EdgeShape *edge = new b2EdgeShape();
+    CGPoint point;
+    
+    if([aDecoder decodeBoolForKey:@"has_vertex_0"]) {
+        edge->m_hasVertex0 = true;
+        point = [aDecoder decodeCGPointForKey:@"edge_vertex_0"];
+        edge->m_vertex0 = b2Vec2(point.x, point.y);
+    }
+    
+    point = [aDecoder decodeCGPointForKey:@"edge_vertex_1"];
+    edge->m_vertex1 = b2Vec2(point.x, point.y);
+    point = [aDecoder decodeCGPointForKey:@"edge_vertex_2"];
+    edge->m_vertex2 = b2Vec2(point.x, point.y);
+    
+    if([aDecoder decodeBoolForKey:@"has_vertex_3"]) {
+        edge->m_hasVertex3 = true;
+        point = [aDecoder decodeCGPointForKey:@"edge_vertex_3"];
+        edge->m_vertex2 = b2Vec2(point.x, point.y);
+    }
+    
+    _fixtureDef->shape = edge;
+}
+
+- (void)decodePolygonWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    
+    b2PolygonShape *polygon = new b2PolygonShape();
+
+    int32 count = [aDecoder decodeInt32ForKey:@"polygon_count"];
+
+    polygon->m_count = count;
+    
+    NSData *vertices = [aDecoder decodeObjectForKey:@"polygon_vertices"];
+    
+    polygon->Set((b2Vec2 *)[vertices bytes], [aDecoder decodeInt32ForKey:@"polygon_count"]);
+        
+    _fixtureDef->shape = polygon;
+}
+
+- (void)decodeChainWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    
+    b2ChainShape *chain = new b2ChainShape();
+    
+    NSData *vertices = [aDecoder decodeObjectForKey:@"chain_vertices"];
+    
+    chain->CreateLoop((b2Vec2 *)[vertices bytes], [aDecoder decodeInt32ForKey:@"chain_count"]);
+
+    _fixtureDef->shape = chain;
+}
+
+- (void)decodeShapeWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    
+    b2Shape::Type type = _fixtureDef->shape->GetType();
+    
+    switch (type) {
+        case b2Shape::e_circle:
+            [self decodeCircleWithCoder:aDecoder];
+            break;
+            
+        case b2Shape::e_edge:
+            [self decodeEdgeWithCoder:aDecoder];
+            break;
+            
+        case b2Shape::e_polygon:
+            [self decodePolygonWithCoder:aDecoder];
+            break;
+            
+        case b2Shape::e_chain:
+            [self decodeChainWithCoder:aDecoder];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (id)initWithCoder:(NSKeyedUnarchiver *)aDecoder {
+    self = [super init];
+    if(self) {
+        [self decodeShapeWithCoder:aDecoder];
+        _fixtureDef->density = [aDecoder decodeFloatForKey:@"density"];
+        _fixtureDef->friction = [aDecoder decodeFloatForKey:@"friction"];
+        _fixtureDef->restitution = [aDecoder decodeFloatForKey:@"restitution"];
+        _fixtureDef->filter.groupIndex = [aDecoder decodeIntForKey:@"group"];
+        _fixtureDef->filter.categoryBits = [aDecoder decodeIntForKey:@"category"];
+        _fixtureDef->filter.maskBits = [aDecoder decodeIntForKey:@"mask"];
+        _fixtureDef->isSensor = [aDecoder decodeBoolForKey:@"is_sensor"];
+    }
+    
+    return self;
+}
+
+- (void)encodeCircle:(const b2CircleShape *)circle withCoder:(NSKeyedArchiver *)aCoder {
+    [aCoder encodeCGPoint:CGPointMake(circle->m_p.x, circle->m_p.y) forKey:@"circle_position"];
+}
+
+- (void)encodeEdge:(const b2EdgeShape *)edge withCoder:(NSKeyedArchiver *)aCoder {
+    
+    if(edge->m_hasVertex0) {
+        [aCoder encodeBool:YES forKey:@"has_vertex_0"];
+        [aCoder encodeCGPoint:CGPointMake(edge->m_vertex0.x, edge->m_vertex0.y) forKey:@"edge_vertex_0"];
+    }
+        
+    [aCoder encodeCGPoint:CGPointMake(edge->m_vertex1.x, edge->m_vertex1.y) forKey:@"edge_vertex_1"];
+    [aCoder encodeCGPoint:CGPointMake(edge->m_vertex2.x, edge->m_vertex2.y) forKey:@"edge_vertex_2"];
+
+    if(edge->m_hasVertex3) {
+        [aCoder encodeBool:YES forKey:@"has_vertex_3"];
+        [aCoder encodeCGPoint:CGPointMake(edge->m_vertex3.x, edge->m_vertex3.y) forKey:@"edge_vertex_3"];
+    }
+}
+
+- (void)encodePolygon:(const b2PolygonShape *)polygon withCoder:(NSKeyedArchiver *)aCoder {
+    
+    int32 count = polygon->m_count;
+    
+    [aCoder encodeInt32:count forKey:@"polygon_count"];
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:(void *)polygon->m_vertices length:sizeof(b2Vec2)*count] forKey:@"polygon_vertices"];
+    // We DON'T encode the normals or the centroid; they will be recalculated
+//    [aCoder encodeObject:[NSData dataWithBytesNoCopy:polygon->m_normals length:sizeof(b2Vec2)*count] forKey:@"polygon_normals"];
+//    [aCoder encodeCGPoint:CGPointMake(polygon->m_centroid.x, polygon->m_centroid.y) forKey:@"polygon_centroid"];
+}
+
+- (void)encodeChain:(const b2ChainShape *)chain withCoder:(NSKeyedArchiver *)aCoder {
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:chain->m_vertices length:chain->m_count * sizeof(b2Vec2)] forKey:@"chain_vertices"];
+    [aCoder encodeInt32:chain->m_count forKey:@"chain_count"];
+    
+    // TODO: BG - support for prev and next vertices
+}
+
+- (void)encodeShapeWithCoder:(NSKeyedArchiver *)aCoder {
+    
+    b2Shape::Type type = _fixtureDef->shape->GetType();
+    const b2Shape *shape = _fixtureDef ? _fixtureDef->shape : _fixture->GetShape();
+    
+    [aCoder encodeFloat:_fixtureDef->shape->m_radius forKey:@"shape_radius"];
+    [aCoder encodeInt:type forKey:@"shape_type"];
+    
+    switch (type) {
+        case b2Shape::e_chain:
+            [self encodeChain:(b2ChainShape *)shape withCoder:aCoder];
+            break;
+            
+        case b2Shape::e_edge:
+            [self encodeEdge:(b2EdgeShape *)shape withCoder:aCoder];
+            break;
+            
+        case b2Shape::e_circle:
+            [self encodeCircle:(b2CircleShape *)shape withCoder:aCoder];
+            break;
+            
+        case b2Shape::e_polygon:
+            [self encodePolygon:(b2PolygonShape *)shape withCoder:aCoder];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)encodeWithCoder:(NSKeyedArchiver *)aCoder {    
+    [self encodeShapeWithCoder:aCoder];
+    
+    [aCoder encodeFloat:_fixtureDef->density forKey:@"density"];
+    [aCoder encodeFloat:_fixtureDef->friction forKey:@"friction"];
+    [aCoder encodeFloat:_fixtureDef->restitution forKey:@"restitution"];
+    [aCoder encodeInt:_fixtureDef->filter.groupIndex forKey:@"group"];
+    [aCoder encodeInt:_fixtureDef->filter.categoryBits forKey:@"category"];
+    [aCoder encodeInt:_fixtureDef->filter.maskBits forKey:@"mask"];
+    [aCoder encodeBool:_fixtureDef->isSensor forKey:@"is_sensor"];
+}
+
+
 #pragma mark - CCShape
 - (void)addFixtureToBody:(CCBodySprite *)body {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
@@ -121,6 +306,17 @@
 
 - (void)removeFixtureFromBody:(CCBodySprite *)body {
     NSAssert1(_fixture, @"Fixture not set! Cannot remove from body %@", body);
+    
+    // Regenerate the fixture definition
+    _fixtureDef = new b2FixtureDef();
+    
+    _fixtureDef->shape = _fixture->GetShape()->Clone(NULL);
+    _fixtureDef->density = _fixture->GetDensity();
+    _fixtureDef->friction = _fixture->GetFriction();
+    _fixtureDef->restitution = _fixture->GetRestitution();
+    _fixtureDef->filter = _fixture->GetFilterData();
+    _fixtureDef->isSensor = _fixture->IsSensor();
+    
     body.body->DestroyFixture(_fixture);
     _fixture = NULL;
 }

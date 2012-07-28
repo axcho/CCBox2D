@@ -13,17 +13,17 @@
 
 // CCShape represents a fixture definition, which includes a shape
 
-@interface CCShape : NSObject
+@interface CCShape : NSObject<NSCoding>
 
 @property (nonatomic, assign) id userData;
 
 @property (nonatomic, assign) Float32 density;
 @property (nonatomic, assign) Float32 friction;
 @property (nonatomic, assign) Float32 restitution;
-@property (nonatomic, assign, getter = isSensor) BOOL sensor;
 @property (nonatomic, assign) UInt16 collisionCategory;
 @property (nonatomic, assign) UInt16 collisionMask;
 @property (nonatomic, assign) SInt16 collisionGroup;
+@property (nonatomic, assign, getter = isSensor) BOOL sensor;
 
 - (void)addFixtureToBody:(CCBodySprite *)body;
 - (void)removeFixtureFromBody:(CCBodySprite *)body;
