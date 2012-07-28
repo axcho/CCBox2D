@@ -42,6 +42,7 @@
 @synthesize endContact=_endContact;
 @synthesize collision=_collision;
 @synthesize world=_world;
+@synthesize shapes=_shapes;
 
 @dynamic physicsType;
 @dynamic active;
@@ -347,6 +348,8 @@
 		_body->GetWorld()->DestroyBody(_body);
 		_body = NULL;
         _bodyDef = new b2BodyDef();
+        
+        [self removeShapes];
 	}
 }
 

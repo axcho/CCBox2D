@@ -67,11 +67,13 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic) float angularVelocity;
 @property (nonatomic) CGPoint velocity;
 
+@property (nonatomic, readonly, copy) NSDictionary *shapes;
+
 @property (nonatomic, assign) CCWorldLayer *world;
 
-@property (nonatomic, copy) id startContact; // actually a ContactBlock
-@property (nonatomic, copy) id endContact;   // ditto
-@property (nonatomic, copy) id collision;
+@property (nonatomic, copy) ContactBlock startContact; // actually a ContactBlock
+@property (nonatomic, copy) ContactBlock endContact;   // ditto
+@property (nonatomic, copy) CollideBlock collision;
 
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse;
