@@ -371,8 +371,8 @@
         // give it a reference to this sprite
         _body->SetUserData(self);
         
-        for (CCShape *shape in [_shapes allValues])
-            [shape addFixtureToBody:self];
+        for (NSString *key in [_shapes allKeys])
+            [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
         
         // if there are any joints
         if (_joints)
