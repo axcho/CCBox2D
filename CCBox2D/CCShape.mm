@@ -11,6 +11,9 @@
 #import "CCBox2DPrivate.h"
 
 
+static b2BlockAllocator *_allocator;
+
+
 #pragma mark -
 @implementation CCShape {
     b2FixtureDef *_fixtureDef;
@@ -295,6 +298,14 @@
 }
 
 
+#pragma mark - NSObject
++ (void)initialize {
+    if(self == [CCShape class]) {
+        _allocator = new b2BlockAllocator();
+    }
+}
+
+
 #pragma mark - CCShape
 - (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
@@ -315,7 +326,7 @@
     // Regenerate the fixture definition
     _fixtureDef = new b2FixtureDef();
     
-    _fixtureDef->shape = _fixture->GetShape()->Clone(NULL);
+    _fixtureDef->shape = _fixture->GetShape()->Clone(_allocator);
     _fixtureDef->density = _fixture->GetDensity();
     _fixtureDef->friction = _fixture->GetFriction();
     _fixtureDef->restitution = _fixture->GetRestitution();
