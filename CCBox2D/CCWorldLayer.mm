@@ -50,10 +50,10 @@ void ContactConduit::BeginContact(b2Contact* contact)
 	// notify the physics sprites
     ContactBlock startContact = sprite1.startContact;
     
-    if(startContact) startContact(sprite2, nil, nil);
+    if(startContact) startContact(sprite2, (NSString *)fixtureA->GetUserData(), (NSString *)fixtureB->GetUserData());
     
     startContact = sprite2.startContact;
-    if(startContact) startContact(sprite1, nil, nil);
+    if(startContact) startContact(sprite1, (NSString *)fixtureB->GetUserData(), (NSString *)fixtureA->GetUserData());
 	
 	// notify the physics listener
 	[listener onOverlapBody:sprite1 andBody:sprite2];
@@ -69,9 +69,9 @@ void ContactConduit::EndContact(b2Contact* contact)
 	
 	// notify the physics sprites
     ContactBlock endContact = sprite1.endContact;
-    if(endContact) endContact(sprite2, nil, nil);
+    if(endContact) endContact(sprite2, (NSString *)fixtureA->GetUserData(), (NSString *)fixtureB->GetUserData());
     endContact = sprite2.endContact;
-    if(endContact) endContact(sprite1, nil, nil);
+    if(endContact) endContact(sprite1, (NSString *)fixtureB->GetUserData(), (NSString *)fixtureA->GetUserData());
 	
 	// notify the physics listener;
 	[listener onSeparateBody:sprite1 andBody:sprite2];
