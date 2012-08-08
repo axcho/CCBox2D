@@ -296,12 +296,17 @@
 
 
 #pragma mark - CCShape
-- (void)addFixtureToBody:(CCBodySprite *)body {
+- (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
-    body.body->CreateFixture(_fixtureDef);
+    _fixtureDef->userData = userData;
+    _fixture = body.body->CreateFixture(_fixtureDef);
     delete _fixtureDef->shape;
     delete _fixtureDef;
     _fixtureDef = NULL;
+}
+
+- (void)addFixtureToBody:(CCBodySprite *)body {
+    [self addFixtureToBody:body userData:nil];
 }
 
 - (void)removeFixtureFromBody:(CCBodySprite *)body {
