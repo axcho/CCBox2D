@@ -31,8 +31,8 @@
 #define GTKG_RATIO 1000
 
 
-extern const CGFloat PTMRatio;
-extern const CGFloat InvPTMRatio;
+extern CGFloat PTMRatio;
+extern CGFloat InvPTMRatio;
 
 
 @class CCBodySprite;
@@ -56,6 +56,9 @@ extern const CGFloat InvPTMRatio;
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
 @property (nonatomic) BOOL debugDrawing;
+
++ (void)setPixelsToMetresRatio:(CGFloat)ratio;
++ (CGFloat)pixelsToMetresRatio;
 
 @end
 

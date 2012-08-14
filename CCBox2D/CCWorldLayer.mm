@@ -29,8 +29,8 @@
 
 
 
-const CGFloat PTMRatio = PTM_RATIO;
-const CGFloat InvPTMRatio = 1.0f / PTM_RATIO;
+CGFloat PTMRatio = PTM_RATIO;
+CGFloat InvPTMRatio = 1.0f / PTM_RATIO;
 
 
 ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
@@ -208,7 +208,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
     glPushMatrix();
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_COLOR_ARRAY);
-    glScalef(PTM_RATIO, PTM_RATIO, PTM_RATIO);
+    glScalef(PTMRatio, PTMRatio, PTMRatio);
     glTranslatef(-position_.x * InvPTMRatio, -position_.y * InvPTMRatio, 0);
     _world->DrawDebugData();
     glEnableClientState(GL_COLOR_ARRAY);
@@ -227,6 +227,19 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	
 	// don't forget to call "super dealloc"
 	[super dealloc];
+}
+
++ (void)setPixelsToMetresRatio:(CGFloat)ratio {
+    
+    NSAssert(ratio > 1.0f, @"A Pixels-to-metres ratio of less than 1 is not supported");
+    if(ratio < PTM_RATIO)
+        NSLog(@"Warning! Pixels to metres ratios less than %d can cause problems!", PTM_RATIO);
+    PTMRatio = ratio;
+    InvPTMRatio = 1.0f/ratio;
+}
+
++ (CGFloat)pixelsToMetresRatio {
+    return PTMRatio;
 }
 
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
