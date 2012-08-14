@@ -196,8 +196,8 @@
         
     CGPoint result;
 
-    result.x = linearVelocity.x;
-    result.y = linearVelocity.y;
+    result.x = linearVelocity.x * PTMRatio;
+    result.y = linearVelocity.y * PTMRatio;
     
     return result;
 }
