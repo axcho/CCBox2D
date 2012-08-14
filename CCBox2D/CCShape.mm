@@ -54,62 +54,159 @@ static b2BlockAllocator *_allocator;
     return _fixture;
 }
 
+
+#define THROW_EXCEP() [NSException raise:NSInternalInconsistencyException format:@"CCShape should have either a fixture or a fixtureDef at all times"]
+
 - (id)userData {
-    return (id)_fixtureDef->userData;
+    if(_fixtureDef)
+        return (id)_fixtureDef->userData;
+    else if(_fixture)
+        return (id)_fixture->GetUserData();
+    else
+        THROW_EXCEP();
+    return nil;
 }
 
 - (void)setUserData:(id)userData {
-    _fixtureDef->userData = userData;
+    if(_fixtureDef)
+        _fixtureDef->userData = userData;
+    else if(_fixture)
+        _fixture->SetUserData(userData);
+    else
+        THROW_EXCEP();
 }
 
 - (Float32)density {
-    const static Float32 conversionFactor = InvPTMRatio * InvPTMRatio * GTKG_RATIO;
-    return conversionFactor * _fixtureDef->density;
+    
+    const Float32 conversionFactor = InvPTMRatio * InvPTMRatio * GTKG_RATIO;
+    Float32 density;
+    
+    if(_fixtureDef)
+        density = _fixtureDef->density;
+    else if(_fixture)
+        density = _fixture->GetDensity();
+    else
+        THROW_EXCEP();
+    
+    return conversionFactor * density;
 }
 
 - (void)setDensity:(Float32)density {
-    const static Float32 conversionFactor = PTM_RATIO * PTM_RATIO / GTKG_RATIO;
-    _fixtureDef->density = density * conversionFactor;
+    
+    const Float32 conversionFactor = InvPTMRatio * InvPTMRatio / GTKG_RATIO;
+    
+    density = density * conversionFactor;
+    
+    if(_fixtureDef)
+        _fixtureDef->density = density * conversionFactor;
+    else if(_fixture)
+        _fixture->SetDensity(density);
+    else
+        THROW_EXCEP();
 }
 
 - (Float32)friction {
-    return _fixtureDef->friction;
+    if(_fixtureDef)
+        return _fixtureDef->friction;
+    else if(_fixture)
+        return _fixture->GetFriction();
+    else
+        THROW_EXCEP();
+    return 0;
 }
 
 - (void)setFriction:(Float32)friction {
-    _fixtureDef->friction = friction;
+    if(_fixtureDef)
+        _fixtureDef->friction = friction;
+    else if(_fixture)
+        _fixture->SetFriction(friction);
+    else
+        THROW_EXCEP();
 }
 
 - (BOOL)isSensor {
-    return _fixtureDef->isSensor;
+    if(_fixtureDef)
+        return _fixtureDef->isSensor;
+    else if(_fixture)
+        return _fixture->IsSensor();
+    else
+        THROW_EXCEP();
+    return NO;
 }
 
 - (void)setSensor:(BOOL)sensor {
-    _fixtureDef->isSensor = sensor;
+    if(_fixtureDef)
+        _fixtureDef->isSensor = sensor;
+    else if(_fixture)
+        _fixture->SetSensor(sensor);
+    else
+        THROW_EXCEP();
 }
 
 -(UInt16)collisionCategory {
-    return _fixtureDef->filter.categoryBits;
+    if(_fixtureDef)
+        return _fixtureDef->filter.categoryBits;
+    else if(_fixture)
+        return _fixture->GetFilterData().categoryBits;
+    else
+        THROW_EXCEP();
+    return 0;
 }
 
 - (void)setCollisionCategory:(UInt16)collisionCategory {
-    _fixtureDef->filter.categoryBits = collisionCategory;
+    if(_fixtureDef)
+        _fixtureDef->filter.categoryBits = collisionCategory;
+    else if(_fixture) {
+        b2Filter filter = _fixture->GetFilterData();
+        filter.categoryBits = collisionCategory;
+        _fixture->SetFilterData(filter);
+    }
+    else
+        THROW_EXCEP();
 }
 
 - (UInt16)collisionMask {
-    return _fixtureDef->filter.maskBits;
+    if(_fixtureDef)
+        return _fixtureDef->filter.maskBits;
+    else if(_fixture)
+        return _fixture->GetFilterData().maskBits;
+    else
+        THROW_EXCEP();
+    return 0;
 }
 
 - (void)setCollisionMask:(UInt16)collisionMask {
-    _fixtureDef->filter.maskBits = collisionMask;
+    if(_fixtureDef)
+        _fixtureDef->filter.maskBits = collisionMask;
+    else if (_fixture) {
+        b2Filter filter = _fixture->GetFilterData();
+        filter.maskBits = collisionMask;
+        _fixture->SetFilterData(filter);
+    }
+    else
+        THROW_EXCEP();
 }
 
 - (SInt16)collisionGroup {
-    return _fixtureDef->filter.groupIndex;
+    if(_fixtureDef)
+        return _fixtureDef->filter.groupIndex;
+    else if(_fixture)
+        return _fixture->GetFilterData().groupIndex;
+    else
+        THROW_EXCEP();
+    return 0;
 }
 
 -(void)setCollisionGroup:(SInt16)collisionGroup {
-    _fixtureDef->filter.groupIndex = collisionGroup;
+    if(_fixtureDef)
+        _fixtureDef->filter.groupIndex = collisionGroup;
+    else if(_fixture) {
+        b2Filter filter = _fixture->GetFilterData();
+        filter.groupIndex = collisionGroup;
+        _fixture->SetFilterData(filter);
+    }
+    else
+        THROW_EXCEP();
 }
 
 
