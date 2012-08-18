@@ -7,17 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CCWorldLayer.h"
 
-@interface CCSliderJoint : CCSprite <CCJointSprite> {
-   
-   BOOL _fixed;
-   BOOL _running, _limited;
+#import "CCWorldLayer.h"
+#import "CCJointSprite.h"
+
+
+@interface CCSliderJoint : CCJointSprite {
+    BOOL _running, _limited;
 	float _motorSpeed, _maxForce, _minRotation, _maxRotation;
 	CGPoint _anchor;
-	CCBodySprite *_body1;
-	CCBodySprite *_body2;
-	CCWorldLayer *_world;
 }
 
 @property (nonatomic) BOOL running;

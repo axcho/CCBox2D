@@ -61,12 +61,3 @@ extern CGFloat InvPTMRatio;
 + (CGFloat)pixelsToMetresRatio;
 
 @end
-
-@protocol CCJointSprite
-
-@property (nonatomic) BOOL fixed;
-@property (nonatomic, readonly) CCBodySprite *body1;
-@property (nonatomic, readonly) CCBodySprite *body2;
-@property (nonatomic, assign) CCWorldLayer *world;
-
-@end

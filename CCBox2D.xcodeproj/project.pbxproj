@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		845679A915DC18750066D2FD /* CCJointSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = 845679A715DC18740066D2FD /* CCJointSprite.h */; };
+		845679AA15DC18750066D2FD /* CCJointSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845679A815DC18740066D2FD /* CCJointSprite.mm */; };
 		848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 848F360615AC9D570079D84D /* CCSliderJoint.h */; };
 		848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848F360715AC9D570079D84D /* CCSliderJoint.mm */; };
 		849273C115AF6256004DCA73 /* CCShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 849273BF15AF6256004DCA73 /* CCShape.h */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		845679A715DC18740066D2FD /* CCJointSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCJointSprite.h; sourceTree = "<group>"; };
+		845679A815DC18740066D2FD /* CCJointSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCJointSprite.mm; sourceTree = "<group>"; };
 		848F360615AC9D570079D84D /* CCSliderJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSliderJoint.h; sourceTree = "<group>"; };
 		848F360715AC9D570079D84D /* CCSliderJoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSliderJoint.mm; sourceTree = "<group>"; };
 		849273BF15AF6256004DCA73 /* CCShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCShape.h; sourceTree = "<group>"; };
@@ -285,6 +289,8 @@
 				B6A87DF2155843B70034591E /* CCBodySprite.mm */,
 				B6A87DF3155843B70034591E /* CCBox2D.h */,
 				B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */,
+				845679A715DC18740066D2FD /* CCJointSprite.h */,
+				845679A815DC18740066D2FD /* CCJointSprite.mm */,
 				B6A87DF4155843B70034591E /* CCMotorSprite.h */,
 				B6A87DF5155843B70034591E /* CCMotorSprite.mm */,
 				849273BF15AF6256004DCA73 /* CCShape.h */,
@@ -323,6 +329,7 @@
 				B665118215866D8E00C4139A /* Render.h in Headers */,
 				848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */,
 				849273C115AF6256004DCA73 /* CCShape.h in Headers */,
+				845679A915DC18750066D2FD /* CCJointSprite.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +391,7 @@
 				B665118115866D8E00C4139A /* Render.cpp in Sources */,
 				848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */,
 				849273C215AF6256004DCA73 /* CCShape.mm in Sources */,
+				845679AA15DC18750066D2FD /* CCJointSprite.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

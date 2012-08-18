@@ -25,8 +25,7 @@
 #import <Cocos2DKit/Cocos2DKit.h>
 
 
-@class CCWorldLayer, CCBodySprite, CCShape;
-@protocol CCJointSprite;
+@class CCBodySprite, CCJointSprite, CCShape, CCWorldLayer;
 
 typedef enum
 {
@@ -69,6 +68,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 
 @property (nonatomic, readonly, copy) NSDictionary *shapes;
 
+// -setWorld: recursively set's the world on any body or joint children
 @property (nonatomic, assign) CCWorldLayer *world;
 
 @property (nonatomic, copy) ContactBlock startContact; // actually a ContactBlock
@@ -88,7 +88,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 -(void) removeShapeNamed:(NSString *)name;
 -(void) removeShapes;
 
--(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;
+-(void) addedToJoint:(CCJointSprite *)sprite;
 
 -(void) update:(ccTime)delta;
 

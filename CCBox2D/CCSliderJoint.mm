@@ -14,16 +14,12 @@
     b2PrismaticJoint *_prismaticJoint;
 }
 
-@synthesize fixed = _fixed;
 @synthesize running = _running;
 @synthesize limited = _limited;
 @synthesize speed = _motorSpeed;
 @synthesize power = _maxTorque;
 @synthesize minRotation = _minRotation;
 @synthesize maxRotation = _maxRotation;
-@synthesize body1 = _body1;
-@synthesize body2 = _body2;
-@synthesize world = _world;
 
 -(b2Joint *) joint
 {
@@ -206,53 +202,6 @@
 			[self setRotation:CC_RADIANS_TO_DEGREES(-_prismaticJoint->GetJointTranslation())];
 		}
 	}
-}
-
-- (void) dealloc
-{
-	// remove joint from world
-	[self destroyJoint];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
-
--(void) onEnter
-{
-	[super onEnter];
-	
-	// skip if the joint already exists
-	if (_prismaticJoint)
-		return;
-	
-	// if physics manager is not defined
-	if (!_world)
-	{
-		// if parent is a physics manager
-		if ([super.parent isKindOfClass:[CCWorldLayer class]])
-		{
-			// use the parent as the physics manager
-			_world = (CCWorldLayer *)super.parent;
-		}
-	}
-	
-	// if physics manager is defined now
-	if (_world)
-	{
-		// create the joint
-		[self createJoint];
-	}
-}
-
--(void) onExit
-{
-	[super onExit];
-	
-	// destroy the joint
-	[self destroyJoint];
-	
-	// get rid of the physics manager reference too
-	_world = nil;
 }
 
 @end

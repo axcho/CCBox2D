@@ -27,6 +27,7 @@
 #import "CCBodySprite.h"
 #import "CCWorldLayer.h"
 #import "CCShape.h"
+#import "CCJointSprite.h"
 
 #import "CCBox2DPrivate.h"
 
@@ -202,6 +203,15 @@
     return result;
 }
 
+- (void)setWorld:(CCWorldLayer *)world {
+    if(_world != world) {
+        _world = world;
+        for(id child in self.children)
+            if([child respondsToSelector:@selector(setWorld:)])
+                [child setWorld:world];
+    }
+}
+
 
 #pragma mark - CCNode Accessors
 -(void) setPosition:(CGPoint)newPosition
@@ -312,7 +322,7 @@
         [self removeShapeNamed:name];
 }
 
--(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite
+-(void) addedToJoint:(CCJointSprite *)sprite
 {
 	if (!_body) {
 		if (!_joints)
@@ -338,7 +348,7 @@
 			nextJoint = joint->next;
 			
 			// get the joint sprite
-			CCSprite<CCJointSprite> *sprite = (CCSprite<CCJointSprite> *)(joint->joint->GetUserData());
+			CCJointSprite *sprite = (CCJointSprite *)(joint->joint->GetUserData());
 			
 			if (sprite)
 				[sprite removeFromParentAndCleanup:YES];
@@ -452,7 +462,7 @@
 		return;
 	
 	if (!_world && [parent_ isKindOfClass:[CCWorldLayer class]])
-        _world = (CCWorldLayer *)parent_;
+        self.world = (CCWorldLayer *)parent_;
 	
 	if (_world)
 		[self createBody];
@@ -461,7 +471,7 @@
 -(void) onExit {
 	[super onExit];
     [self destroyBody];
-	_world = nil;
+	self.world = nil;
 }
 
 @end
