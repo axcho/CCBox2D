@@ -68,11 +68,11 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 
 @property (nonatomic, readonly, copy) NSDictionary *shapes;
 
-// -setWorld: recursively set's the world on any body or joint children
+// -setWorld: recursively sets the world on any body or joint children
 @property (nonatomic, assign) CCWorldLayer *world;
 
-@property (nonatomic, copy) ContactBlock startContact; // actually a ContactBlock
-@property (nonatomic, copy) ContactBlock endContact;   // ditto
+@property (nonatomic, copy) ContactBlock startContact;
+@property (nonatomic, copy) ContactBlock endContact;
 @property (nonatomic, copy) CollideBlock collision;
 
 
