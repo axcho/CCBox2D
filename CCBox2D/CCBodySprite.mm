@@ -469,9 +469,9 @@
 }
 
 -(void) onExit {
-	[super onExit];
     [self destroyBody];
 	self.world = nil;
+	[super onExit];
 }
 
 @end

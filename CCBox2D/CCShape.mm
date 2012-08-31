@@ -396,6 +396,11 @@ static b2BlockAllocator *_allocator;
 
 
 #pragma mark - NSObject
+- (void)dealloc {
+    self.userData = nil;
+    [super dealloc];
+}
+
 + (void)initialize {
     if(self == [CCShape class]) {
         _allocator = new b2BlockAllocator();

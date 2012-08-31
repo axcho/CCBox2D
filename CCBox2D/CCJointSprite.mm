@@ -26,6 +26,7 @@
 
 #pragma mark - NSObject
 - (void)dealloc {
+    [self destroyJoint];
     self.world = nil;
     self.body1 = nil;
     self.body2 = nil;
@@ -59,9 +60,9 @@
 }
 
 -(void) onExit {
-	[super onExit];
     [self destroyJoint];
 	self.world = nil;
+	[super onExit];
 }
 
 

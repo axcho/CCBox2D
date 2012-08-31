@@ -227,13 +227,4 @@
 	}
 }
 
-- (void) dealloc
-{
-	// remove joint from world
-	[self destroyJoint];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
-
 @end
