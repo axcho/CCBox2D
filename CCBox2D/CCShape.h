@@ -29,6 +29,8 @@
 - (void)addFixtureToBody:(CCBodySprite *)body;
 - (void)removeFixtureFromBody:(CCBodySprite *)body;
 
+- (NSString *)shapeDescription;
+
 + (CCShape *)boxWithRect:(CGRect)rect;
 + (CCShape *)circleWithCenter:(CGPoint)center radius:(Float32)radius;
 + (CCShape *)polygonWithVertices:(CCArray *)shapeVertices;

@@ -11,6 +11,23 @@
 #import "CCBox2DPrivate.h"
 
 
+NSString *StringForCircle(const b2CircleShape *circle) {
+    return [NSString stringWithFormat:@"Circle (c:%@, r:%.2f)", StringForVector(&circle->m_p), circle->m_radius];
+}
+
+NSString *StringForPolygon(const b2PolygonShape *polygon) {
+    return [NSString stringWithFormat:@"Pgon (c:%@, #:%d)", StringForVector(&polygon->m_centroid), polygon->m_count];
+}
+
+NSString *StringForEdge(const b2EdgeShape *edge) {
+    return [NSString stringWithFormat:@"Edge (A:%@, B:%@)", StringForVector(&edge->m_vertex1), StringForVector(&edge->m_vertex2)];
+}
+
+NSString *StringForChain(const b2ChainShape *chain) {
+    return [NSString stringWithFormat:@"Chain (S:%@, #:%d)", StringForVector(chain->m_vertices), chain->m_count];
+}
+
+
 static b2BlockAllocator *_allocator;
 
 
@@ -437,6 +454,29 @@ static b2BlockAllocator *_allocator;
     
     body.body->DestroyFixture(_fixture);
     _fixture = NULL;
+}
+
+- (NSString *)shapeDescription {
+    
+    const b2Shape *shape;
+    
+    if(_fixture) shape = _fixture->GetShape();
+    else shape = _fixtureDef->shape;
+    
+    switch (shape->GetType()) {
+        case b2Shape::e_circle:
+            return StringForCircle((b2CircleShape *)shape);
+        case b2Shape::e_polygon:
+            return StringForPolygon((b2PolygonShape *)shape);
+        case b2Shape::e_chain:
+            return StringForChain((b2ChainShape *)shape);
+        case b2Shape::e_edge:
+            return StringForEdge((b2EdgeShape *)shape);
+        default:
+            break;
+    }
+    
+    return nil;
 }
 
 + (CCShape *)boxWithRect:(CGRect)rect {

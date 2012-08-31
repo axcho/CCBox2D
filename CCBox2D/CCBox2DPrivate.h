@@ -17,6 +17,16 @@
 #import "CCJointSprite.h"
 
 
+static inline NSString *StringForVector(const b2Vec2 *vector) {
+    return [NSString stringWithFormat:@"{%.2f, %.2f}", vector->x, vector->y];
+}
+
+extern NSString *StringForCircle(const b2CircleShape *circle);
+extern NSString *StringForPolygon(const b2PolygonShape *polygon);
+extern NSString *StringForEdge(const b2EdgeShape *edge);
+extern NSString *StringForChain(const b2ChainShape *chain);
+
+
 @interface CCBodySprite (CCBox2DPrivate)
 @property (nonatomic, readonly) b2Body *body;
 @end

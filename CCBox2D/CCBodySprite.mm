@@ -334,6 +334,22 @@
 		[sprite onEnter];
 }
 
+- (NSString *)shapeDescription {
+    
+    NSMutableArray *strings = [NSMutableArray array];
+    
+    for(NSString *name in _shapes) {
+        [strings addObject:[NSString stringWithFormat:@"%@: %@", name, [[_shapes objectForKey:name] shapeDescription]]];
+    }
+    for(CCNode *node in self.children) {
+        if([node isKindOfClass:[CCBodySprite class]]) {
+            [strings addObject:[(CCBodySprite *)node shapeDescription]];
+        }
+    }
+
+    return [strings componentsJoinedByString:@", "];
+}
+
 
 #pragma mark - Body Management
 -(void) destroyBody
