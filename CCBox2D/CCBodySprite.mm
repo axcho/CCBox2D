@@ -350,6 +350,17 @@
     return [strings componentsJoinedByString:@", "];
 }
 
+- (CGPoint)physicsPosition {
+    
+    b2Vec2 vec;
+        
+    if(_body)
+        vec = _body->GetPosition();
+    else
+        vec = _bodyDef->position;
+    
+    return CGPointMake(vec.x, vec.y);
+}
 
 #pragma mark - Body Management
 -(void) destroyBody

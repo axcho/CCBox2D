@@ -52,4 +52,25 @@ public:
 };
 
 
+typedef BOOL (^QueryBlock)(b2Body *body);
+
+class QueryCallback : public b2QueryCallback
+{
+public:
+    QueryCallback(QueryBlock block)
+    {
+        queryBlock = [block copy];
+    }
+    
+    ~QueryCallback()
+    {
+        [queryBlock release];
+        queryBlock = nil;
+    }
+  
+    bool ReportFixture(b2Fixture *fixture);
+private:
+    QueryBlock queryBlock;
+};
+
 #endif

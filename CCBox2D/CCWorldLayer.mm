@@ -111,6 +111,10 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	[listener onCollideBody:sprite1 andBody:sprite2 withForce:force withFrictionForce:frictionForce];
 }
 
+bool QueryCallback::ReportFixture(b2Fixture *fixture) {
+    return queryBlock(fixture->GetBody());
+}
+
 @implementation CCWorldLayer {
     b2World *_world;
 	ContactConduit *_conduit;
@@ -227,6 +231,24 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	
 	// don't forget to call "super dealloc"
 	[super dealloc];
+}
+
+- (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest {
+    
+    __block CCBodySprite *bodySprite = nil;
+    b2AABB aabb;
+    
+    aabb.lowerBound = b2Vec2(point.x * InvPTMRatio - 0.5f, point.y * InvPTMRatio - 0.5f);
+    aabb.upperBound = b2Vec2(point.x * InvPTMRatio + 0.5f, point.y * InvPTMRatio + 0.5f);
+
+    QueryBlock block = ^(b2Body *body) {
+        bodySprite = (CCBodySprite *)body->GetUserData();
+        return (BOOL)(!queryTest || queryTest(bodySprite));
+    };
+    QueryCallback callback(block);
+    _world->QueryAABB(&callback, aabb);
+    
+    return bodySprite;
 }
 
 + (void)setPixelsToMetresRatio:(CGFloat)ratio {

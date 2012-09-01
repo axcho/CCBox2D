@@ -38,6 +38,9 @@ extern CGFloat InvPTMRatio;
 @class CCBodySprite;
 
 
+typedef BOOL (^QueryTest)(CCBodySprite *bodySprite);
+
+
 @protocol ContactListenizer
 
 -(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
@@ -56,6 +59,8 @@ extern CGFloat InvPTMRatio;
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) CGPoint gravity;
 @property (nonatomic) BOOL debugDrawing;
+
+- (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 
 + (void)setPixelsToMetresRatio:(CGFloat)ratio;
 + (CGFloat)pixelsToMetresRatio;
