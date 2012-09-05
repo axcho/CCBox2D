@@ -112,7 +112,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 }
 
 bool QueryCallback::ReportFixture(b2Fixture *fixture) {
-    return queryBlock(fixture->GetBody());
+    return fixture->IsSensor() || queryBlock(fixture->GetBody());
 }
 
 @implementation CCWorldLayer {
@@ -121,6 +121,7 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     DebugDraw *_debugDraw;
 }
 
+@synthesize hitTestSize = _hitTestSize;
 @synthesize positionIterations = _positionIterations;
 @synthesize velocityIterations = _velocityIterations;
 @synthesize gravity = _gravity;
@@ -177,6 +178,11 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     }
 }
 
+- (void)setHitTestSize:(CGSize)hitTestSize {
+    _hitTestSize.height = (hitTestSize.height < 2.0f) ? 2.0f : hitTestSize.height;
+    _hitTestSize.width  = (hitTestSize.width  < 2.0f) ? 2.0f : hitTestSize.width;
+}
+
 -(id) init
 {
 	if ((self = [super init]))
@@ -186,6 +192,8 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
 		_conduit = new ContactConduit(self);
 		_world->SetContactListener(_conduit);
 		[self setGravity:CGPointZero];
+        
+        _hitTestSize = CGSizeMake(16.0f, 16.0f);
 		
 		// set iterations
 		_velocityIterations = 1;
@@ -237,13 +245,17 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     
     __block CCBodySprite *bodySprite = nil;
     b2AABB aabb;
+    CGFloat halfW = _hitTestSize.width  * 0.5f;
+    CGFloat halfH = _hitTestSize.height * 0.5f;
     
-    aabb.lowerBound = b2Vec2(point.x * InvPTMRatio - 0.5f, point.y * InvPTMRatio - 0.5f);
-    aabb.upperBound = b2Vec2(point.x * InvPTMRatio + 0.5f, point.y * InvPTMRatio + 0.5f);
+    NSParameterAssert(queryTest);
+    
+    aabb.lowerBound = b2Vec2((point.x - halfW) * InvPTMRatio, (point.y - halfH) * InvPTMRatio);
+    aabb.upperBound = b2Vec2((point.x + halfW) * InvPTMRatio, (point.y + halfH) * InvPTMRatio);
 
     QueryBlock block = ^(b2Body *body) {
         bodySprite = (CCBodySprite *)body->GetUserData();
-        return (BOOL)(!queryTest || queryTest(bodySprite));
+        return queryTest(bodySprite);
     };
     QueryCallback callback(block);
     _world->QueryAABB(&callback, aabb);

@@ -55,11 +55,16 @@ typedef BOOL (^QueryTest)(CCBodySprite *bodySprite);
 	CGPoint _gravity;
 }
 
+// size of box around the point used for hit testing in -bodyAtPoint:queryTest:; defaults to 16x16 points
+// smallest value supported is 2x2
+@property (nonatomic) CGSize hitTestSize;
+
+@property (nonatomic) CGPoint gravity;
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
-@property (nonatomic) CGPoint gravity;
 @property (nonatomic) BOOL debugDrawing;
 
+// queryTest should return YES to continue searching
 - (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 
 + (void)setPixelsToMetresRatio:(CGFloat)ratio;
