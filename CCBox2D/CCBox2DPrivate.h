@@ -52,7 +52,7 @@ public:
 };
 
 
-typedef BOOL (^QueryBlock)(b2Body *body);
+typedef BOOL (^QueryBlock)(b2Fixture *fixture);
 
 class QueryCallback : public b2QueryCallback
 {

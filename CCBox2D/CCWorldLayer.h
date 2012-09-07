@@ -38,7 +38,7 @@ extern CGFloat InvPTMRatio;
 @class CCBodySprite;
 
 
-typedef BOOL (^QueryTest)(CCBodySprite *bodySprite);
+typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
 
 
 @protocol ContactListenizer

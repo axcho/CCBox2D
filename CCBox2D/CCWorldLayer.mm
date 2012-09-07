@@ -112,7 +112,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 }
 
 bool QueryCallback::ReportFixture(b2Fixture *fixture) {
-    return fixture->IsSensor() || queryBlock(fixture->GetBody());
+    return queryBlock(fixture);
 }
 
 @implementation CCWorldLayer {
@@ -253,9 +253,9 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     aabb.lowerBound = b2Vec2((point.x - halfW) * InvPTMRatio, (point.y - halfH) * InvPTMRatio);
     aabb.upperBound = b2Vec2((point.x + halfW) * InvPTMRatio, (point.y + halfH) * InvPTMRatio);
 
-    QueryBlock block = ^(b2Body *body) {
-        bodySprite = (CCBodySprite *)body->GetUserData();
-        return queryTest(bodySprite);
+    QueryBlock block = ^(b2Fixture *fixture) {
+        bodySprite = (CCBodySprite *)fixture->GetBody()->GetUserData();
+        return queryTest(bodySprite, (NSString *)fixture->GetUserData());
     };
     QueryCallback callback(block);
     _world->QueryAABB(&callback, aabb);
