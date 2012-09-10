@@ -39,6 +39,19 @@ ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
 	listener = listenizer;
 }
 
+void ContactConduit::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
+{
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
+	CCBodySprite *sprite1 = (CCBodySprite *)fixtureA->GetBody()->GetUserData();
+	CCBodySprite *sprite2 = (CCBodySprite *)fixtureB->GetBody()->GetUserData();
+    
+    float surfaceVelocity = sprite1.surfaceVelocity + sprite2.surfaceVelocity;
+
+    if(surfaceVelocity)
+        contact->SetTangentSpeed(surfaceVelocity * InvPTMRatio);
+}
+
 void ContactConduit::BeginContact(b2Contact* contact)
 {
 	// extract the physics sprites from the contact

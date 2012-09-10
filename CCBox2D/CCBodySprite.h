@@ -64,6 +64,8 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic) float damping;
 @property (nonatomic) float angularDamping;
 @property (nonatomic) float angularVelocity;
+@property (nonatomic) float surfaceVelocity;
+
 @property (nonatomic) CGPoint velocity;
 
 @property (nonatomic, readonly, copy) NSDictionary *shapes;

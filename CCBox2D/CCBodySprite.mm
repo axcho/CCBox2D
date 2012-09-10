@@ -44,6 +44,7 @@
 @synthesize collision=_collision;
 @synthesize world=_world;
 @synthesize shapes=_shapes;
+@synthesize surfaceVelocity = _surfaceVelocity;
 
 @dynamic physicsType;
 @dynamic active;
@@ -397,7 +398,8 @@
         if (_body)
             [self destroyBody];
         
-        CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
+        // With a shifted origin, all locations for added bodies have to be shifted, too
+        CGPoint worldPosition = ccpAdd([self.parent convertToWorldSpace:self.position], _world.position);
         
         // create the body
         _bodyDef->position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
