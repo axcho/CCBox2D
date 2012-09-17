@@ -95,7 +95,6 @@ static b2BlockAllocator *_allocator;
 
 - (Float32)density {
     
-    const Float32 conversionFactor = InvPTMRatio * InvPTMRatio * GTKG_RATIO;
     Float32 density;
     
     if(_fixtureDef)
@@ -105,17 +104,13 @@ static b2BlockAllocator *_allocator;
     else
         THROW_EXCEP();
     
-    return conversionFactor * density;
+    return density;
 }
 
 - (void)setDensity:(Float32)density {
     
-    const Float32 conversionFactor = InvPTMRatio * InvPTMRatio / GTKG_RATIO;
-    
-    density = density * conversionFactor;
-    
     if(_fixtureDef)
-        _fixtureDef->density = density * conversionFactor;
+        _fixtureDef->density = density;
     else if(_fixture)
         _fixture->SetDensity(density);
     else
