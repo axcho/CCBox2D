@@ -398,8 +398,7 @@
         if (_body)
             [self destroyBody];
         
-        // With a shifted origin, all locations for added bodies have to be shifted, too
-        CGPoint worldPosition = ccpAdd([self.parent convertToWorldSpace:self.position], _world.position);
+        CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
         
         // create the body
         _bodyDef->position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
