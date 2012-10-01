@@ -18,8 +18,8 @@
 @synthesize limited = _limited;
 @synthesize speed = _motorSpeed;
 @synthesize power = _maxTorque;
-@synthesize minRotation = _minRotation;
-@synthesize maxRotation = _maxRotation;
+@synthesize minTranslation = _minTranslation;
+@synthesize maxTranslation = _maxTranslation;
 
 -(b2Joint *) joint
 {
@@ -74,41 +74,43 @@
 	}
 }
 
--(void) setMinRotation:(float)newMinRotation
+-(void) setMinRotation:(float)minTranslation
 {
-	_minRotation = newMinRotation;
+	_minTranslation = minTranslation;
 	
 	// if the revolute joint exists
 	if (_prismaticJoint)
 	{
 		// set the revolute joint limits
-		_prismaticJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxRotation), CC_DEGREES_TO_RADIANS(-_minRotation));
+		_prismaticJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxTranslation), CC_DEGREES_TO_RADIANS(-_minTranslation));
 	}
 }
 
--(void) setMaxRotation:(float)newMaxRotation
+-(void) setMaxRotation:(float)maxTranslation
 {
-	_maxRotation = newMaxRotation;
+	_maxTranslation = maxTranslation;
 	
 	// if the revolute joint exists
 	if (_prismaticJoint)
 	{
 		// set the revolute joint limits
-		_prismaticJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxRotation), CC_DEGREES_TO_RADIANS(-_minRotation));
+		_prismaticJoint->SetLimits(CC_DEGREES_TO_RADIANS(-_maxTranslation), CC_DEGREES_TO_RADIANS(-_minTranslation));
 	}
 }
 
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 axis:(CGPoint)axis
 {
-	[self setBody:sprite1 andBody:sprite2 atAnchor:ccp((sprite1.position.x + sprite2.position.x) / 2, (sprite1.position.y + sprite2.position.y) / 2)];
+    CGPoint anchor = ccp((sprite1.position.x + sprite2.position.x) / 2, (sprite1.position.y + sprite2.position.y) / 2);
+	[self setBody:sprite1 andBody:sprite2 atAnchor:anchor axis:axis];
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor
+-(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor axis:(CGPoint)axis
 {
 	_body1 = sprite1;
 	_body2 = sprite2;
 	_anchor = anchor;
+    _axis = axis;
 	
 	// if both sprites exist
 	if (_body1 && _body2)
@@ -148,14 +150,16 @@
 			
 			// set up the data for the joint
 			b2PrismaticJointDef jointData;
-			b2Vec2 anchor(_anchor.x / PTM_RATIO, _anchor.y / PTM_RATIO);
-			//jointData.Initialize(_body1.body, _body2.body, anchor);
+            CGPoint p = [self.parent convertToWorldSpace:_anchor];
+			b2Vec2 anchor(p.x * InvPTMRatio, p.y * InvPTMRatio);
+            
+			jointData.Initialize(_body1.body, _body2.body, anchor, b2Vec2(_axis.x, _axis.y));
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
-			jointData.motorSpeed = CC_DEGREES_TO_RADIANS(-_motorSpeed);
-			jointData.maxMotorForce = _maxForce / PTM_RATIO / PTM_RATIO * GTKG_RATIO;
-			jointData.lowerTranslation = CC_DEGREES_TO_RADIANS(-_maxRotation);
-			jointData.upperTranslation = CC_DEGREES_TO_RADIANS(-_minRotation);
+			jointData.motorSpeed = - CC_DEGREES_TO_RADIANS(_motorSpeed);
+			jointData.maxMotorForce = _maxForce * InvPTMRatio * InvPTMRatio * GTKG_RATIO;
+			jointData.lowerTranslation = -_maxTranslation;
+			jointData.upperTranslation = -_minTranslation;
 			jointData.collideConnected = false;
 			
 			// create the joint
