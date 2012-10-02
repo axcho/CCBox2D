@@ -212,8 +212,8 @@
 	{
 		// update the anchor position
 		b2Vec2 anchor = _revoluteJoint->GetAnchorA();
-		_anchor.x = anchor.x * PTM_RATIO;
-		_anchor.y = anchor.y * PTM_RATIO;
+		_anchor.x = anchor.x * PTMRatio;
+		_anchor.y = anchor.y * PTMRatio;
 		
 		// update the display properties to match
 		[self setPosition:ccp(_anchor.x, _anchor.y)];

@@ -132,7 +132,7 @@
 			if (_length >= 0)
 				jointData.length = _length * InvPTMRatio;
 			else
-				_length = jointData.length * PTM_RATIO;
+				_length = jointData.length * PTMRatio;
 			jointData.dampingRatio = _damping;
 			jointData.frequencyHz = _frequency;
 			jointData.collideConnected = true;
@@ -175,10 +175,10 @@
 		// update the anchor position
 		b2Vec2 anchor1 = _distanceJoint->GetAnchorA();
 		b2Vec2 anchor2 = _distanceJoint->GetAnchorB();
-		_anchor1.x = anchor1.x * PTM_RATIO;
-		_anchor1.y = anchor1.y * PTM_RATIO;
-		_anchor2.x = anchor2.x * PTM_RATIO;
-		_anchor2.y = anchor2.y * PTM_RATIO;
+		_anchor1.x = anchor1.x * PTMRatio;
+		_anchor1.y = anchor1.y * PTMRatio;
+		_anchor2.x = anchor2.x * PTMRatio;
+		_anchor2.y = anchor2.y * PTMRatio;
 		
 		// update the display properties to match
 		[self setPosition:ccp((_anchor1.x + _anchor2.x) / 2, (_anchor1.y + _anchor2.y) / 2)];

@@ -265,7 +265,7 @@
 {
 	// apply force to center of object
 	b2Vec2 center = _body->GetWorldCenter();
-	[self applyForce:force atLocation:ccp(center.x * PTM_RATIO, center.y * PTM_RATIO) asImpulse:impulse];
+	[self applyForce:force atLocation:ccp(center.x * PTMRatio, center.y * PTMRatio) asImpulse:impulse];
 }
 
 -(void) applyForce:(CGPoint)force

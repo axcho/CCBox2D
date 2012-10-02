@@ -111,8 +111,8 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	}
 	
 	// adjust the force units
-	force *= PTM_RATIO / GTKG_RATIO;
-	frictionForce *= PTM_RATIO / GTKG_RATIO;
+	force *= PTMRatio / GTKG_RATIO;
+	frictionForce *= PTMRatio / GTKG_RATIO;
 	
 	// notify the physics sprites
     CollideBlock collision = sprite1.collision;
@@ -280,7 +280,7 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     
     NSAssert(ratio > 1.0f, @"A Pixels-to-metres ratio of less than 1 is not supported");
     if(ratio < PTM_RATIO)
-        NSLog(@"Warning! Pixels to metres ratios less than %d can cause problems!", PTM_RATIO);
+        NSLog(@"Warning! Pixels to metres ratios less than %.3f can cause problems!", PTM_RATIO);
     PTMRatio = ratio;
     InvPTMRatio = 1.0f/ratio;
 }

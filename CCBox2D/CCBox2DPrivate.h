@@ -17,6 +17,10 @@
 #import "CCJointSprite.h"
 
 
+extern CGFloat PTMRatio;
+extern CGFloat InvPTMRatio;
+
+
 static inline NSString *StringForVector(const b2Vec2 *vector) {
     return [NSString stringWithFormat:@"{%.2f, %.2f}", vector->x, vector->y];
 }

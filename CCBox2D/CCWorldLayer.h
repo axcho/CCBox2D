@@ -25,14 +25,10 @@
 #import <Cocos2DKit/Cocos2DKit.h>
 
 // pixels to meters ratio
-#define PTM_RATIO 32
+#define PTM_RATIO 32.0f
 
 // grams to kilograms ratio
-#define GTKG_RATIO 1000
-
-
-extern CGFloat PTMRatio;
-extern CGFloat InvPTMRatio;
+#define GTKG_RATIO 1000.0f
 
 
 @class CCBodySprite;

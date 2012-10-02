@@ -70,7 +70,7 @@
 	if (_prismaticJoint)
 	{
 		// set the revolute joint power
-		_prismaticJoint->SetMaxMotorForce(_maxForce / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
+		_prismaticJoint->SetMaxMotorForce(_maxForce * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
 	}
 }
 
@@ -193,8 +193,8 @@
 	{
 		// update the anchor position
 		b2Vec2 anchor = _prismaticJoint->GetAnchorA();
-		_anchor.x = anchor.x * PTM_RATIO;
-		_anchor.y = anchor.y * PTM_RATIO;
+		_anchor.x = anchor.x * PTMRatio;
+		_anchor.y = anchor.y * PTMRatio;
 		
 		// update the display properties to match
 		[self setPosition:ccp(_anchor.x, _anchor.y)];
