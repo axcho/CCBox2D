@@ -153,7 +153,7 @@
         _bodyDef->bullet = bullet;
 }
 
--(void) setDamping:(float)damping
+-(void) setDamping:(Float32)damping
 {
 	if (_body)
 		_body->SetLinearDamping(damping);
@@ -161,7 +161,7 @@
         _bodyDef->linearDamping = damping;
 }
 
--(void) setAngularDamping:(float)angularDamping
+-(void) setAngularDamping:(Float32)angularDamping
 {
 	if (_body)
 		_body->SetAngularDamping(angularDamping);
@@ -169,7 +169,7 @@
         _bodyDef->angularDamping = angularDamping;
 }
 
--(void) setAngularVelocity:(float)angularVelocity
+-(void) setAngularVelocity:(Float32)angularVelocity
 {
 	if (_body)
 		_body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-angularVelocity));
@@ -214,6 +214,22 @@
 }
 
 
+#pragma mark - Dynamic Accessors
+- (BOOL)isCreated {
+    return NULL != _body;
+}
+
+- (Float32)mass {
+    if(!_body) return 0;
+    return _body->GetMass();
+}
+
+- (Float32)inertia {
+    if(!_body) return 0;
+    return _body->GetInertia();
+}
+
+
 #pragma mark - CCNode Accessors
 -(void) setPosition:(CGPoint)newPosition
 {
@@ -231,7 +247,7 @@
 	}
 }
 
--(void) setRotation:(float)newRotation
+-(void) setRotation:(Float32)newRotation
 {
 	super.rotation = newRotation;
 	
@@ -273,16 +289,16 @@
 	[self applyForce:force asImpulse:NO];
 }
 
--(void) applyTorque:(float)torque asImpulse:(BOOL)impulse
+-(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
 	if (_body)
 		if (impulse)
-			_body->ApplyAngularImpulse(torque * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
+			_body->ApplyAngularImpulse(torque * GTKG_RATIO);
 		else
-			_body->ApplyTorque(torque * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
+			_body->ApplyTorque(torque * GTKG_RATIO);
 }
 
--(void) applyTorque:(float)torque
+-(void) applyTorque:(Float32)torque
 {
 	[self applyTorque:torque asImpulse:NO];
 }

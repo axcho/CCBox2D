@@ -28,7 +28,7 @@
 #define PTM_RATIO 32.0f
 
 // grams to kilograms ratio
-#define GTKG_RATIO 1000.0f
+#define GTKG_RATIO 1
 
 
 @class CCBodySprite;

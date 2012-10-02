@@ -60,7 +60,7 @@ static b2BlockAllocator *_allocator;
         _fixtureDef->filter.maskBits = 0xFFFF;
         _fixtureDef->density = 1.0f;
         _fixtureDef->friction = 0.3f;
-        _fixtureDef->restitution = 0.2f;
+        _fixtureDef->restitution = 0.8f;
     }
     return self;
 }
@@ -428,6 +428,7 @@ static b2BlockAllocator *_allocator;
     delete _fixtureDef->shape;
     delete _fixtureDef;
     _fixtureDef = NULL;
+    body.body->ResetMassData();
 }
 
 - (void)addFixtureToBody:(CCBodySprite *)body {
@@ -449,6 +450,7 @@ static b2BlockAllocator *_allocator;
     
     body.body->DestroyFixture(_fixture);
     _fixture = NULL;
+    body.body->ResetMassData();
 }
 
 - (NSString *)shapeDescription {

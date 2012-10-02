@@ -103,7 +103,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	float frictionForce = 0.0f;
 	
 	// for each contact point
-	for (int i = 0; i < b2_maxManifoldPoints; i++)
+	for (int i = 0; i < impulse->count; i++)
 	{
 		// add the impulse to the total force
 		force += impulse->normalImpulses[i];

@@ -61,10 +61,16 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic) BOOL awake;
 @property (nonatomic) BOOL fixed;
 @property (nonatomic) BOOL bullet;
-@property (nonatomic) float damping;
-@property (nonatomic) float angularDamping;
-@property (nonatomic) float angularVelocity;
-@property (nonatomic) float surfaceVelocity;
+@property (nonatomic) Float32 damping;
+@property (nonatomic) Float32 angularDamping;
+@property (nonatomic) Float32 angularVelocity;
+@property (nonatomic) Float32 surfaceVelocity;
+
+@property (nonatomic, readonly, getter = isCreated) BOOL created;
+
+// only valid once the underlying box2d body has been created
+@property (nonatomic, readonly) Float32 mass;
+@property (nonatomic, readonly) Float32 inertia;
 
 @property (nonatomic) CGPoint velocity;
 
@@ -82,8 +88,8 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location;
 -(void) applyForce:(CGPoint)force asImpulse:(BOOL)impulse;
 -(void) applyForce:(CGPoint)force;
--(void) applyTorque:(float)torque asImpulse:(BOOL)impulse;
--(void) applyTorque:(float)torque;
+-(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse;
+-(void) applyTorque:(Float32)torque;
 
 - (CCShape *)shapeNamed:(NSString *)name;
 - (void)addShape:(CCShape *)shape named:(NSString *)name;

@@ -70,7 +70,7 @@
 	if (_prismaticJoint)
 	{
 		// set the revolute joint power
-		_prismaticJoint->SetMaxMotorForce(_maxForce * InvPTMRatio * InvPTMRatio * GTKG_RATIO);
+		_prismaticJoint->SetMaxMotorForce(_maxForce * GTKG_RATIO);
 	}
 }
 
@@ -157,7 +157,7 @@
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = - CC_DEGREES_TO_RADIANS(_motorSpeed);
-			jointData.maxMotorForce = _maxForce * InvPTMRatio * InvPTMRatio * GTKG_RATIO;
+			jointData.maxMotorForce = _maxForce * GTKG_RATIO;
 			jointData.lowerTranslation = -_maxTranslation;
 			jointData.upperTranslation = -_minTranslation;
 			jointData.collideConnected = false;
