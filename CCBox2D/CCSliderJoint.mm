@@ -158,8 +158,8 @@
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = - CC_DEGREES_TO_RADIANS(_motorSpeed);
 			jointData.maxMotorForce = _maxForce * GTKG_RATIO;
-			jointData.lowerTranslation = -_maxTranslation;
-			jointData.upperTranslation = -_minTranslation;
+			jointData.lowerTranslation = -(_maxTranslation * InvPTMRatio);
+			jointData.upperTranslation = -(_minTranslation * InvPTMRatio);
 			jointData.collideConnected = false;
 			
 			// create the joint
