@@ -58,6 +58,16 @@
 @dynamic velocity;
 
 
+#pragma mark - Private
+- (void)resetFixtures {
+    
+    CGAffineTransform t = [self nodeToWorldTransform];
+
+    for (NSString *key in [_shapes allKeys])
+        [[_shapes objectForKey:key] addFixtureToBody:self userData:key scale:t.a];
+}
+
+
 #pragma mark - Accessors
 - (b2Body *)body {
     return _body;
@@ -255,6 +265,14 @@
 		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
 }
 
+- (void)setScale:(float)scale {
+    super.scale = scale;
+    if(_body) {
+        [self removeShapes];
+        [self resetFixtures];
+    }
+}
+
 
 #pragma mark - Forces
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
@@ -411,36 +429,22 @@
 {
     if (_world.world)
     {
-        if (_body)
-            [self destroyBody];
+        if (_body) [self destroyBody];
         
         CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
         
-        // create the body
         _bodyDef->position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
         _body = _world.world->CreateBody(_bodyDef);
         delete _bodyDef;
         _bodyDef = NULL;
         
-        // give it a reference to this sprite
         _body->SetUserData(self);
         
-        for (NSString *key in [_shapes allKeys])
-            [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
+        [self resetFixtures];
         
-        // if there are any joints
-        if (_joints)
-        {
-            // for each associated joint sprite
-            CCSprite *sprite;
-            CCARRAY_FOREACH(_joints, sprite)
-            {
-                if (sprite.parent)
-                    [sprite onEnter];
-            }
-        }
+        for (CCSprite *sprite in _joints)
+            if (sprite.parent) [sprite onEnter];
         
-        // update every frame
         [self scheduleUpdate];
     }
 }
