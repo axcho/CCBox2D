@@ -421,76 +421,8 @@ static b2BlockAllocator *_allocator;
 
 
 #pragma mark - CCShape
-- (void)resizeChain:(b2ChainShape *)chain scale:(float)scale {
-    for (NSUInteger i=0; i<chain->m_count; ++i) {
-        chain->m_vertices[i].x *= scale;
-        chain->m_vertices[i].y *= scale;
-    }
-}
-
-- (void)resizeEdge:(b2EdgeShape *)edge scale:(float)scale {
-    if(edge->m_hasVertex0) {
-        edge->m_vertex0.x *= scale;
-        edge->m_vertex0.y *= scale;
-    }
-    edge->m_vertex1.x *= scale;
-    edge->m_vertex1.y *= scale;
-    edge->m_vertex2.x *= scale;
-    edge->m_vertex2.y *= scale;
-    if(edge->m_hasVertex3) {
-        edge->m_vertex3.x *= scale;
-        edge->m_vertex3.y *= scale;
-    }
-}
-
-- (void)resizeCircle:(b2CircleShape *)circle scale:(float)scale {
-    circle->m_p.x *= scale;
-    circle->m_p.y *= scale;
-    circle->m_radius *= scale;
-}
-
-- (void)resizePolygon:(b2PolygonShape *)polygon scale:(float)scale {
-    for(NSUInteger i=0; i<polygon->m_count; ++i) {
-        polygon->m_vertices[i].x *= scale;
-        polygon->m_vertices[i].y *= scale;
-    }
-}
-
-- (void)scaleFixture:(float)scale {
-    
-    b2Shape::Type type = _fixtureDef->shape->GetType();
-    const b2Shape *shape = _fixtureDef ? _fixtureDef->shape : _fixture->GetShape();
-
-    switch (type) {
-        case b2Shape::e_chain:
-            [self resizeChain:(b2ChainShape *)shape scale:scale];
-            break;
-            
-        case b2Shape::e_edge:
-            [self resizeEdge:(b2EdgeShape *)shape scale:scale];
-            break;
-            
-        case b2Shape::e_circle:
-            [self resizeCircle:(b2CircleShape *)shape scale:scale];
-            break;
-            
-        case b2Shape::e_polygon:
-            [self resizePolygon:(b2PolygonShape *)shape scale:scale];
-            break;
-            
-        default:
-            [NSException raise:NSInternalInconsistencyException format:@"unknown shape type %d cannot be resized", type];
-            break;
-    }
-}
-
-- (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData scale:(Float32)scale {
-    
+- (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData {
     NSAssert1(_fixtureDef, @"Fixture already on a body; cannot add to new body %@", body);
-    
-    if(scale != 1.0)
-        [self scaleFixture:scale];
-    
     _fixtureDef->userData = userData;
     _fixture = body.body->CreateFixture(_fixtureDef);
     delete _fixtureDef->shape;
@@ -499,12 +431,8 @@ static b2BlockAllocator *_allocator;
     body.body->ResetMassData();
 }
 
-- (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData {
-    [self addFixtureToBody:body userData:userData scale:1.0f];
-}
-
 - (void)addFixtureToBody:(CCBodySprite *)body {
-    [self addFixtureToBody:body userData:nil scale:1.0f];
+    [self addFixtureToBody:body userData:nil];
 }
 
 - (void)removeFixtureFromBody:(CCBodySprite *)body {
@@ -523,10 +451,6 @@ static b2BlockAllocator *_allocator;
     body.body->DestroyFixture(_fixture);
     _fixture = NULL;
     body.body->ResetMassData();
-    
-    // revert any scale inherited from the body
-    if(body.scale != 1.0f && body.scale > 0)
-        [self scaleFixture:1.0f/body.scale];
 }
 
 - (NSString *)shapeDescription {

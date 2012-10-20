@@ -59,14 +59,6 @@
 
 
 #pragma mark - Private
-- (void)resetFixtures {
-    
-    CGAffineTransform t = [self nodeToWorldTransform];
-
-    for (NSString *key in [_shapes allKeys])
-        [[_shapes objectForKey:key] addFixtureToBody:self userData:key scale:t.a];
-}
-
 - (void)recursiveMarkTransformDirty {
     for(id node in self.children)
         if([node isKindOfClass:[CCBodySprite class]])
@@ -299,14 +291,6 @@
 		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
 }
 
-- (void)setScale:(float)scale {
-    super.scale = scale;
-    if(_body) {
-        [self removeShapes];
-        [self resetFixtures];
-    }
-}
-
 
 #pragma mark - Forces
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
@@ -463,7 +447,8 @@
 {
     if (_world.world)
     {
-        if (_body) [self destroyBody];
+        if (_body)
+            [self destroyBody];
         
         CGPoint position  = position_;
         
@@ -478,6 +463,8 @@
         _body->SetUserData(self);
         
         [self resetFixtures];
+        for (NSString *key in [_shapes allKeys])
+            [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
         
         for (CCSprite *sprite in _joints)
             if (sprite.parent) [sprite onEnter];
