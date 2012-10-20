@@ -607,8 +607,15 @@ static b2BlockAllocator *_allocator;
 + (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count {
     
     b2ChainShape *chainShape = new b2ChainShape();
+    b2Vec2 *vertices = new b2Vec2[count];
     
-    chainShape->CreateLoop((b2Vec2 *)chainVertices, count);
+    for(NSUInteger i=0; i<count; ++i) {
+        vertices[i].x = InvPTMRatio * chainVertices[i].x;
+        vertices[i].y = InvPTMRatio * chainVertices[i].y;
+    }
+    chainShape->CreateLoop(vertices, count);
+    
+    delete [] vertices;
 
     return [[[self alloc] initWithShape:chainShape] autorelease];
 }
