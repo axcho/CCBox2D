@@ -126,6 +126,7 @@
 			
 			// set up the data for the joint
 			b2DistanceJointDef jointData;
+            // TODO: update to support setting joints as children of bodies
 			b2Vec2 anchor1(_anchor1.x * InvPTMRatio, _anchor1.y * InvPTMRatio);
 			b2Vec2 anchor2(_anchor2.x * InvPTMRatio, _anchor2.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor1, anchor2);

@@ -67,6 +67,38 @@
         [[_shapes objectForKey:key] addFixtureToBody:self userData:key scale:t.a];
 }
 
+- (void)recursiveMarkTransformDirty {
+    for(id node in self.children)
+        if([node isKindOfClass:[CCBodySprite class]])
+            [node recursiveMarkTransformDirty];
+    _worldTransformDirty = YES;
+}
+
+- (CGAffineTransform)worldTransform {
+    if(_worldTransformDirty) {
+        
+        CGAffineTransform t = [self nodeToParentTransform];
+        
+        for (CCNode *p = parent_; [p class] == [self class]; p = p->parent_)
+            t = CGAffineTransformConcat(t, [p nodeToParentTransform]);
+        
+        _worldTransform = t;
+        _worldTransformDirty = NO;
+    }
+    
+    return _worldTransform;
+}
+
+- (CGAffineTransform)inverseWorldTransform {
+    
+	CGAffineTransform t = [self nodeToParentTransform];
+    
+	for (CCNode *p = parent_; [p class] == [self class]; p = p->parent_)
+		t = CGAffineTransformConcat([p nodeToParentTransform], t);
+    
+	return t;
+}
+
 
 #pragma mark - Accessors
 - (b2Body *)body {
@@ -255,6 +287,8 @@
         
 		_body->SetTransform(b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio), _body->GetAngle());
 	}
+    
+    [self recursiveMarkTransformDirty];
 }
 
 -(void) setRotation:(Float32)newRotation
@@ -431,9 +465,12 @@
     {
         if (_body) [self destroyBody];
         
-        CGPoint worldPosition = [self.parent convertToWorldSpace:self.position];
+        CGPoint position  = position_;
         
-        _bodyDef->position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
+        if([parent_ isKindOfClass:[CCBodySprite class]])
+            position = CGPointApplyAffineTransform(position_, [(CCBodySprite *)parent_ inverseWorldTransform]);
+        
+        _bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
         _body = _world.world->CreateBody(_bodyDef);
         delete _bodyDef;
         _bodyDef = NULL;
@@ -491,11 +528,14 @@
     if(!active && !_wasActive)
         return;
     
-    b2Vec2 bodyPosition = _body->GetPosition();
-    CGPoint worldPosition = ccp(bodyPosition.x * PTMRatio, bodyPosition.y * PTMRatio);
-    CGPoint localPosition = [self.parent convertToNodeSpace:worldPosition];
+
+    b2Vec2 newBodyPos = _body->GetPosition();
+    CGPoint position = ccp(newBodyPos.x * PTMRatio, newBodyPos.y * PTMRatio);
     
-    [super setPosition:localPosition];
+    if([parent_ isKindOfClass:[CCBodySprite class]])
+        position = CGPointApplyAffineTransform(position, [(CCBodySprite *)parent_ worldTransform]);
+    
+    [super setPosition:position];
     [super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
     
     _wasActive = active;

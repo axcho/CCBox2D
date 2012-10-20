@@ -150,10 +150,12 @@
 			
 			// set up the data for the joint
 			b2PrismaticJointDef jointData;
-            CGPoint p = [self.parent convertToWorldSpace:_anchor];
-			b2Vec2 anchor(p.x * InvPTMRatio, p.y * InvPTMRatio);
+            CGPoint anchor = _anchor;
+
+            if([parent_ isKindOfClass:[CCBodySprite class]])
+                anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)parent_ worldTransform]);
             
-			jointData.Initialize(_body1.body, _body2.body, anchor, b2Vec2(_axis.x, _axis.y));
+			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio), b2Vec2(_axis.x, _axis.y));
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = - CC_DEGREES_TO_RADIANS(_motorSpeed);

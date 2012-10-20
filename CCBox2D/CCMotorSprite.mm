@@ -162,9 +162,12 @@
 			
 			// set up the data for the joint
 			b2RevoluteJointDef jointData;
-            CGPoint p = [self.parent convertToWorldSpace:_anchor];
-			b2Vec2 anchor(p.x * InvPTMRatio, p.y * InvPTMRatio);
-			jointData.Initialize(_body1.body, _body2.body, anchor);
+            CGPoint anchor = _anchor;
+            
+            if([parent_ isKindOfClass:[CCBodySprite class]])
+                anchor = CGPointApplyAffineTransform(_anchor, [(CCBodySprite *)parent_ inverseWorldTransform]);
+
+			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio));
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = CC_DEGREES_TO_RADIANS(-_motorSpeed);
@@ -210,15 +213,15 @@
 	// if revolute joint exists
 	if (_revoluteJoint)
 	{
-		// update the anchor position
-		b2Vec2 anchor = _revoluteJoint->GetAnchorA();
-		_anchor.x = anchor.x * PTMRatio;
-		_anchor.y = anchor.y * PTMRatio;
+        
+        b2Vec2 newAnchor = _revoluteJoint->GetAnchorA();
+        CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
+
+        if([parent_ isKindOfClass:[CCBodySprite class]])
+            anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)parent_ worldTransform]);
 		
-		// update the display properties to match
-		[self setPosition:ccp(_anchor.x, _anchor.y)];
+        [self setAnchorPoint:anchor];
 		
-		// if the joint is not fixed
 		if (!_fixed)
 		{
 			// adjust the angle to zmatch too

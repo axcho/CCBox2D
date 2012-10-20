@@ -33,6 +33,9 @@ extern NSString *StringForChain(const b2ChainShape *chain);
 
 @interface CCBodySprite (CCBox2DPrivate)
 @property (nonatomic, readonly) b2Body *body;
+- (CGAffineTransform)worldTransform;
+- (CGAffineTransform)inverseWorldTransform;
+- (void)recursiveMarkTransformDirty;
 @end
 
 @interface CCJointSprite (CCBox2DPrivate)

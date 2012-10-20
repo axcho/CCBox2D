@@ -51,7 +51,10 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
     ContactBlock _endContact;
     CollideBlock _collision;
     
+    CGAffineTransform _worldTransform;
+    
     BOOL _wasActive;
+    BOOL _worldTransformDirty;
 }
 
 @property (nonatomic) PhysicsType physicsType;
