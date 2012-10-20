@@ -462,7 +462,6 @@
         
         _body->SetUserData(self);
         
-        [self resetFixtures];
         for (NSString *key in [_shapes allKeys])
             [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
         
