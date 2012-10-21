@@ -74,21 +74,11 @@
         for (CCNode *p = parent_; [p class] == [self class]; p = p->parent_)
             t = CGAffineTransformConcat(t, [p nodeToParentTransform]);
         
-        _worldTransform = t;
+        _worldTransform = CGAffineTransformInvert(t);
         _worldTransformDirty = NO;
     }
     
     return _worldTransform;
-}
-
-- (CGAffineTransform)inverseWorldTransform {
-    
-	CGAffineTransform t = [self nodeToParentTransform];
-    
-	for (CCNode *p = parent_; [p class] == [self class]; p = p->parent_)
-		t = CGAffineTransformConcat([p nodeToParentTransform], t);
-    
-	return t;
 }
 
 
@@ -273,7 +263,10 @@
 	
 	if (_body) {
         
-        CGPoint worldPosition = [self.parent convertToWorldSpace:newPosition];
+        CGPoint worldPosition = newPosition;
+        
+        if([parent_ isKindOfClass:[CCBodySprite class]])
+            worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)parent_ worldTransform]));
         
 //        NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
         
@@ -450,10 +443,10 @@
         if (_body)
             [self destroyBody];
         
-        CGPoint position  = position_;
+        CGPoint position = position_;
         
         if([parent_ isKindOfClass:[CCBodySprite class]])
-            position = CGPointApplyAffineTransform(position_, [(CCBodySprite *)parent_ inverseWorldTransform]);
+            position = CGPointApplyAffineTransform(position_, CGAffineTransformInvert([(CCBodySprite *)parent_ worldTransform]));
         
         _bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
         _body = _world.world->CreateBody(_bodyDef);
@@ -521,7 +514,11 @@
     if([parent_ isKindOfClass:[CCBodySprite class]])
         position = CGPointApplyAffineTransform(position, [(CCBodySprite *)parent_ worldTransform]);
     
-    [super setPosition:position];
+    if(!CGPointEqualToPoint(position, position_)) {
+        [super setPosition:position];
+        [self recursiveMarkTransformDirty];
+    }
+    
     [super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
     
     _wasActive = active;

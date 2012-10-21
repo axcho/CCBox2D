@@ -153,7 +153,7 @@
             CGPoint anchor = _anchor;
 
             if([parent_ isKindOfClass:[CCBodySprite class]])
-                anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)parent_ worldTransform]);
+                anchor = CGPointApplyAffineTransform(anchor, CGAffineTransformInvert([(CCBodySprite *)parent_ worldTransform]));
             
 			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio), b2Vec2(_axis.x, _axis.y));
 			jointData.enableMotor = _running;
@@ -194,9 +194,13 @@
 	if (_prismaticJoint)
 	{
 		// update the anchor position
-		b2Vec2 anchor = _prismaticJoint->GetAnchorA();
-		_anchor.x = anchor.x * PTMRatio;
-		_anchor.y = anchor.y * PTMRatio;
+		b2Vec2 newAnchor = _prismaticJoint->GetAnchorA();
+        CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
+        
+        if([parent_ isKindOfClass:[CCBodySprite class]])
+            anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)parent_ worldTransform]);
+		
+        _anchor = anchor;
 		
 		// update the display properties to match
 		[self setPosition:ccp(_anchor.x, _anchor.y)];

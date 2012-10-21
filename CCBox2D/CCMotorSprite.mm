@@ -165,7 +165,7 @@
             CGPoint anchor = _anchor;
             
             if([parent_ isKindOfClass:[CCBodySprite class]])
-                anchor = CGPointApplyAffineTransform(_anchor, [(CCBodySprite *)parent_ inverseWorldTransform]);
+                anchor = CGPointApplyAffineTransform(_anchor, CGAffineTransformInvert([(CCBodySprite *)parent_ worldTransform]));
 
 			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio));
 			jointData.enableMotor = _running;
@@ -220,7 +220,7 @@
         if([parent_ isKindOfClass:[CCBodySprite class]])
             anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)parent_ worldTransform]);
 		
-        [self setAnchorPoint:anchor];
+        _anchor = anchor;
 		
 		if (!_fixed)
 		{
