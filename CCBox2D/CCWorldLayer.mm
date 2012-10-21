@@ -149,13 +149,6 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     return _world;
 }
 
-- (void)setPosition:(CGPoint)position {
-    CGPoint oldPosition = position_;
-    [super setPosition:position];
-    // apply the transformation delta to the b2World
-    _world->ShiftOrigin(b2Vec2((oldPosition.x - position.x) * InvPTMRatio, (oldPosition.y - position.y) * InvPTMRatio));
-}
-
 -(void) setGravity:(CGPoint)newGravity
 {
 	_gravity = newGravity;
@@ -234,7 +227,6 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_COLOR_ARRAY);
     glScalef(PTMRatio, PTMRatio, PTMRatio);
-    glTranslatef(-position_.x * InvPTMRatio, -position_.y * InvPTMRatio, 0);
     _world->DrawDebugData();
     glEnableClientState(GL_COLOR_ARRAY);
     glEnable(GL_TEXTURE_2D);
