@@ -221,6 +221,25 @@ static b2BlockAllocator *_allocator;
         THROW_EXCEP();
 }
 
+- (Float32)restitution {
+    if(_fixtureDef)
+        return _fixtureDef->restitution;
+    else if(_fixture)
+        return _fixture->GetRestitution();
+    else
+        THROW_EXCEP();
+    return 0;
+}
+
+- (void)setRestitution:(Float32)restitution {
+    if(_fixtureDef)
+        _fixtureDef->restitution = restitution;
+    else if(_fixture)
+        _fixture->SetRestitution(restitution);
+    else
+        THROW_EXCEP();
+}
+
 
 #pragma mark - NSCoding
 - (void)decodeCircleWithCoder:(NSKeyedUnarchiver *)aDecoder {
