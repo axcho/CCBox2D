@@ -25,6 +25,8 @@
 @property (nonatomic, assign) SInt16 collisionGroup;
 @property (nonatomic, assign, getter = isSensor) BOOL sensor;
 
+@property (nonatomic, readonly) CGRect boundingBox;
+
 - (void)addFixtureToBody:(CCBodySprite *)body userData:(id)userData;
 - (void)addFixtureToBody:(CCBodySprite *)body;
 - (void)removeFixtureFromBody:(CCBodySprite *)body;

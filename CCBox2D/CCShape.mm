@@ -240,6 +240,25 @@ static b2BlockAllocator *_allocator;
         THROW_EXCEP();
 }
 
+- (CGRect)boundingBox {
+
+    const b2Shape *shape = _fixtureDef ? _fixtureDef->shape : _fixture->GetShape();
+    b2AABB box;
+    b2Transform xf;
+    
+    if(_fixture) {
+        xf = _fixture->GetBody()->GetTransform();
+    }
+    else {
+        xf.SetIdentity();
+    }
+    
+    shape->ComputeAABB(&box, xf, 0);
+    
+    return CGRectMake(box.lowerBound.x*PTMRatio, box.lowerBound.y*PTMRatio,
+                      (box.upperBound.x-box.lowerBound.x)*PTMRatio, (box.upperBound.y-box.lowerBound.y)*PTMRatio);
+}
+
 
 #pragma mark - NSCoding
 - (void)decodeCircleWithCoder:(NSKeyedUnarchiver *)aDecoder {
@@ -385,8 +404,8 @@ static b2BlockAllocator *_allocator;
 
 - (void)encodeShapeWithCoder:(NSKeyedArchiver *)aCoder {
     
-    b2Shape::Type type = _fixtureDef->shape->GetType();
     const b2Shape *shape = _fixtureDef ? _fixtureDef->shape : _fixture->GetShape();
+    b2Shape::Type type = shape->GetType();
     
     [aCoder encodeFloat:_fixtureDef->shape->m_radius forKey:@"shape_radius"];
     [aCoder encodeInt:type forKey:@"shape_type"];
