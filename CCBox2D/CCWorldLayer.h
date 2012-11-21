@@ -60,6 +60,8 @@ typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
 @property (nonatomic) int velocityIterations;
 @property (nonatomic) BOOL debugDrawing;
 
+@property (nonatomic, readonly) BOOL locked;
+
 // queryTest should return YES to continue searching
 - (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 

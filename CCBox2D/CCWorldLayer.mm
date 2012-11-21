@@ -189,6 +189,10 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
     _hitTestSize.width  = (hitTestSize.width  < 2.0f) ? 2.0f : hitTestSize.width;
 }
 
+- (BOOL)locked {
+    return (BOOL) _world->IsLocked();
+}
+
 -(id) init
 {
 	if ((self = [super init]))
