@@ -13,11 +13,11 @@ Pod::Spec.new do |s|
       :commit => 'HEAD' 
     }
     s.platform = :ios, '5.0'
-    s.framework = 'Foundation' 'OpenGLES'
+    s.framework = 'Foundation', 'OpenGLES'
     
     # Linker flags
     s.requires_arc = false
-    s.ios.source_files = 'CCBox2d/*.{h,m}'
-    s.osx.source_files = 'CCBox2d/*.{h,m}'
+    s.ios.source_files = 'CCBox2D/*.{h,m}'
+    s.osx.source_files = 'CCBox2D/*.{h,m}'
         
 end
