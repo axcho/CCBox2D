@@ -116,7 +116,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 }
 
 - (void)setPosition:(CGPoint)position {
-    CGPoint oldPosition = position_;
+    CGPoint oldPosition = position;
     [super setPosition:position];
     // apply the transformation delta to the b2World
     _world->ShiftOrigin(b2Vec2((oldPosition.x - position.x) * InvPTMRatio, (oldPosition.y - position.y) * InvPTMRatio));
@@ -189,16 +189,17 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 
 - (void)draw {
     [super draw];
-    glPushMatrix();
+    ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
+   /* glPushMatrix();
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_COLOR_ARRAY);
     glScalef(PTM_RATIO, PTM_RATIO, PTM_RATIO);
-    glTranslatef(-position_.x * InvPTMRatio, -position_.y * InvPTMRatio, 0);
+    glTranslatef(-_position.x * InvPTMRatio, -_position.y * InvPTMRatio, 0);
     _world->DrawDebugData();
     glEnableClientState(GL_COLOR_ARRAY);
     glEnable(GL_TEXTURE_2D);
     glPopMatrix();
-    glFlush();
+    glFlush();*/
 }
 
 - (void) dealloc

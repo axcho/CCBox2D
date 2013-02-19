@@ -499,7 +499,7 @@
 	if (_body)
 	{
 		// set the body rotation in radians
-		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
+		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-[self rotation]));
 	}
 }
 
@@ -645,7 +645,7 @@
 {
 	// create a box shape
 	b2PolygonShape *boxShape = new b2PolygonShape();
-	boxShape->SetAsBox(shapeSize.width / 2 * InvPTMRatio, shapeSize.height / 2 * InvPTMRatio, b2Vec2((shapeLocation.x - position_.x) * InvPTMRatio, (shapeLocation.y - position_.y) * InvPTMRatio), 0);
+	boxShape->SetAsBox(shapeSize.width / 2 * InvPTMRatio, shapeSize.height / 2 * InvPTMRatio, b2Vec2((shapeLocation.x - _position.x) * InvPTMRatio, (shapeLocation.y - _position.y) * InvPTMRatio), 0);
 	
 	// add it
 	[self addShape:boxShape withName:shapeName];
@@ -653,12 +653,12 @@
 
 -(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize
 {
-	[self addBoxWithName:shapeName ofSize:shapeSize atLocation:position_];
+	[self addBoxWithName:shapeName ofSize:shapeSize atLocation:_position];
 }
 
 -(void) addBoxWithName:(NSString *)shapeName
 {
-	[self addBoxWithName:shapeName ofSize:rect_.size];
+	[self addBoxWithName:shapeName ofSize:_rect.size];
 }
 
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation
@@ -666,7 +666,7 @@
 	// create a circle shape
 	b2CircleShape *circleShape = new b2CircleShape();
 	circleShape->m_radius = shapeRadius * InvPTMRatio;
-	circleShape->m_p.Set((shapeLocation.x - position_.x) * InvPTMRatio, (shapeLocation.y - position_.y) * InvPTMRatio);
+	circleShape->m_p.Set((shapeLocation.x - _position.x) * InvPTMRatio, (shapeLocation.y - _position.y) * InvPTMRatio);
 	
 	// add it
 	[self addShape:circleShape withName:shapeName];
@@ -674,13 +674,13 @@
 
 -(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius
 {
-	[self addCircleWithName:shapeName ofRadius:shapeRadius atLocation:position_];
+	[self addCircleWithName:shapeName ofRadius:shapeRadius atLocation:_position];
 }
 
 -(void) addCircleWithName:(NSString *)shapeName
 {
-	float width = rect_.size.width;
-	float height = rect_.size.height;
+	float width = _rect.size.width;
+	float height = _rect.size.height;
 	float diameter = (width < height) ? width : height;
 	[self addCircleWithName:shapeName ofRadius:(diameter / 2)];
 }
@@ -700,7 +700,7 @@
 	{
 		// save the vertex in world coordinates
 		CGPoint point = [vertex CGPointValue];
-		vertices[i] = b2Vec2((point.x - position_.x) * InvPTMRatio, (point.y - position_.y) * InvPTMRatio);
+		vertices[i] = b2Vec2((point.x - _position.x) * InvPTMRatio, (point.y - _position.y) * InvPTMRatio);
 		
 		// next vertex
 		i++;
@@ -895,7 +895,7 @@
 			bodyData.angularDamping = _angularDamping;
 			bodyData.linearDamping = _damping;
 			bodyData.position = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
-			bodyData.angle = CC_DEGREES_TO_RADIANS(-rotation_);
+			bodyData.angle = CC_DEGREES_TO_RADIANS(-[self rotation]);
 //			_active = true;
 			bodyData.active = _active;
 			bodyData.allowSleep = _sleepy;
@@ -1063,10 +1063,10 @@
 	if (!_world)
 	{
 		// if parent is a physics manager
-		if ([parent_ isKindOfClass:[CCWorldLayer class]])
+		if ([_parent isKindOfClass:[CCWorldLayer class]])
 		{
 			// use the parent as the physics manager
-			_world = (CCWorldLayer *)parent_;
+			_world = (CCWorldLayer *)_parent;
 		}
 	}
 	
