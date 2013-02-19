@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
     
     # Linker flags
     s.requires_arc = false
-    
-    
+    s.ios.source_files = 'CCBox2d/*.{h,m}'
+    s.osx.source_files = 'CCBox2d/*.{h,m}'
         
 end
