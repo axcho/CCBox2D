@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     s.homepage = 'https://github.com/jdp-global/CCBox2D'
     s.license = {
       :type => 'MIT',
-      :file => 'LICENSE.md'
+      :file => 'License.txt'
     }
     s.author = {'axcho' => 'axcho@axcho.com/'}
     s.source = { 
