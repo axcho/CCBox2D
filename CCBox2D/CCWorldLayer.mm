@@ -25,7 +25,7 @@
 #import "CCWorldLayer.h"
 #import "CCBodySprite.h"
 #import "CCBox2DPrivate.h"
-#import "Render.h"
+//#import "Render.h"
 
 
 
@@ -100,7 +100,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 @implementation CCWorldLayer {
     b2World *_world;
 	ContactConduit *_conduit;
-    DebugDraw *_debugDraw;
+    //DebugDraw *_debugDraw;
 }
 
 @synthesize positionIterations = _positionIterations;
@@ -140,7 +140,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 		}
 	}
 }
-
+/*
 - (BOOL)debugDrawing {
     return NULL != _debugDraw;
 }
@@ -148,14 +148,14 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 - (void)setDebugDrawing:(BOOL)debugDrawing {
     if(debugDrawing && !_debugDraw) {
         _debugDraw = new DebugDraw();
-        _debugDraw->SetFlags(b2Draw::e_shapeBit|b2Draw::e_jointBit|b2Draw::e_aabbBit /*|b2Draw::e_centerOfMassBit*/);
+        _debugDraw->SetFlags(b2Draw::e_shapeBit|b2Draw::e_jointBit|b2Draw::e_aabbBit |b2Draw::e_centerOfMassBit);
         _world->SetDebugDraw(_debugDraw);
     }
     else if(!debugDrawing && _debugDraw) {
         _world->SetDebugDraw(NULL);
         delete _debugDraw, _debugDraw = NULL;
     }
-}
+}*/
 
 -(id) init
 {
@@ -207,7 +207,7 @@ void ContactConduit::PostSolve(b2Contact* contact, const b2ContactImpulse* impul
 	delete _conduit;
 	delete _world;
     
-    if(_debugDraw) delete _debugDraw;
+   // if(_debugDraw) delete _debugDraw;
 	
 	// don't forget to call "super dealloc"
 	[super dealloc];
