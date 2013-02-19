@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
     }
     s.platform = :ios, '5.0'
     s.framework = 'Foundation' 'OpenGLES'
-    s.preferred_dependency = 'Core'
     
     # Linker flags
     s.requires_arc = false
