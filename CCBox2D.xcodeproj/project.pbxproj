@@ -25,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		83CF603E16D37CAF00D024C0 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBox2DPrivate.h; sourceTree = "<group>"; };
 		B665117F15866D8E00C4139A /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		B665118015866D8E00C4139A /* Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
@@ -76,6 +77,7 @@
 				B6A87DDF155843680034591E /* Frameworks */,
 				B6A87DDE155843680034591E /* Products */,
 				005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */,
+				83CF603E16D37CAF00D024C0 /* Podfile */,
 			);
 			sourceTree = "<group>";
 		};
