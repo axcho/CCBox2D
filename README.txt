@@ -52,12 +52,23 @@ But still, if enough people are interested, who knows what could happen! :)
 
 
 
+This will get your project up and running with pods.
 
-Pods
+Just create a Podfile in your existing project and include the following
+
+
+Podfile
+=======================
+platform :ios, '5.0'
+
+# Using the Default
 pod 'box2d'
 pod 'cocos2d'
-pod 'ccbox2d' 
+pod 'CCBox2D' , :podspec => 'https://raw.github.com/jdp-global/CCBox2D/master/CCBox2d.podspec'
 
+
+
+run pod install from terminal. 
 
 
 
