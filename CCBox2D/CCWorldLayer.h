@@ -25,17 +25,17 @@
 #import "cocos2d.h"
 
 // pixels to meters ratio
-#define PTM_RATIO 32
+#define PTM_RATIO 32.0f
 
 // grams to kilograms ratio
-#define GTKG_RATIO 1000
-
-
-extern const CGFloat PTMRatio;
-extern const CGFloat InvPTMRatio;
+#define GTKG_RATIO 1
 
 
 @class CCBodySprite;
+
+
+typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
+
 
 @protocol ContactListenizer
 
@@ -51,21 +51,21 @@ extern const CGFloat InvPTMRatio;
 	CGPoint _gravity;
 }
 
+// size of box around the point used for hit testing in -bodyAtPoint:queryTest:; defaults to 16x16 points
+// smallest value supported is 2x2
+@property (nonatomic) CGSize hitTestSize;
+
+@property (nonatomic) CGPoint gravity;
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
-@property (nonatomic) CGPoint gravity;
+@property (nonatomic) BOOL debugDrawing;
 
--(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+@property (nonatomic, readonly) BOOL locked;
 
-@end
+// queryTest should return YES to continue searching
+- (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 
-@protocol CCJointSprite
-
-@property (nonatomic) BOOL fixed;
-@property (nonatomic, readonly) CCBodySprite *body1;
-@property (nonatomic, readonly) CCBodySprite *body2;
-@property (nonatomic, assign) CCWorldLayer *world;
++ (void)setPixelsToMetresRatio:(CGFloat)ratio;
++ (CGFloat)pixelsToMetresRatio;
 
 @end

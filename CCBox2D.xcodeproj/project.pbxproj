@@ -7,18 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A65E6542CCA446C8306652E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BADF53B78DE246C48B2BE905 /* libPods.a */; };
+		845679A915DC18750066D2FD /* CCJointSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = 845679A715DC18740066D2FD /* CCJointSprite.h */; };
+		845679AA15DC18750066D2FD /* CCJointSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845679A815DC18740066D2FD /* CCJointSprite.mm */; };
+		848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 848F360615AC9D570079D84D /* CCSliderJoint.h */; };
+		848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848F360715AC9D570079D84D /* CCSliderJoint.mm */; };
+		849273C115AF6256004DCA73 /* CCShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 849273BF15AF6256004DCA73 /* CCShape.h */; };
+		849273C215AF6256004DCA73 /* CCShape.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849273C015AF6256004DCA73 /* CCShape.mm */; };
 		B665118515866E5B00C4139A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B665118415866E5B00C4139A /* OpenGLES.framework */; };
 		B6A87DE1155843680034591E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A87DE0155843680034591E /* Foundation.framework */; };
+		B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF1155843B70034591E /* CCBodySprite.h */; };
+		B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF2155843B70034591E /* CCBodySprite.mm */; };
+		B6A87DFC155843B70034591E /* CCBox2D.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF3155843B70034591E /* CCBox2D.h */; settings = {ATTRIBUTES = (); }; };
+		B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF4155843B70034591E /* CCMotorSprite.h */; };
+		B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF5155843B70034591E /* CCMotorSprite.mm */; };
+		B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF6155843B70034591E /* CCSpringSprite.h */; };
+		B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF7155843B70034591E /* CCSpringSprite.mm */; };
+		B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A87DF8155843B70034591E /* CCWorldLayer.h */; };
+		B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A87DF9155843B70034591E /* CCWorldLayer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		83CF603E16D37CAF00D024C0 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		845679A715DC18740066D2FD /* CCJointSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCJointSprite.h; sourceTree = "<group>"; };
+		845679A815DC18740066D2FD /* CCJointSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCJointSprite.mm; sourceTree = "<group>"; };
+		848F360615AC9D570079D84D /* CCSliderJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSliderJoint.h; sourceTree = "<group>"; };
+		848F360715AC9D570079D84D /* CCSliderJoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSliderJoint.mm; sourceTree = "<group>"; };
+		849273BF15AF6256004DCA73 /* CCShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCShape.h; sourceTree = "<group>"; };
+		849273C015AF6256004DCA73 /* CCShape.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCShape.mm; sourceTree = "<group>"; };
+		B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBox2DPrivate.h; sourceTree = "<group>"; };
 		B665118415866E5B00C4139A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		B6A87DDD155843680034591E /* libCCBox2D.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libCCBox2D.a; path = "/Users/johndpope/Documents/gitWorkspace/CCBox2D/build/Release-iphoneos/libCCBox2D.a"; sourceTree = "<absolute>"; };
+		B6A87DDD155843680034591E /* libCCBox2D.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCCBox2D.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A87DE0155843680034591E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		BADF53B78DE246C48B2BE905 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CCBox2D-Prefix.pch"; sourceTree = "<group>"; };
+		B6A87DF1155843B70034591E /* CCBodySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBodySprite.h; sourceTree = "<group>"; };
+		B6A87DF2155843B70034591E /* CCBodySprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCBodySprite.mm; sourceTree = "<group>"; };
+		B6A87DF3155843B70034591E /* CCBox2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBox2D.h; sourceTree = "<group>"; };
+		B6A87DF4155843B70034591E /* CCMotorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMotorSprite.h; sourceTree = "<group>"; };
+		B6A87DF5155843B70034591E /* CCMotorSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCMotorSprite.mm; sourceTree = "<group>"; };
+		B6A87DF6155843B70034591E /* CCSpringSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSpringSprite.h; sourceTree = "<group>"; };
+		B6A87DF7155843B70034591E /* CCSpringSprite.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCSpringSprite.mm; sourceTree = "<group>"; };
+		B6A87DF8155843B70034591E /* CCWorldLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCWorldLayer.h; sourceTree = "<group>"; };
+		B6A87DF9155843B70034591E /* CCWorldLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCWorldLayer.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,7 +56,6 @@
 			files = (
 				B665118515866E5B00C4139A /* OpenGLES.framework in Frameworks */,
 				B6A87DE1155843680034591E /* Foundation.framework in Frameworks */,
-				7A65E6542CCA446C8306652E /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,10 +65,18 @@
 		B6A87DD2155843680034591E = {
 			isa = PBXGroup;
 			children = (
+				B6A87DE2155843680034591E /* CCBox2D */,
 				B6A87DDF155843680034591E /* Frameworks */,
-				005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */,
-				83CF603E16D37CAF00D024C0 /* Podfile */,
+				B6A87DDE155843680034591E /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B6A87DDE155843680034591E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DDD155843680034591E /* libCCBox2D.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B6A87DDF155843680034591E /* Frameworks */ = {
@@ -49,9 +84,40 @@
 			children = (
 				B6A87DE0155843680034591E /* Foundation.framework */,
 				B665118415866E5B00C4139A /* OpenGLES.framework */,
-				BADF53B78DE246C48B2BE905 /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B6A87DE2155843680034591E /* CCBox2D */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DF1155843B70034591E /* CCBodySprite.h */,
+				B6A87DF2155843B70034591E /* CCBodySprite.mm */,
+				B6A87DF3155843B70034591E /* CCBox2D.h */,
+				B64B3DFC155FF261004C2F6F /* CCBox2DPrivate.h */,
+				845679A715DC18740066D2FD /* CCJointSprite.h */,
+				845679A815DC18740066D2FD /* CCJointSprite.mm */,
+				B6A87DF4155843B70034591E /* CCMotorSprite.h */,
+				B6A87DF5155843B70034591E /* CCMotorSprite.mm */,
+				849273BF15AF6256004DCA73 /* CCShape.h */,
+				849273C015AF6256004DCA73 /* CCShape.mm */,
+				848F360615AC9D570079D84D /* CCSliderJoint.h */,
+				848F360715AC9D570079D84D /* CCSliderJoint.mm */,
+				B6A87DF6155843B70034591E /* CCSpringSprite.h */,
+				B6A87DF7155843B70034591E /* CCSpringSprite.mm */,
+				B6A87DF8155843B70034591E /* CCWorldLayer.h */,
+				B6A87DF9155843B70034591E /* CCWorldLayer.mm */,
+				B6A87DE3155843680034591E /* Supporting Files */,
+			);
+			path = CCBox2D;
+			sourceTree = "<group>";
+		};
+		B6A87DE3155843680034591E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B6A87DE4155843680034591E /* CCBox2D-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -61,6 +127,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A87DFA155843B70034591E /* CCBodySprite.h in Headers */,
+				B6A87DFC155843B70034591E /* CCBox2D.h in Headers */,
+				B6A87DFD155843B70034591E /* CCMotorSprite.h in Headers */,
+				B6A87DFF155843B70034591E /* CCSpringSprite.h in Headers */,
+				B6A87E01155843B70034591E /* CCWorldLayer.h in Headers */,
+				848F360815AC9D570079D84D /* CCSliderJoint.h in Headers */,
+				849273C115AF6256004DCA73 /* CCShape.h in Headers */,
+				845679A915DC18750066D2FD /* CCJointSprite.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,7 +148,6 @@
 				B6A87DD9155843680034591E /* Sources */,
 				B6A87DDA155843680034591E /* Frameworks */,
 				B6A87DDB155843680034591E /* Headers */,
-				8C74CD2C5805410EBBEDF683 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -102,7 +175,7 @@
 				en,
 			);
 			mainGroup = B6A87DD2155843680034591E;
-			productRefGroup = B6A87DD2155843680034591E;
+			productRefGroup = B6A87DDE155843680034591E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -111,28 +184,18 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		8C74CD2C5805410EBBEDF683 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		B6A87DD9155843680034591E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A87DFB155843B70034591E /* CCBodySprite.mm in Sources */,
+				B6A87DFE155843B70034591E /* CCMotorSprite.mm in Sources */,
+				B6A87E00155843B70034591E /* CCSpringSprite.mm in Sources */,
+				B6A87E02155843B70034591E /* CCWorldLayer.mm in Sources */,
+				848F360915AC9D570079D84D /* CCSliderJoint.mm in Sources */,
+				849273C215AF6256004DCA73 /* CCShape.mm in Sources */,
+				845679AA15DC18750066D2FD /* CCJointSprite.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,7 +244,6 @@
 		};
 		B6A87DEB155843680034591E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/CCBox2D.dst;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -190,6 +252,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CCBox2D/CCBox2D-Prefix.pch";
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/include";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -199,7 +263,6 @@
 		};
 		B6A87DEC155843680034591E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 005A0212D3A445BF85ADD4D5 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/CCBox2D.dst;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -208,6 +271,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CCBox2D/CCBox2D-Prefix.pch";
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/include";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Vendor/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

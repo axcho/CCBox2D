@@ -25,82 +25,85 @@
 #import "cocos2d.h"
 
 
-@class CCWorldLayer;
-@protocol CCJointSprite;
+@class CCBodySprite, CCJointSprite, CCShape, CCWorldLayer;
 
 typedef enum
 {
-	kStatic,
+	kStatic = 0,
 	kKinematic,
 	kDynamic
 } PhysicsType;
 
+
+typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString *otherShapeName);
+typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 friction);
+
+
+
 @interface CCBodySprite : CCSprite
 {
-	PhysicsType _physicsType;
-	unsigned short _collisionType, _collidesWithType;
-	BOOL _active, _sleepy, _awake, _solid, _fixed, _bullet;
-	float _density, _friction, _bounce;
-	float _damping, _angularDamping;
-	float _angularVelocity;
-	CGPoint _velocity;
 	CCArray *_joints;
 	CCWorldLayer *_world;
 	
 	NSMutableDictionary *_shapes;
-	NSMutableDictionary *_shapeData;
+    
+    ContactBlock _startContact;
+    ContactBlock _endContact;
+    CollideBlock _collision;
+    
+    CGAffineTransform _worldTransform;
+    
+    BOOL _wasActive;
+    BOOL _worldTransformDirty;
 }
 
 @property (nonatomic) PhysicsType physicsType;
-@property (nonatomic) unsigned short collisionType;
-@property (nonatomic) unsigned short collidesWithType;
+
 @property (nonatomic) BOOL active;
 @property (nonatomic) BOOL sleepy;
 @property (nonatomic) BOOL awake;
-@property (nonatomic) BOOL solid;
 @property (nonatomic) BOOL fixed;
 @property (nonatomic) BOOL bullet;
-@property (nonatomic) float density;
-@property (nonatomic) float friction;
-@property (nonatomic) float bounce;
-@property (nonatomic) float damping;
-@property (nonatomic) float angularDamping;
-@property (nonatomic) float angularVelocity;
+@property (nonatomic) Float32 damping;
+@property (nonatomic) Float32 angularDamping;
+@property (nonatomic) Float32 angularVelocity;
+@property (nonatomic) Float32 surfaceVelocity;
+
+@property (nonatomic, readonly, getter = isCreated) BOOL created;
+
+// only valid once the underlying box2d body has been created
+@property (nonatomic, readonly) Float32 mass;
+@property (nonatomic, readonly) Float32 inertia;
+
 @property (nonatomic) CGPoint velocity;
+
+@property (nonatomic, readonly, copy) NSDictionary *shapes;
+
+// -setWorld: recursively sets the world on any body or joint children
 @property (nonatomic, assign) CCWorldLayer *world;
 
--(void) setDensity:(float)newDensity forShape:(NSString *)shapeName;
--(void) setFriction:(float)newFriction forShape:(NSString *)shapeName;
--(void) setBounce:(float)newBounce forShape:(NSString *)shapeName;
+@property (nonatomic, copy) ContactBlock startContact;
+@property (nonatomic, copy) ContactBlock endContact;
+@property (nonatomic, copy) CollideBlock collision;
+
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse;
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location;
 -(void) applyForce:(CGPoint)force asImpulse:(BOOL)impulse;
 -(void) applyForce:(CGPoint)force;
--(void) applyTorque:(float)torque asImpulse:(BOOL)impulse;
--(void) applyTorque:(float)torque;
+-(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse;
+-(void) applyTorque:(Float32)torque;
 
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize atLocation:(CGPoint)shapeLocation;
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize;
--(void) addBoxWithName:(NSString *)shapeName;
-
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation;
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius;
--(void) addCircleWithName:(NSString *)shapeName;
-
--(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices;
-
--(void) addChainWithName:(NSString *)shapeName withVertices:(CGPoint *)chainVertices count:(NSUInteger)count;
-
--(void) removeShapeWithName:(NSString *)shapeName;
+- (CCShape *)shapeNamed:(NSString *)name;
+- (void)addShape:(CCShape *)shape named:(NSString *)name;
+-(void) removeShapeNamed:(NSString *)name;
 -(void) removeShapes;
 
--(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite;
+- (NSString *)shapeDescription;
+- (CGPoint)physicsPosition;
+
+-(void) addedToJoint:(CCJointSprite *)sprite;
 
 -(void) update:(ccTime)delta;
-
--(void) onOverlapBody:(CCBodySprite *)sprite;
--(void) onSeparateBody:(CCBodySprite *)sprite;
--(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end

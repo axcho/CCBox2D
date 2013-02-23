@@ -32,13 +32,9 @@
     b2DistanceJoint *_distanceJoint;
 }
 
-@synthesize fixed = _fixed;
 @synthesize length = _length;
 @synthesize damping = _damping;
 @synthesize frequency = _frequency;
-@synthesize body1 = _body1;
-@synthesize body2 = _body2;
-@synthesize world = _world;
 
 -(b2Joint *) joint
 {
@@ -130,13 +126,14 @@
 			
 			// set up the data for the joint
 			b2DistanceJointDef jointData;
+            // TODO: update to support setting joints as children of bodies
 			b2Vec2 anchor1(_anchor1.x * InvPTMRatio, _anchor1.y * InvPTMRatio);
 			b2Vec2 anchor2(_anchor2.x * InvPTMRatio, _anchor2.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor1, anchor2);
 			if (_length >= 0)
 				jointData.length = _length * InvPTMRatio;
 			else
-				_length = jointData.length * PTM_RATIO;
+				_length = jointData.length * PTMRatio;
 			jointData.dampingRatio = _damping;
 			jointData.frequencyHz = _frequency;
 			jointData.collideConnected = true;
@@ -179,10 +176,10 @@
 		// update the anchor position
 		b2Vec2 anchor1 = _distanceJoint->GetAnchorA();
 		b2Vec2 anchor2 = _distanceJoint->GetAnchorB();
-		_anchor1.x = anchor1.x * PTM_RATIO;
-		_anchor1.y = anchor1.y * PTM_RATIO;
-		_anchor2.x = anchor2.x * PTM_RATIO;
-		_anchor2.y = anchor2.y * PTM_RATIO;
+		_anchor1.x = anchor1.x * PTMRatio;
+		_anchor1.y = anchor1.y * PTMRatio;
+		_anchor2.x = anchor2.x * PTMRatio;
+		_anchor2.y = anchor2.y * PTMRatio;
 		
 		// update the display properties to match
 		[self setPosition:ccp((_anchor1.x + _anchor2.x) / 2, (_anchor1.y + _anchor2.y) / 2)];
@@ -196,52 +193,4 @@
 		}
 	}
 }
-
-- (void) dealloc
-{
-	// remove joint from world
-	[self destroyJoint];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
-
--(void) onEnter
-{
-	[super onEnter];
-	
-	// skip if the joint already exists
-	if (_distanceJoint)
-		return;
-	
-	// if physics manager is not defined
-	if (!_world)
-	{
-		// if parent is a physics manager
-		if ([super.parent isKindOfClass:[CCWorldLayer class]])
-		{
-			// use the parent as the physics manager
-			_world = (CCWorldLayer *)super.parent;
-		}
-	}
-	
-	// if physics manager is defined now
-	if (_world)
-	{
-		// create the joint
-		[self createJoint];
-	}
-}
-
--(void) onExit
-{
-	[super onExit];
-	
-	// destroy the joint
-	[self destroyJoint];
-	
-	// get rid of the physics manager reference too
-	_world = nil;
-}
-
 @end
