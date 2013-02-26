@@ -148,10 +148,10 @@
 -(void) createJoint
 {
 	// if the physics manager exists
-	if (_world)
+	if (_worldLayer)
 	{
 		// if the world and bodies exist
-		if (_world.world && _body1.body && _body2.body)
+		if (_worldLayer.world && _body1.body && _body2.body)
 		{
 			// if the revolute joint exists
 			if (_revoluteJoint)
@@ -177,7 +177,7 @@
 			jointData.collideConnected = false;
 			
 			// create the joint
-			_revoluteJoint = (b2RevoluteJoint *)(_world.world->CreateJoint(&jointData));
+			_revoluteJoint = (b2RevoluteJoint *)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_revoluteJoint->SetUserData(self);
@@ -203,7 +203,7 @@
 		_revoluteJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
-		_world = nil;
+		_worldLayer = nil;
 	}
 	return self;
 }

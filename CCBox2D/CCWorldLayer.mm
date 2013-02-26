@@ -34,6 +34,11 @@ CGFloat PTMRatio = PTM_RATIO;
 CGFloat InvPTMRatio = 1.0f / PTM_RATIO;
 
 
+/*CCDestructionListener::CCDestructionListener(id<CCDestructionListenizer> listenizer)
+{
+    
+}*/
+
 ContactConduit::ContactConduit(id<ContactListenizer> listenizer)
 {
 	// save the physics listener
@@ -267,6 +272,7 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
         bodySprite = (CCBodySprite *)fixture->GetBody()->GetUserData();
         return queryTest(bodySprite, (NSString *)fixture->GetUserData());
     };
+   
     QueryCallback callback(block);
     _world->QueryAABB(&callback, aabb);
     
@@ -296,6 +302,7 @@ bool QueryCallback::ReportFixture(b2Fixture *fixture) {
 
 -(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 {
+    
 }
 
 @end

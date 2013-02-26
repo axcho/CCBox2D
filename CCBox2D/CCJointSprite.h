@@ -13,13 +13,15 @@
 @interface CCJointSprite : CCSprite {
     CCBodySprite *_body1;
     CCBodySprite *_body2;
-    CCWorldLayer *_world;
+    CCWorldLayer *_worldLayer;
+    b2World *_world;
     BOOL _fixed;
 }
 
 @property (nonatomic, readonly) CCBodySprite *body1;
 @property (nonatomic, readonly) CCBodySprite *body2;
-@property (nonatomic, assign)   CCWorldLayer *world;
+@property (nonatomic, assign)   CCWorldLayer *worldLayer;
+@property (nonatomic, assign)   b2World *world;
 @property (nonatomic) BOOL fixed;
 
 -(void) createJoint;

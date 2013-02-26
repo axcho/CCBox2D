@@ -23,7 +23,7 @@
  */
 
 #import "cocos2d.h"
-
+#import "Box2D.h"
 
 @class CCBodySprite, CCJointSprite, CCShape, CCWorldLayer;
 
@@ -43,7 +43,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @interface CCBodySprite : CCSprite
 {
 	CCArray *_joints;
-	CCWorldLayer *_world;
+	//CCWorldLayer *_world;
 	
 	NSMutableDictionary *_shapes;
     
@@ -80,12 +80,14 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic, readonly, copy) NSDictionary *shapes;
 
 // -setWorld: recursively sets the world on any body or joint children
-@property (nonatomic, assign) CCWorldLayer *world;
+@property (nonatomic, assign) CCWorldLayer *worldLayer;
+@property (nonatomic, assign) b2World *world;
 
 @property (nonatomic, copy) ContactBlock startContact;
 @property (nonatomic, copy) ContactBlock endContact;
 @property (nonatomic, copy) CollideBlock collision;
 
+-(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type;
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse;
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location;
@@ -103,7 +105,6 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 - (CGPoint)physicsPosition;
 
 -(void) addedToJoint:(CCJointSprite *)sprite;
-
 -(void) update:(ccTime)delta;
-
+-(void) createBody;
 @end

@@ -1,26 +1,4 @@
-/*
- 
- CCBox2D for iPhone: https://github.com/axcho/CCBox2D
- 
- Copyright (c) 2011 axcho and Fugazo, Inc.
- 
- This software is provided 'as-is', without any express or implied
- warranty. In no event will the authors be held liable for any damages
- arising from the use of this software.
- 
- Permission is granted to anyone to use this software for any purpose,
- including commercial applications, and to alter it and redistribute it
- freely, subject to the following restrictions:
- 
- 1. The origin of this software must not be misrepresented; you must not
- claim that you wrote the original software. If you use this software
- in a product, an acknowledgment in the product documentation would be
- appreciated but is not required.
- 2. Altered source versions must be plainly marked as such, and must not be
- misrepresented as being the original software.
- 3. This notice may not be removed or altered from any source distribution.
- 
- */
+
 
 #import "CCSpringSprite.h"
 #import "CCBodySprite.h"
@@ -36,10 +14,7 @@
 @synthesize damping = _damping;
 @synthesize frequency = _frequency;
 
--(b2Joint *) joint
-{
-	return (b2Joint *)_distanceJoint;
-}
+
 
 -(void) setLength:(float)newLength
 {
@@ -115,7 +90,7 @@
 	if (_world)
 	{
 		// if the world and bodies exist
-		if (_world.world && _body1.body && _body2.body)
+		if (_world && _body1.body && _body2.body)
 		{
 			// if the distance joint exists
 			if (_distanceJoint)
@@ -139,7 +114,7 @@
 			jointData.collideConnected = true;
 			
 			// create the joint
-			_distanceJoint = (b2DistanceJoint *)(_world.world->CreateJoint(&jointData));
+			_distanceJoint = (b2DistanceJoint *)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_distanceJoint->SetUserData(self);
@@ -163,10 +138,45 @@
 		_distanceJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
-		_world = nil;
+		_worldLayer = nil;
 	}
 	return self;
 }
+
+
+
+-(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1  body2:(CCBodySprite*)body2
+{
+	if ((self = [super init]))
+	{
+		_fixed = NO;
+		_length = -1;
+		_damping = 0;
+		_frequency = 0;
+        //_distanceJoint = distanceJointDef;
+        
+        b2Vec2 anchorA = distanceJointDef.localAnchorA;
+        _anchor1 = CGPointMake(anchorA.x * PTMRatio, anchorA.y * PTMRatio);
+
+        b2Vec2 anchorB = distanceJointDef.localAnchorB;
+        _anchor2 = CGPointMake(anchorB.x * PTMRatio, anchorB.y * PTMRatio);
+		_body1 = body1;
+		_body2 = body2;
+		_worldLayer = nil;
+        _world = world;
+        
+        // if both sprites exist
+       /* if (_body1 && _body2)
+        {
+            // notify them that they are attached to this joint
+            [_body1 addedToJoint:self];
+            [_body2 addedToJoint:self];
+        }*/
+        
+	}
+	return self;
+}
+
 
 -(void) update:(ccTime)delta
 {

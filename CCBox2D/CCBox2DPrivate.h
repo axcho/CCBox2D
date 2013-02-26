@@ -58,6 +58,19 @@ public:
 	id<ContactListenizer> listener;
 };
 
+// This is called when a joint in the world is implicitly destroyed
+// because an attached body is destroyed. This gives us a chance to
+// nullify the mouse joint.
+/*class CCDestructionListener : public b2DestructionListener
+{
+public:
+    CCDestructionListener(id<CCDestructionListenizer> listenizer);
+    void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
+    void SayGoodbye(b2Joint* joint);
+    
+   // Test* test;
+};*/
+
 
 typedef BOOL (^QueryBlock)(b2Fixture *fixture);
 

@@ -36,6 +36,12 @@
 
 typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
 
+@protocol CCDestructionListenizer
+
+//-(void) sayGoodbye(b2Fixture* fixture);
+//-(void) sayGoodbye(b2Joint* joint);
+
+@end
 
 @protocol ContactListenizer
 

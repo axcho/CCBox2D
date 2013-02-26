@@ -22,12 +22,14 @@
 @synthesize fixed = _fixed;
 @synthesize body1 = _body1;
 @synthesize body2 = _body2;
+@synthesize worldLayer = _worldLayer;
 @synthesize world = _world;
 
 #pragma mark - NSObject
 - (void)dealloc {
     [self destroyJoint];
-    self.world = nil;
+    self.worldLayer = nil;
+    self.world =  nil;
     self.body1 = nil;
     self.body2 = nil;
     [super dealloc];
@@ -35,12 +37,12 @@
 
 
 #pragma mark - Accessors
-- (void)setWorld:(CCWorldLayer *)world {
-    if(_world != world) {
-        _world = world;
+- (void)setWorldLayer:(CCWorldLayer *)worldLayer {
+    if(_worldLayer != worldLayer) {
+        _worldLayer = worldLayer;
         for(id child in self.children)
-            if([child respondsToSelector:@selector(setWorld:)])
-                [child setWorld:world];
+            if([child respondsToSelector:@selector(setWorldLayer:)])
+                [child setWorldLayer:worldLayer];
     }
 }
 
@@ -49,19 +51,24 @@
 -(void) onEnter {
 	[super onEnter];
 	
-	if (self.joint)
-		return;
+	if ([self respondsToSelector:@selector(joint)]){
+        if (self.joint) {
+            return;
+        }
+    }
+
 	
-	if (!_world && [super.parent isKindOfClass:[CCWorldLayer class]])
-			self.world = (CCWorldLayer *)super.parent;
+	if (!_worldLayer && [super.parent isKindOfClass:[CCWorldLayer class]])
+			self.worldLayer = (CCWorldLayer *)super.parent;
 	
-	if (_world)
+	if (_world || _worldLayer)
 		[self createJoint];
 }
 
 -(void) onExit {
     [self destroyJoint];
-	self.world = nil;
+	self.worldLayer = nil;
+    self.world =nil;
 	[super onExit];
 }
 

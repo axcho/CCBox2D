@@ -33,8 +33,7 @@ static b2BlockAllocator *_allocator;
 
 #pragma mark -
 @implementation CCShape {
-    b2FixtureDef *_fixtureDef;
-    b2Fixture *_fixture;
+
 }
 
 
@@ -48,6 +47,8 @@ static b2BlockAllocator *_allocator;
 @dynamic collisionCategory;
 @dynamic collisionMask;
 @dynamic collisionGroup;
+@synthesize fixture = _fixture;
+@synthesize fixtureDef = _fixtureDef;
 
 
 #pragma mark - Private
@@ -66,10 +67,7 @@ static b2BlockAllocator *_allocator;
 }
 
 
-#pragma mark - Accessors
-- (b2Fixture *)fixture {
-    return _fixture;
-}
+
 
 
 #define THROW_EXCEP() [NSException raise:NSInternalInconsistencyException format:@"CCShape should have either a fixture or a fixtureDef at all times"]
@@ -514,6 +512,20 @@ static b2BlockAllocator *_allocator;
     return nil;
 }
 
++ (CCShape *)boxWithFixtureDef:(b2FixtureDef)mFixtureDef{
+
+    CCShape *ccShape = [[self alloc] init];
+    b2FixtureDef *fixtureDef = new b2FixtureDef();
+    fixtureDef->shape = mFixtureDef.shape;
+    fixtureDef->friction = mFixtureDef.friction;
+    fixtureDef->userData = mFixtureDef.userData;
+    fixtureDef->restitution = mFixtureDef.restitution;
+    fixtureDef->density = mFixtureDef.density;
+    fixtureDef->isSensor = mFixtureDef.isSensor;
+    ccShape.fixtureDef = fixtureDef;
+    return [ccShape autorelease];
+    
+}
 + (CCShape *)boxWithRect:(CGRect)rect {
     
     b2PolygonShape *polygon = new b2PolygonShape();
@@ -566,6 +578,16 @@ static b2BlockAllocator *_allocator;
     return [[[self alloc] initWithShape:polygonShape] autorelease];
 }
 
+
++ (CCShape *)polygonWithVecVertices:(b2Vec2 *)vertices count:(int)count{
+    
+	// create a polygon shape
+	b2PolygonShape *polygonShape = new b2PolygonShape();
+	polygonShape->Set(vertices, count);
+    
+    return [[[self alloc] initWithShape:polygonShape] autorelease];
+}
+
 + (CCShape *)chainWithVertices:(CGPoint *)chainVertices count:(NSUInteger)count {
     
     b2ChainShape *chainShape = new b2ChainShape();
@@ -581,5 +603,15 @@ static b2BlockAllocator *_allocator;
 
     return [[[self alloc] initWithShape:chainShape] autorelease];
 }
+
++ (CCShape *)edgeWithVec1:(b2Vec2 )vec1 vec2:(b2Vec2 )vec2 {
+    
+    b2EdgeShape *edge = new b2EdgeShape();
+    edge->Set(b2Vec2(vec1), b2Vec2(vec2));
+    
+    return [[[self alloc] initWithShape:edge] autorelease];
+}
+
+//
 
 @end

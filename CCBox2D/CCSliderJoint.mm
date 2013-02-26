@@ -136,10 +136,10 @@
 -(void) createJoint
 {
 	// if the physics manager exists
-	if (_world)
+	if (_worldLayer)
 	{
 		// if the world and bodies exist
-		if (_world.world && _body1.body && _body2.body)
+		if (_worldLayer.world && _body1.body && _body2.body)
 		{
 			// if the revolute joint exists
 			if (_prismaticJoint)
@@ -165,7 +165,7 @@
 			jointData.collideConnected = false;
 			
 			// create the joint
-			_prismaticJoint = (b2PrismaticJoint *)(_world.world->CreateJoint(&jointData));
+			_prismaticJoint = (b2PrismaticJoint *)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_prismaticJoint->SetUserData(self);
@@ -183,7 +183,7 @@
         _prismaticJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
-		_world = nil;
+		_worldLayer = nil;
 	}
 	return self;
 }

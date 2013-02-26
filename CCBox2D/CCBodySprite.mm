@@ -43,6 +43,7 @@
 @synthesize endContact=_endContact;
 @synthesize collision=_collision;
 @synthesize world=_world;
+@synthesize worldLayer=_worldLayer;
 @synthesize shapes=_shapes;
 @synthesize surfaceVelocity = _surfaceVelocity;
 
@@ -228,9 +229,20 @@
     return result;
 }
 
-- (void)setWorld:(CCWorldLayer *)world {
+- (void)setWorldLayer:(CCWorldLayer *)worldLayer{
+    if(_worldLayer != worldLayer) {
+        _worldLayer = worldLayer;
+        _world = _worldLayer.world;
+        for(id child in self.children)
+            if([child respondsToSelector:@selector(setWorldLayer:)])
+                [child setWorldLayer:worldLayer];
+    }
+}
+
+- (void)setWorld:(b2World *)world{
     if(_world != world) {
         _world = world;
+        //self.world = _worldLayer.world;
         for(id child in self.children)
             if([child respondsToSelector:@selector(setWorld:)])
                 [child setWorld:world];
@@ -268,7 +280,7 @@
         if([_parent isKindOfClass:[CCBodySprite class]])
             worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
         
-//        NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
+        NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
         
 		_body->SetTransform(b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio), _body->GetAngle());
 	}
@@ -321,10 +333,12 @@
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
 	if (_body)
-		if (impulse)
-			_body->ApplyAngularImpulse(torque * GTKG_RATIO);
-		else
-			_body->ApplyTorque(torque * GTKG_RATIO);
+		if (impulse){
+           _body->ApplyAngularImpulse(torque * GTKG_RATIO); 
+        } else{
+           _body->ApplyTorque(torque * GTKG_RATIO); 
+        }
+			
 }
 
 -(void) applyTorque:(Float32)torque
@@ -438,18 +452,19 @@
 
 -(void) createBody
 {
-    if (_world.world)
+    if (_world)
     {
-        if (_body)
-            [self destroyBody];
-        
+        if (_body) [self destroyBody];
+         
         CGPoint position = _position;
         
         if([_parent isKindOfClass:[CCBodySprite class]])
             position = CGPointApplyAffineTransform(_position, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
         
         _bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
-        _body = _world.world->CreateBody(_bodyDef);
+       // _bodyDef->position.Set(0.0f, 10.0f);
+        _body = _world->CreateBody(_bodyDef);
+        
         delete _bodyDef;
         _bodyDef = NULL;
         
@@ -495,6 +510,32 @@
 	return self;
 }
 
+-(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type {
+    return [self initWithWorld:world bodyType:type shapes:nil];
+}
+-(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type shapes:(NSMutableDictionary*)shapesDict
+{
+	if ((self = [super init]))
+	{
+        _bodyDef = new b2BodyDef();
+        _world = world;
+        _bodyDef->type = type;
+        _bodyDef->awake = YES;
+        _bodyDef->allowSleep = YES;
+        _bodyDef->userData = self;
+        
+        _wasActive = _bodyDef->active = YES;
+       
+        _shapes = [[NSMutableDictionary alloc] init];
+        if (shapesDict!=nil) {
+            [_shapes addEntriesFromDictionary:shapesDict];
+        }
+         [self createBody];
+	}
+	return self;
+}
+
+
 
 #pragma mark - Updating
 -(void) update:(ccTime)delta
@@ -532,8 +573,8 @@
 	if (_body)
 		return;
 	
-	if (!_world && [_parent isKindOfClass:[CCWorldLayer class]])
-        self.world = (CCWorldLayer *)_parent;
+	if (!_worldLayer && [_parent isKindOfClass:[CCWorldLayer class]])
+        self.worldLayer = (CCWorldLayer *)_parent;
 	
 	if (_world)
 		[self createBody];
@@ -541,8 +582,11 @@
 
 -(void) onExit {
     [self destroyBody];
-	self.world = nil;
+	self.worldLayer = nil;
 	[super onExit];
 }
+
+
+
 
 @end
