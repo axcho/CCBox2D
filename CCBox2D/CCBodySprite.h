@@ -74,9 +74,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 // only valid once the underlying box2d body has been created
 @property (nonatomic, readonly) Float32 mass;
 @property (nonatomic, readonly) Float32 inertia;
-
 @property (nonatomic) CGPoint velocity;
-
 @property (nonatomic, readonly, copy) NSDictionary *shapes;
 
 // -setWorld: recursively sets the world on any body or joint children
@@ -103,6 +101,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 
 - (NSString *)shapeDescription;
 - (CGPoint)physicsPosition;
+- (CGPoint)centerPoint;
 
 -(void) addedToJoint:(CCJointSprite *)sprite;
 -(void) update:(ccTime)delta;

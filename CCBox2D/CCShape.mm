@@ -515,14 +515,7 @@ static b2BlockAllocator *_allocator;
 + (CCShape *)boxWithFixtureDef:(b2FixtureDef)mFixtureDef{
 
     CCShape *ccShape = [[self alloc] init];
-    b2FixtureDef *fixtureDef = new b2FixtureDef();
-    fixtureDef->shape = mFixtureDef.shape;
-    fixtureDef->friction = mFixtureDef.friction;
-    fixtureDef->userData = mFixtureDef.userData;
-    fixtureDef->restitution = mFixtureDef.restitution;
-    fixtureDef->density = mFixtureDef.density;
-    fixtureDef->isSensor = mFixtureDef.isSensor;
-    ccShape.fixtureDef = fixtureDef;
+    ccShape.fixtureDef = new b2FixtureDef(mFixtureDef);
     return [ccShape autorelease];
     
 }

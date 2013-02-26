@@ -271,7 +271,7 @@
 {
 	super.position = newPosition;
     
-//    NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
+    NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
 	
 	if (_body) {
         
@@ -418,6 +418,12 @@
         vec = _body->GetPosition();
     else
         vec = _bodyDef->position;
+    
+    return CGPointMake(vec.x, vec.y);
+}
+- (CGPoint)centerPoint {
+    
+	b2Vec2 vec = _body->GetWorldCenter();
     
     return CGPointMake(vec.x, vec.y);
 }
