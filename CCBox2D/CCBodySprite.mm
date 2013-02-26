@@ -28,9 +28,9 @@
 #import "CCWorldLayer.h"
 #import "CCShape.h"
 #import "CCJointSprite.h"
-
 #import "CCBox2DPrivate.h"
 
+#define DEBUGSPRITE 0
 
 #pragma mark -
 @implementation CCBodySprite {
@@ -39,6 +39,7 @@
 }
 
 #pragma mark - Properties
+@synthesize onTouchDownBlock;
 @synthesize startContact=_startContact;
 @synthesize endContact=_endContact;
 @synthesize collision=_collision;
@@ -46,6 +47,7 @@
 @synthesize worldLayer=_worldLayer;
 @synthesize shapes=_shapes;
 @synthesize surfaceVelocity = _surfaceVelocity;
+@synthesize scaleFactorMoving = _scaleFactorMoving;
 
 @dynamic physicsType;
 @dynamic active;
@@ -271,7 +273,7 @@
 {
 	super.position = newPosition;
     
-    NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
+    if(DEBUGSPRITE) NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
 	
 	if (_body) {
         
@@ -280,7 +282,7 @@
         if([_parent isKindOfClass:[CCBodySprite class]])
             worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
         
-        NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
+        if(DEBUGSPRITE) NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
         
 		_body->SetTransform(b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio), _body->GetAngle());
 	}
@@ -300,6 +302,7 @@
 #pragma mark - Forces
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
 {
+    if(DEBUGSPRITE) NSLog(@"applyForce");
 	if (_body) {
         
 		// get force and location in world coordinates
@@ -315,11 +318,13 @@
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location
 {
+        if(DEBUGSPRITE) NSLog(@"applyForce");
 	[self applyForce:force atLocation:location asImpulse:NO];
 }
 
 -(void) applyForce:(CGPoint)force asImpulse:(BOOL)impulse
 {
+    if(DEBUGSPRITE) NSLog(@"applyForce asImpulse");
 	// apply force to center of object
 	b2Vec2 center = _body->GetWorldCenter();
 	[self applyForce:force atLocation:ccp(center.x * PTMRatio, center.y * PTMRatio) asImpulse:impulse];
@@ -327,11 +332,13 @@
 
 -(void) applyForce:(CGPoint)force
 {
+    if(DEBUGSPRITE) NSLog(@"applyForce");
 	[self applyForce:force asImpulse:NO];
 }
 
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
+    if(DEBUGSPRITE) NSLog(@"applyTorque");
 	if (_body)
 		if (impulse){
            _body->ApplyAngularImpulse(torque * GTKG_RATIO); 
@@ -343,6 +350,7 @@
 
 -(void) applyTorque:(Float32)torque
 {
+    if(DEBUGSPRITE) NSLog(@"applyTorque");
 	[self applyTorque:torque asImpulse:NO];
 }
 
@@ -421,12 +429,7 @@
     
     return CGPointMake(vec.x, vec.y);
 }
-- (CGPoint)centerPoint {
-    
-	b2Vec2 vec = _body->GetWorldCenter();
-    
-    return CGPointMake(vec.x, vec.y);
-}
+
 
 #pragma mark - Body Management
 -(void) destroyBody
@@ -493,6 +496,7 @@
     [_joints release], _joints = nil;
     [_shapes release], _shapes = nil;
     self.startContact = nil;
+    self.onTouchDownBlock = nil;
     self.endContact = nil;
     self.collision = nil;
 	[super dealloc];
@@ -502,6 +506,7 @@
 {
 	if ((self = [super init]))
 	{
+
         _bodyDef = new b2BodyDef();
         
         _bodyDef->type = b2_dynamicBody;
@@ -517,12 +522,10 @@
 }
 
 -(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type {
-    return [self initWithWorld:world bodyType:type shapes:nil];
-}
--(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type shapes:(NSMutableDictionary*)shapesDict
-{
+    
 	if ((self = [super init]))
 	{
+
         _bodyDef = new b2BodyDef();
         _world = world;
         _bodyDef->type = type;
@@ -531,14 +534,23 @@
         _bodyDef->userData = self;
         
         _wasActive = _bodyDef->active = YES;
-       
+        
         _shapes = [[NSMutableDictionary alloc] init];
-        if (shapesDict!=nil) {
-            [_shapes addEntriesFromDictionary:shapesDict];
-        }
-         [self createBody];
+
+        [self createBody];
 	}
 	return self;
+}
+-(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef 
+{
+    
+    _bodyDef = new b2BodyDef(bodyDef);
+    _wasActive = _bodyDef->active = YES;
+    _world = world;
+
+    
+    [self createBody];
+
 }
 
 
@@ -562,7 +574,10 @@
         position = CGPointApplyAffineTransform(position, [(CCBodySprite *)_parent worldTransform]);
     
     if(!CGPointEqualToPoint(position, _position)) {
-        [super setPosition:position];
+      //  NSLog(@"_scaleFactorMoving:%f",self.scaleFactorMoving);
+        [super setPosition: ccpMult(position,InvPTMRatio)];
+         
+       ;
         [self recursiveMarkTransformDirty];
     }
     
@@ -593,6 +608,51 @@
 }
 
 
+-(void)setScale:(float)scale{
+    [super setScale:scale];
+    
+    
+}
+
+
+// N.B. when initialising this class with super methods - in order to get the setPosition to catch - you must overide these methods
+/*+(id)spriteWithTexture:(CCTexture2D*)texture
+{
+	return [[[self alloc] initWithTexture:texture] autorelease];
+}
+
++(id)spriteWithTexture:(CCTexture2D*)texture rect:(CGRect)rect
+{
+	return [[[self alloc] initWithTexture:texture rect:rect] autorelease];
+}
+
++(id)spriteWithFile:(NSString*)filename
+{
+	return [[[self alloc] initWithFile:filename] autorelease];
+}*/
+
++(id)spriteWithFile:(NSString*)filename rect:(CGRect)rect
+{
+	return [[[self alloc] initWithFile:filename rect:rect] autorelease];
+}
+
+/*+(id)spriteWithSpriteFrame:(CCSpriteFrame*)spriteFrame
+{
+	return [[[self alloc] initWithSpriteFrame:spriteFrame] autorelease];
+}
+
++(id)spriteWithSpriteFrameName:(NSString*)spriteFrameName
+{
+	CCSpriteFrame *frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName];
+    
+	NSAssert1(frame!=nil, @"Invalid spriteFrameName: %@", spriteFrameName);
+	return [self spriteWithSpriteFrame:frame];
+}
+
++(id)spriteWithCGImage:(CGImageRef)image key:(NSString*)key
+{
+	return [[[self alloc] initWithCGImage:image key:key] autorelease];
+}*/
 
 
 @end

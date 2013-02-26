@@ -34,6 +34,7 @@ typedef enum
 	kDynamic
 } PhysicsType;
 
+typedef void (^OnTouchBlock)();
 
 typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString *otherShapeName);
 typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 friction);
@@ -68,7 +69,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic) Float32 angularDamping;
 @property (nonatomic) Float32 angularVelocity;
 @property (nonatomic) Float32 surfaceVelocity;
-
+@property (nonatomic) float scaleFactorMoving;
 @property (nonatomic, readonly, getter = isCreated) BOOL created;
 
 // only valid once the underlying box2d body has been created
@@ -81,6 +82,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic, assign) CCWorldLayer *worldLayer;
 @property (nonatomic, assign) b2World *world;
 
+@property (nonatomic, copy) OnTouchBlock onTouchDownBlock;
 @property (nonatomic, copy) ContactBlock startContact;
 @property (nonatomic, copy) ContactBlock endContact;
 @property (nonatomic, copy) CollideBlock collision;
@@ -105,5 +107,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 
 -(void) addedToJoint:(CCJointSprite *)sprite;
 -(void) update:(ccTime)delta;
--(void) createBody;
+-(void) createBody; //automatically called - don't use 
+
+-(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef;
 @end
