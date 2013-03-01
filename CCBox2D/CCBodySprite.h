@@ -70,6 +70,7 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic) Float32 angularVelocity;
 @property (nonatomic) Float32 surfaceVelocity;
 @property (nonatomic) float scaleFactorMoving;
+@property (nonatomic) CGPoint physicsPosition;
 @property (nonatomic, readonly, getter = isCreated) BOOL created;
 
 // only valid once the underlying box2d body has been created
@@ -81,6 +82,9 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 // -setWorld: recursively sets the world on any body or joint children
 @property (nonatomic, assign) CCWorldLayer *worldLayer;
 @property (nonatomic, assign) b2World *world;
+@property (nonatomic,assign)  b2Body *body;
+@property (nonatomic,assign) b2BodyDef *bodyDef;
+
 
 @property (nonatomic, copy) OnTouchBlock onTouchDownBlock;
 @property (nonatomic, copy) ContactBlock startContact;
@@ -102,7 +106,6 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 -(void) removeShapes;
 
 - (NSString *)shapeDescription;
-- (CGPoint)physicsPosition;
 - (CGPoint)centerPoint;
 
 -(void) addedToJoint:(CCJointSprite *)sprite;

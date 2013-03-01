@@ -34,8 +34,7 @@
 
 #pragma mark -
 @implementation CCBodySprite {
-    b2BodyDef *_bodyDef;
-    b2Body *_body;
+    
 }
 
 #pragma mark - Properties
@@ -48,6 +47,7 @@
 @synthesize shapes=_shapes;
 @synthesize surfaceVelocity = _surfaceVelocity;
 @synthesize scaleFactorMoving = _scaleFactorMoving;
+@synthesize physicsPosition;
 
 @dynamic physicsType;
 @dynamic active;
@@ -86,142 +86,140 @@
 
 
 #pragma mark - Accessors
-- (b2Body *)body {
-    return _body;
-}
+
 
 -(void) setPhysicsType:(PhysicsType)physicsType
 {
-	if (_body)
-		_body->SetType((b2BodyType)physicsType);
+	if (self.body)
+		self.body->SetType((b2BodyType)physicsType);
     else
-        _bodyDef->type = (b2BodyType)physicsType;
+        self.bodyDef->type = (b2BodyType)physicsType;
 }
 
 - (PhysicsType)physicsType {
-    if(_body)
-        return (PhysicsType) _body->GetType();
+    if(self.body)
+        return (PhysicsType) self.body->GetType();
     else
-        return (PhysicsType) _bodyDef->type;
+        return (PhysicsType) self.bodyDef->type;
 }
 
 - (BOOL)active {
-    if(_body)
-        return _body->IsActive();
+    if(self.body)
+        return self.body->IsActive();
     else
-        return _bodyDef->active;
+        return self.bodyDef->active;
 }
 
 -(void) setActive:(BOOL)active
 {
-	if (_body)
-		_body->SetActive(active);
+	if (self.body)
+		self.body->SetActive(active);
     else
-        _bodyDef->active = active;
+        self.bodyDef->active = active;
 }
 
 - (BOOL)sleepy {
-    if(_body)
-        return _body->IsSleepingAllowed();
+    if(self.body)
+        return self.body->IsSleepingAllowed();
     else
-        return _bodyDef->allowSleep;
+        return self.bodyDef->allowSleep;
 }
 
 -(void) setSleepy:(BOOL)sleep
 {
-	if (_body)
-		_body->SetSleepingAllowed(sleep);
+	if (self.body)
+		self.body->SetSleepingAllowed(sleep);
     else
-        _bodyDef->allowSleep = sleep;
+        self.bodyDef->allowSleep = sleep;
 }
 
 - (BOOL)awake {
-    if(_body)
-        return _body->IsAwake();
+    if(self.body)
+        return self.body->IsAwake();
     else
-        return _bodyDef->awake;
+        return self.bodyDef->awake;
 }
 
 -(void)setAwake:(BOOL)awake
 {
-	if (_body)
-		_body->SetAwake(awake);
+	if (self.body)
+		self.body->SetAwake(awake);
 	else
-        _bodyDef->awake = awake;
+        self.bodyDef->awake = awake;
 }
 
 - (BOOL)fixed {
-    if(_body)
-        return _body->IsFixedRotation();
+    if(self.body)
+        return self.body->IsFixedRotation();
     else
-        return _bodyDef->fixedRotation;
+        return self.bodyDef->fixedRotation;
 }
 
 -(void)setFixed:(BOOL)fixed
 {
-	if (_body)
-		_body->SetFixedRotation(fixed);
+	if (self.body)
+		self.body->SetFixedRotation(fixed);
     else
-        _bodyDef->fixedRotation = fixed;
+        self.bodyDef->fixedRotation = fixed;
 }
 
 - (BOOL)bullet {
-    if(_body)
-        return _body->IsBullet();
+    if(self.body)
+        return self.body->IsBullet();
     else
-        return _bodyDef->bullet;
+        return self.bodyDef->bullet;
 }
 
 -(void) setBullet:(BOOL)bullet
 {
-	if (_body)
-		_body->SetBullet(bullet);
+	if (self.body)
+		self.body->SetBullet(bullet);
     else
-        _bodyDef->bullet = bullet;
+        self.bodyDef->bullet = bullet;
 }
 
 -(void) setDamping:(Float32)damping
 {
-	if (_body)
-		_body->SetLinearDamping(damping);
+	if (self.body)
+		self.body->SetLinearDamping(damping);
 	else
-        _bodyDef->linearDamping = damping;
+        self.bodyDef->linearDamping = damping;
 }
 
 -(void) setAngularDamping:(Float32)angularDamping
 {
-	if (_body)
-		_body->SetAngularDamping(angularDamping);
+	if (self.body)
+		self.body->SetAngularDamping(angularDamping);
 	else
-        _bodyDef->angularDamping = angularDamping;
+        self.bodyDef->angularDamping = angularDamping;
 }
 
 -(void) setAngularVelocity:(Float32)angularVelocity
 {
-	if (_body)
-		_body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-angularVelocity));
+	if (self.body)
+		self.body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-angularVelocity));
     else
-        _bodyDef->angularVelocity = CC_DEGREES_TO_RADIANS(-angularVelocity);
+        self.bodyDef->angularVelocity = CC_DEGREES_TO_RADIANS(-angularVelocity);
 }
 
 -(void) setVelocity:(CGPoint)velocity
 {
     b2Vec2 linearVelocity = b2Vec2(velocity.x * InvPTMRatio, velocity.y * InvPTMRatio);
     
-	if (_body)
-		_body->SetLinearVelocity(linearVelocity);
+	if (self.body)
+		self.body->SetLinearVelocity(linearVelocity);
     else
-        _bodyDef->linearVelocity = linearVelocity;
+        self.bodyDef->linearVelocity = linearVelocity;
 }
 
 - (CGPoint)velocity {
 
     b2Vec2 linearVelocity;
     
-    if(_body)
-        linearVelocity = _body->GetLinearVelocity();
+    if(self.body)
+        linearVelocity = self.body->GetLinearVelocity();
     else
-        linearVelocity = _bodyDef->linearVelocity;
+        linearVelocity = self.bodyDef->linearVelocity;
         
     CGPoint result;
 
@@ -254,17 +252,17 @@
 
 #pragma mark - Dynamic Accessors
 - (BOOL)isCreated {
-    return NULL != _body;
+    return NULL != self.body;
 }
 
 - (Float32)mass {
-    if(!_body) return 0;
-    return _body->GetMass();
+    if(!self.body) return 0;
+    return self.body->GetMass();
 }
 
 - (Float32)inertia {
-    if(!_body) return 0;
-    return _body->GetInertia();
+    if(!self.body) return 0;
+    return self.body->GetInertia();
 }
 
 
@@ -275,18 +273,31 @@
     
     if(DEBUGSPRITE) NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
 	
-	if (_body) {
+    if (_world) {
+        if (self.body) {
+            
+            CGPoint worldPosition = newPosition;
+            
+            if([_parent isKindOfClass:[CCBodySprite class]])
+                worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
+            
+            if(DEBUGSPRITE) NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
+            
+            b2Vec2 vec = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
+            float32 angle = self.body->GetAngle();
+            if (_world->IsLocked() == false) {
+                //http://www.raywenderlich.com/forums/viewtopic.php?f=2&t=29&start=60
+              self.body->SetTransform(vec,angle );
+            }else{
+                NSLog(@"WARNING: can't set transform on callback from listener");
+            }
         
-        CGPoint worldPosition = newPosition;
-        
-        if([_parent isKindOfClass:[CCBodySprite class]])
-            worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
-        
-        if(DEBUGSPRITE) NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
-        
-		_body->SetTransform(b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio), _body->GetAngle());
-	}
-    
+        }
+
+    }else{
+        NSLog(@"WARNING: no world set");
+    }
+	    
     [self recursiveMarkTransformDirty];
 }
 
@@ -294,8 +305,8 @@
 {
 	super.rotation = newRotation;
 	
-	if (_body)
-		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-[self rotation]));
+	if (self.body)
+		self.body->SetTransform(self.body->GetPosition(), CC_DEGREES_TO_RADIANS(-[self rotation]));
 }
 
 
@@ -303,16 +314,18 @@
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
 {
     if(DEBUGSPRITE) NSLog(@"applyForce");
-	if (_body) {
+	if (self.body) {
         
 		// get force and location in world coordinates
 		b2Vec2 b2Force(force.x * InvPTMRatio * GTKG_RATIO, force.y * InvPTMRatio * GTKG_RATIO);
 		b2Vec2 b2Location(location.x * InvPTMRatio, location.y * InvPTMRatio);
 		
-		if (impulse)
-			_body->ApplyLinearImpulse(b2Force, b2Location);
-		else
-			_body->ApplyForce(b2Force, b2Location);
+		if (impulse){
+            self.body->ApplyLinearImpulse(b2Force, b2Location);
+        } else{
+            self.body->ApplyForce(b2Force, b2Location);
+        }
+			
 	}
 }
 
@@ -326,8 +339,12 @@
 {
     if(DEBUGSPRITE) NSLog(@"applyForce asImpulse");
 	// apply force to center of object
-	b2Vec2 center = _body->GetWorldCenter();
-	[self applyForce:force atLocation:ccp(center.x * PTMRatio, center.y * PTMRatio) asImpulse:impulse];
+    if (self.body) {
+       	b2Vec2 center = self.body->GetWorldCenter();
+        [self applyForce:force atLocation:ccp(center.x * PTMRatio, center.y * PTMRatio) asImpulse:impulse]; // TODO - this needs to be cleaner.
+        
+    }
+
 }
 
 -(void) applyForce:(CGPoint)force
@@ -339,11 +356,11 @@
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
     if(DEBUGSPRITE) NSLog(@"applyTorque");
-	if (_body)
+	if (self.body)
 		if (impulse){
-           _body->ApplyAngularImpulse(torque * GTKG_RATIO); 
+           self.body->ApplyAngularImpulse(torque * GTKG_RATIO); 
         } else{
-           _body->ApplyTorque(torque * GTKG_RATIO); 
+           self.body->ApplyTorque(torque * GTKG_RATIO); 
         }
 			
 }
@@ -364,7 +381,7 @@
     
     CCShape *oldShape = [_shapes objectForKey:name];
 
-	if (_body) {
+	if (self.body) {
         if(oldShape)
             [oldShape removeFixtureFromBody:self];
 		[shape addFixtureToBody:self];
@@ -379,7 +396,7 @@
     
     if(!shape) return;
     
-    if(_body)
+    if(self.body)
         [shape removeFixtureFromBody:self];
     
     [_shapes removeObjectForKey:name];
@@ -392,7 +409,7 @@
 
 -(void) addedToJoint:(CCJointSprite *)sprite
 {
-	if (!_body) {
+	if (!self.body) {
 		if (!_joints)
 			_joints = [[CCArray array] retain];
 		
@@ -418,15 +435,31 @@
     return [strings componentsJoinedByString:@", "];
 }
 
+- (CGPoint)setPhysicsPosition {
+    
+    b2Vec2 b2Position = b2Vec2(self.position.x/PTM_RATIO,
+                               self.position.y/PTM_RATIO);
+    float32 b2Angle = -1 * CC_DEGREES_TO_RADIANS(self.rotation);
+    
+   
+    b2Vec2 vec;
+    if(self.body){
+        self.body->SetTransform(b2Position, b2Angle);
+    }else{
+        self.bodyDef->position = b2Position;
+
+    }
+}
 - (CGPoint)physicsPosition {
     
     b2Vec2 vec;
         
-    if(_body)
-        vec = _body->GetPosition();
-    else
-        vec = _bodyDef->position;
-    
+    if(self.body){
+       vec = self.body->GetPosition();
+    }else{
+       vec = self.bodyDef->position;       
+    }
+ 
     return CGPointMake(vec.x, vec.y);
 }
 
@@ -434,11 +467,11 @@
 #pragma mark - Body Management
 -(void) destroyBody
 {
-	if (_body) {
+	if (self.body) {
         
 		// for each attached joint
 		b2JointEdge *nextJoint;
-		for (b2JointEdge *joint = _body->GetJointList(); joint; joint = nextJoint)
+		for (b2JointEdge *joint = self.body->GetJointList(); joint; joint = nextJoint)
 		{
 			// get the next joint ahead of time to avoid a bad pointer when joint is destroyed
 			nextJoint = joint->next;
@@ -451,9 +484,9 @@
 		}
 		
 		// destroy the body
-		_body->GetWorld()->DestroyBody(_body);
-		_body = NULL;
-        _bodyDef = new b2BodyDef();
+		self.body->GetWorld()->DestroyBody(self.body);
+		self.body = NULL;
+        self.bodyDef = new b2BodyDef();
         
         [self removeShapes];
 	}
@@ -463,21 +496,21 @@
 {
     if (_world)
     {
-        if (_body) [self destroyBody];
+        if (self.body) [self destroyBody];
          
         CGPoint position = _position;
         
         if([_parent isKindOfClass:[CCBodySprite class]])
             position = CGPointApplyAffineTransform(_position, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
         
-        _bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
-       // _bodyDef->position.Set(0.0f, 10.0f);
-        _body = _world->CreateBody(_bodyDef);
+        self.bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
+       // self.bodyDef->position.Set(0.0f, 10.0f);
+        self.body = _world->CreateBody(self.bodyDef);
         
-        delete _bodyDef;
-        _bodyDef = NULL;
+        delete self.bodyDef;
+        self.bodyDef = NULL;
         
-        _body->SetUserData(self);
+        self.body->SetUserData(self);
         
         for (NSString *key in [_shapes allKeys])
             [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
@@ -507,14 +540,14 @@
 	if ((self = [super init]))
 	{
 
-        _bodyDef = new b2BodyDef();
+        self.bodyDef = new b2BodyDef();
         
-        _bodyDef->type = b2_dynamicBody;
-        _bodyDef->awake = YES;
-        _bodyDef->allowSleep = YES;
-        _bodyDef->userData = self;
+        self.bodyDef->type = b2_dynamicBody;
+        self.bodyDef->awake = YES;
+        self.bodyDef->allowSleep = YES;
+        self.bodyDef->userData = self;
 
-        _wasActive = _bodyDef->active = YES;
+        _wasActive = self.bodyDef->active = YES;
 
 		_shapes = [[NSMutableDictionary alloc] init];
 	}
@@ -526,14 +559,14 @@
 	if ((self = [super init]))
 	{
 
-        _bodyDef = new b2BodyDef();
+        self.bodyDef = new b2BodyDef();
         _world = world;
-        _bodyDef->type = type;
-        _bodyDef->awake = YES;
-        _bodyDef->allowSleep = YES;
-        _bodyDef->userData = self;
+        self.bodyDef->type = type;
+        self.bodyDef->awake = YES;
+        self.bodyDef->allowSleep = YES;
+        self.bodyDef->userData = self;
         
-        _wasActive = _bodyDef->active = YES;
+        _wasActive = self.bodyDef->active = YES;
         
         _shapes = [[NSMutableDictionary alloc] init];
 
@@ -543,9 +576,11 @@
 }
 -(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef 
 {
+
+    if (self.body) [self destroyBody];
     
-    _bodyDef = new b2BodyDef(bodyDef);
-    _wasActive = _bodyDef->active = YES;
+    self.bodyDef = new b2BodyDef(bodyDef);
+    _wasActive = self.bodyDef->active = YES;
     _world = world;
 
     
@@ -558,16 +593,16 @@
 #pragma mark - Updating
 -(void) update:(ccTime)delta
 {
-	if(!_body)
+	if(!self.body)
         return;
     
-    BOOL active = _body->IsActive();
+    BOOL active = self.body->IsActive();
     
     if(!active && !_wasActive)
         return;
     
 
-    b2Vec2 newBodyPos = _body->GetPosition();
+    b2Vec2 newBodyPos = self.body->GetPosition();
     CGPoint position = ccp(newBodyPos.x * PTMRatio, newBodyPos.y * PTMRatio);
     
     if([_parent isKindOfClass:[CCBodySprite class]])
@@ -581,7 +616,7 @@
         [self recursiveMarkTransformDirty];
     }
     
-    [super setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
+    [super setRotation:CC_RADIANS_TO_DEGREES(-self.body->GetAngle())];
     
     _wasActive = active;
 }
@@ -591,7 +626,7 @@
 -(void) onEnter {
 	[super onEnter];
 	
-	if (_body)
+	if (self.body)
 		return;
 	
 	if (!_worldLayer && [_parent isKindOfClass:[CCWorldLayer class]])
