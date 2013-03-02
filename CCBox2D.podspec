@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
     }
     s.author = {'axcho' => 'axcho@axcho.com/'}
     s.source = { 
-      :git => 'git://github.com/jdp-global/CCBox2D.git',:commit => 'b43d018ef1af2162c12f5fe115876be42b1a893c' 
+      :git => 'git://github.com/jdp-global/CCBox2D.git',:commit => '9fc87365666d164302e6cce348726cb69b86c0bf' 
     }
     s.platform = :ios, '5.0'
     s.framework = 'Foundation', 'OpenGLES'
