@@ -1,0 +1,21 @@
+
+EXTERNAL SOURCES: 
+  CCBox2D: 
+    :podspec: https://raw.github.com/jdp-global/CCBox2D/master/CCBox2d.podspec
+
+PODS: 
+- CCBox2D (0.0.1)
+- box2d (2.3.0)
+- cocos2d (2.1.rc0)
+
+SPEC CHECKSUMS: 
+  cocos2d: c6d26b9c0abdbb26bed2e771baf94ce6fa7dd523
+  box2d: 091fdf7e8b74bc74f20803734370b8492096ea04
+  CCBox2D: f695a06410c20d36168949efd11e4332d9c7c100
+
+DEPENDENCIES: 
+- CCBox2D (from `https://raw.github.com/jdp-global/CCBox2D/master/CCBox2d.podspec')
+- box2d
+- cocos2d
+
+COCOAPODS: 0.16.2

@@ -24,20 +24,18 @@
 
 #import "CCMotorSprite.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
 
+@implementation CCMotorSprite {
+	b2RevoluteJoint *_revoluteJoint;
+}
 
-@implementation CCMotorSprite
-
-@synthesize fixed = _fixed;
 @synthesize running = _running;
 @synthesize limited = _limited;
 @synthesize speed = _motorSpeed;
 @synthesize power = _maxTorque;
 @synthesize minRotation = _minRotation;
 @synthesize maxRotation = _maxRotation;
-@synthesize body1 = _body1;
-@synthesize body2 = _body2;
-@synthesize world = _world;
 
 -(b2Joint *) joint
 {
@@ -88,7 +86,7 @@
 	if (_revoluteJoint)
 	{
 		// set the revolute joint power
-		_revoluteJoint->SetMaxMotorTorque(_maxTorque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
+		_revoluteJoint->SetMaxMotorTorque(_maxTorque * GTKG_RATIO);
 	}
 }
 
@@ -150,10 +148,10 @@
 -(void) createJoint
 {
 	// if the physics manager exists
-	if (_world)
+	if (_worldLayer)
 	{
 		// if the world and bodies exist
-		if (_world.world && _body1.body && _body2.body)
+		if (_worldLayer.world && _body1.body && _body2.body)
 		{
 			// if the revolute joint exists
 			if (_revoluteJoint)
@@ -164,18 +162,22 @@
 			
 			// set up the data for the joint
 			b2RevoluteJointDef jointData;
-			b2Vec2 anchor(_anchor.x / PTM_RATIO, _anchor.y / PTM_RATIO);
-			jointData.Initialize(_body1.body, _body2.body, anchor);
+            CGPoint anchor = _anchor;
+            
+            if([_parent isKindOfClass:[CCBodySprite class]])
+                anchor = CGPointApplyAffineTransform(_anchor, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
+
+			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio));
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
 			jointData.motorSpeed = CC_DEGREES_TO_RADIANS(-_motorSpeed);
-			jointData.maxMotorTorque = _maxTorque / PTM_RATIO / PTM_RATIO * GTKG_RATIO;
+			jointData.maxMotorTorque = _maxTorque * GTKG_RATIO;
 			jointData.lowerAngle = CC_DEGREES_TO_RADIANS(-_maxRotation);
 			jointData.upperAngle = CC_DEGREES_TO_RADIANS(-_minRotation);
 			jointData.collideConnected = false;
 			
 			// create the joint
-			_revoluteJoint = (b2RevoluteJoint *)(_world.world->CreateJoint(&jointData));
+			_revoluteJoint = (b2RevoluteJoint *)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_revoluteJoint->SetUserData(self);
@@ -201,7 +203,7 @@
 		_revoluteJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
-		_world = nil;
+		_worldLayer = nil;
 	}
 	return self;
 }
@@ -211,68 +213,21 @@
 	// if revolute joint exists
 	if (_revoluteJoint)
 	{
-		// update the anchor position
-		b2Vec2 anchor = _revoluteJoint->GetAnchorA();
-		_anchor.x = anchor.x * PTM_RATIO;
-		_anchor.y = anchor.y * PTM_RATIO;
+        
+        b2Vec2 newAnchor = _revoluteJoint->GetAnchorA();
+        CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
+
+        if([_parent isKindOfClass:[CCBodySprite class]])
+            anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)_parent worldTransform]);
 		
-		// update the display properties to match
-		[self setPosition:ccp(_anchor.x, _anchor.y)];
+        _anchor = anchor;
 		
-		// if the joint is not fixed
 		if (!_fixed)
 		{
-			// adjust the angle to match too
+			// adjust the angle to zmatch too
 			[self setRotation:CC_RADIANS_TO_DEGREES(-_revoluteJoint->GetJointAngle())];
 		}
 	}
-}
-
-- (void) dealloc
-{
-	// remove joint from world
-	[self destroyJoint];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
-
--(void) onEnter
-{
-	[super onEnter];
-	
-	// skip if the joint already exists
-	if (_revoluteJoint)
-		return;
-	
-	// if physics manager is not defined
-	if (!_world)
-	{
-		// if parent is a physics manager
-		if ([super.parent isKindOfClass:[CCWorldLayer class]])
-		{
-			// use the parent as the physics manager
-			_world = (CCWorldLayer *)super.parent;
-		}
-	}
-	
-	// if physics manager is defined now
-	if (_world)
-	{
-		// create the joint
-		[self createJoint];
-	}
-}
-
--(void) onExit
-{
-	[super onExit];
-	
-	// destroy the joint
-	[self destroyJoint];
-	
-	// get rid of the physics manager reference too
-	_world = nil;
 }
 
 @end

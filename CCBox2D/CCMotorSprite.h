@@ -24,17 +24,14 @@
 
 #import "CCWorldLayer.h"
 
+#import "CCJointSprite.h"
 
-@interface CCMotorSprite : CCSprite <CCJointSprite>
+
+@interface CCMotorSprite : CCJointSprite
 {
-	BOOL _fixed;
 	BOOL _running, _limited;
 	float _motorSpeed, _maxTorque, _minRotation, _maxRotation;
 	CGPoint _anchor;
-	b2RevoluteJoint *_revoluteJoint;
-	CCBodySprite *_body1;
-	CCBodySprite *_body2;
-	CCWorldLayer *_world;
 }
 
 @property (nonatomic) BOOL running;
