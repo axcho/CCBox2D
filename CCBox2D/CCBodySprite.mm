@@ -22,1032 +22,672 @@
  
  */
 
+#import "Box2D.h"
+
 #import "CCBodySprite.h"
 #import "CCWorldLayer.h"
+#import "CCShape.h"
+#import "CCJointSprite.h"
+#import "CCBox2DPrivate.h"
 
+#define DEBUGSPRITE 0
 
-@implementation CCBodySprite
-
-@synthesize physicsType = _physicsType;
-@synthesize collisionType = _collisionType;
-@synthesize collidesWithType = _collidesWithType;
-@synthesize active = _active;
-@synthesize sleepy = _sleepy;
-@synthesize awake = _awake;
-@synthesize solid = _solid;
-@synthesize fixed = _fixed;
-@synthesize bullet = _bullet;
-@synthesize density = _density;
-@synthesize friction = _friction;
-@synthesize bounce = _bounce;
-@synthesize damping = _damping;
-@synthesize angularDamping = _angularDamping;
-@synthesize angularVelocity = _angularVelocity;
-@synthesize velocity = _velocity;
-@synthesize body = _body;
-@synthesize world = _world;
-
--(void) setPhysicsType:(PhysicsType)newPhysicsType
-{
-	_physicsType = newPhysicsType;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body physics type
-		_body->SetType(_physicsType == kStatic ? b2_staticBody :
-					   _physicsType == kKinematic ? b2_kinematicBody :
-					   _physicsType == kDynamic ? b2_dynamicBody :
-					   _body->GetType());
-	}
+#pragma mark -
+@implementation CCBodySprite {
+    
 }
 
--(void) setCollisionType:(uint16)newCollisionType
-{
-	_collisionType = newCollisionType;
-	
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// get the collision filter for the shape
-			b2Filter filter = shape->GetFilterData();
-			
-			// adjust the collision type
-			filter.categoryBits = _collisionType;
-			
-			// set the collision filter
-			shape->SetFilterData(filter);
-		}
-	}
+#pragma mark - Properties
+@synthesize onTouchDownBlock;
+@synthesize startContact=_startContact;
+@synthesize endContact=_endContact;
+@synthesize collision=_collision;
+@synthesize world=_world;
+@synthesize worldLayer=_worldLayer;
+@synthesize shapes=_shapes;
+@synthesize surfaceVelocity = _surfaceVelocity;
+@synthesize scaleFactorMoving = _scaleFactorMoving;
+@synthesize physicsPosition;
+
+@dynamic physicsType;
+@dynamic active;
+@dynamic sleepy;
+@dynamic awake;
+@dynamic fixed;
+@dynamic bullet;
+@dynamic damping;
+@dynamic angularDamping;
+@dynamic angularVelocity;
+@dynamic velocity;
+
+
+#pragma mark - Private
+- (void)recursiveMarkTransformDirty {
+    for(id node in self.children)
+        if([node isKindOfClass:[CCBodySprite class]])
+            [node recursiveMarkTransformDirty];
+    _worldTransformDirty = YES;
 }
 
--(void) setCollidesWithType:(uint16)newCollidesWithType
-{
-	_collidesWithType = newCollidesWithType;
-	
-	// if body exists
-	if (_body)
-	{
-		
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// get the collision filter for the shape
-			b2Filter filter = shape->GetFilterData();
-			
-			// adjust the collides with type
-			filter.maskBits = _collidesWithType;
-			
-			// set the collision filter
-			shape->SetFilterData(filter);
-		}
-	}
+- (CGAffineTransform)worldTransform {
+    if(_worldTransformDirty) {
+        
+        CGAffineTransform t = [self nodeToParentTransform];
+        
+        for (CCNode *p = _parent; [p class] == [self class]; p = p->_parent)
+            t = CGAffineTransformConcat(t, [p nodeToParentTransform]);
+        
+        _worldTransform = CGAffineTransformInvert(t);
+        _worldTransformDirty = NO;
+    }
+    
+    return _worldTransform;
 }
 
--(void) setActive:(BOOL)newActive
+
+#pragma mark - Accessors
+
+
+-(void) setPhysicsType:(PhysicsType)physicsType
 {
-	_active = newActive;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body active
-		_body->SetActive(_active);
-	}
+	if (self.body)
+		self.body->SetType((b2BodyType)physicsType);
+    else
+        self.bodyDef->type = (b2BodyType)physicsType;
+}
+
+- (PhysicsType)physicsType {
+    if(self.body)
+        return (PhysicsType) self.body->GetType();
+    else
+        return (PhysicsType) self.bodyDef->type;
+}
+
+- (BOOL)active {
+    if(self.body)
+        return self.body->IsActive();
+    else
+        return self.bodyDef->active;
+}
+
+-(void) setActive:(BOOL)active
+{
+	if (self.body)
+		self.body->SetActive(active);
+    else
+        self.bodyDef->active = active;
+}
+
+- (BOOL)sleepy {
+    if(self.body)
+        return self.body->IsSleepingAllowed();
+    else
+        return self.bodyDef->allowSleep;
+}
+
+-(void) setSleepy:(BOOL)sleep
+{
+	if (self.body)
+		self.body->SetSleepingAllowed(sleep);
+    else
+        self.bodyDef->allowSleep = sleep;
+}
+
+- (BOOL)awake {
+    if(self.body)
+        return self.body->IsAwake();
+    else
+        return self.bodyDef->awake;
+}
+
+-(void)setAwake:(BOOL)awake
+{
+	if (self.body)
+		self.body->SetAwake(awake);
 	else
-	{
-		// sprite cannot be active without body
-		_active = NO;
-	}
+        self.bodyDef->awake = awake;
 }
 
--(void) setSleepy:(BOOL)newSleepy
-{
-	_sleepy = newSleepy;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body sleepy
-		_body->SetSleepingAllowed(_sleepy);
-	}
+- (BOOL)fixed {
+    if(self.body)
+        return self.body->IsFixedRotation();
+    else
+        return self.bodyDef->fixedRotation;
 }
 
--(void) setAwake:(BOOL)newAwake
+-(void)setFixed:(BOOL)fixed
 {
-	_awake = newAwake;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body awake
-		_body->SetAwake(_awake);
-	}
+	if (self.body)
+		self.body->SetFixedRotation(fixed);
+    else
+        self.bodyDef->fixedRotation = fixed;
 }
 
--(void) setSolid:(BOOL)newSolid
+- (BOOL)bullet {
+    if(self.body)
+        return self.body->IsBullet();
+    else
+        return self.bodyDef->bullet;
+}
+
+-(void) setBullet:(BOOL)bullet
 {
-	_solid = newSolid;
-	
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// set the shape solid
-			shape->SetSensor(!_solid);
-		}
-	}
+	if (self.body)
+		self.body->SetBullet(bullet);
+    else
+        self.bodyDef->bullet = bullet;
+}
+
+-(void) setDamping:(Float32)damping
+{
+	if (self.body)
+		self.body->SetLinearDamping(damping);
 	else
-	{
-		// for each shape data in the body
-		NSArray *shapeNames = [_shapeData allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape data
-			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-			
-			// set the shape data solid
-			shapeData->isSensor = !_solid;
-		}
-	}
+        self.bodyDef->linearDamping = damping;
 }
 
--(void) setFixed:(BOOL)newFixed
+-(void) setAngularDamping:(Float32)angularDamping
 {
-	_fixed = newFixed;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body fixed
-		_body->SetFixedRotation(_fixed);
-	}
-}
-
--(void) setBullet:(BOOL)newBullet
-{
-	_bullet = newBullet;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body bullet
-		_body->SetBullet(_bullet);
-	}
-}
-
--(void) setDensity:(float)newDensity
-{
-	_density = newDensity;
-	
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// set the shape density
-			shape->SetDensity(_density * PTM_RATIO * PTM_RATIO / GTKG_RATIO);
-		}
-	}
+	if (self.body)
+		self.body->SetAngularDamping(angularDamping);
 	else
-	{
-		// for each shape data in the body
-		NSArray *shapeNames = [_shapeData allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape data
-			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-			
-			// set the shape data density
-			shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
-		}
-	}
+        self.bodyDef->angularDamping = angularDamping;
 }
 
--(void) setDensity:(float)newDensity forShape:(NSString *)shapeName
+-(void) setAngularVelocity:(Float32)angularVelocity
 {
-	// if body exists
-	if (_body)
-	{
-		// get the shape with the given name
-		b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-		
-		// if the shape exists
-		if (shape)
-		{
-			shape->SetDensity(newDensity * PTM_RATIO * PTM_RATIO / GTKG_RATIO);
-		}
-	}
-	else
-	{
-		// get the shape data with the given name
-		b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-		
-		// if the shape data exists
-		if (shapeData)
-		{
-			// set the shape data density
-			shapeData->density = newDensity * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
-		}
-	}
+	if (self.body)
+		self.body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-angularVelocity));
+    else
+        self.bodyDef->angularVelocity = CC_DEGREES_TO_RADIANS(-angularVelocity);
 }
 
--(void) setFriction:(float)newFriction
+-(void) setVelocity:(CGPoint)velocity
 {
-	_friction = newFriction;
-	
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// set the shape friction
-			shape->SetFriction(_friction);
-		}
-	}
-	else
-	{
-		// for each shape data in the body
-		NSArray *shapeNames = [_shapeData allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape data
-			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-			
-			// set the shape data friction
-			shapeData->friction = _friction;
-		}
-	}
+    b2Vec2 linearVelocity = b2Vec2(velocity.x * InvPTMRatio, velocity.y * InvPTMRatio);
+    
+	if (self.body)
+		self.body->SetLinearVelocity(linearVelocity);
+    else
+        self.bodyDef->linearVelocity = linearVelocity;
 }
 
--(void) setFriction:(float)newFriction forShape:(NSString *)shapeName
-{
-	// if body exists
-	if (_body)
-	{
-		// get the shape with the given name
-		b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-		
-		// if the shape exists
-		if (shape)
-		{
-			// set the shape friction
-			shape->SetFriction(newFriction);
-		}
-	}
-	else
-	{
-		// get the shape data with the given name
-		b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-		
-		// if the shape data exists
-		if (shapeData)
-		{
-			// set the shape data friction
-			shapeData->friction = newFriction;
-		}
-	}
+- (CGPoint)velocity {
+
+    b2Vec2 linearVelocity;
+    
+    if(self.body)
+        linearVelocity = self.body->GetLinearVelocity();
+    else
+        linearVelocity = self.bodyDef->linearVelocity;
+        
+    CGPoint result;
+
+    result.x = linearVelocity.x * PTMRatio;
+    result.y = linearVelocity.y * PTMRatio;
+    
+    return result;
 }
 
--(void) setBounce:(float)newBounce
-{
-	_bounce = newBounce;
-	
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// set the shape bounce
-			shape->SetRestitution(_bounce);
-		}
-	}
-	else
-	{
-		// for each shape data in the body
-		NSArray *shapeNames = [_shapeData allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape data
-			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-			
-			// set the shape data bounce
-			shapeData->restitution = _bounce;
-		}
-	}
+- (void)setWorldLayer:(CCWorldLayer *)worldLayer{
+    if(_worldLayer != worldLayer) {
+        _worldLayer = worldLayer;
+        _world = _worldLayer.world;
+        for(id child in self.children)
+            if([child respondsToSelector:@selector(setWorldLayer:)])
+                [child setWorldLayer:worldLayer];
+    }
 }
 
--(void) setBounce:(float)newBounce forShape:(NSString *)shapeName
-{
-	// if body exists
-	if (_body)
-	{
-		// get the shape with the given name
-		b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-		
-		// if the shape exists
-		if (shape)
-		{
-			// set the shape bounce
-			shape->SetRestitution(newBounce);
-		}
-	}
-	else
-	{
-		// get the shape data with the given name
-		b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-		
-		// if the shape data exists
-		if (shapeData)
-		{
-			// set the shape data bounce
-			shapeData->restitution = newBounce;
-		}
-	}
+- (void)setWorld:(b2World *)world{
+    if(_world != world) {
+        _world = world;
+        //self.world = _worldLayer.world;
+        for(id child in self.children)
+            if([child respondsToSelector:@selector(setWorld:)])
+                [child setWorld:world];
+    }
 }
 
--(void) setDamping:(float)newDamping
-{
-	_damping = newDamping;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body damping
-		_body->SetLinearDamping(_damping);
-	}
+
+#pragma mark - Dynamic Accessors
+- (BOOL)isCreated {
+    return NULL != self.body;
 }
 
--(void) setAngularDamping:(float)newAngularDamping
-{
-	_angularDamping = newAngularDamping;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body angular damping
-		_body->SetAngularDamping(_angularDamping);
-	}
+- (Float32)mass {
+    if(!self.body) return 0;
+    return self.body->GetMass();
 }
 
--(void) setAngularVelocity:(float)newAngularVelocity
-{
-	_angularVelocity = newAngularVelocity;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body angular velocity in radians
-		_body->SetAngularVelocity(CC_DEGREES_TO_RADIANS(-_angularVelocity));
-	}
+- (Float32)inertia {
+    if(!self.body) return 0;
+    return self.body->GetInertia();
 }
 
--(void) setVelocity:(CGPoint)newVelocity
-{
-	_velocity = newVelocity;
-	
-	// if body exists
-	if (_body)
-	{
-		// set the body velocity
-		_body->SetLinearVelocity(b2Vec2(_velocity.x / PTM_RATIO, _velocity.y / PTM_RATIO));
-	}
-}
 
+#pragma mark - CCNode Accessors
 -(void) setPosition:(CGPoint)newPosition
 {
 	super.position = newPosition;
+    
+    if(DEBUGSPRITE) NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
 	
-	// if body exists
-	if (_body)
-	{
-		// set the body position in world coordinates
-		_body->SetTransform(b2Vec2(position_.x / PTM_RATIO, position_.y / PTM_RATIO), _body->GetAngle());
-	}
+    if (_world) {
+        if (self.body) {
+            
+            CGPoint worldPosition = newPosition;
+            
+            if([_parent isKindOfClass:[CCBodySprite class]])
+                worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
+            
+            if(DEBUGSPRITE) NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
+            
+            b2Vec2 vec = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
+            float32 angle = self.body->GetAngle();
+            if (_world->IsLocked() == false) {
+                //http://www.raywenderlich.com/forums/viewtopic.php?f=2&t=29&start=60
+              self.body->SetTransform(vec,angle );
+            }else{
+                NSLog(@"WARNING: can't set transform on callback from listener");
+            }
+        
+        }
+
+    }else{
+        NSLog(@"WARNING: no world set");
+    }
+	    
+    [self recursiveMarkTransformDirty];
 }
 
--(void) setRotation:(float)newRotation
+-(void) setRotation:(Float32)newRotation
 {
 	super.rotation = newRotation;
 	
-	// if body exists
-	if (_body)
-	{
-		// set the body rotation in radians
-		_body->SetTransform(_body->GetPosition(), CC_DEGREES_TO_RADIANS(-rotation_));
-	}
+	if (self.body)
+		self.body->SetTransform(self.body->GetPosition(), CC_DEGREES_TO_RADIANS(-[self rotation]));
 }
 
+
+#pragma mark - Forces
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
 {
-	// if body exists
-	if (_body)
-	{
+    if(DEBUGSPRITE) NSLog(@"applyForce");
+	if (self.body) {
+        
 		// get force and location in world coordinates
-		b2Vec2 b2Force(force.x / PTM_RATIO * GTKG_RATIO, force.y / PTM_RATIO * GTKG_RATIO);
-		b2Vec2 b2Location(location.x / PTM_RATIO, location.y / PTM_RATIO);
+		b2Vec2 b2Force(force.x * InvPTMRatio * GTKG_RATIO, force.y * InvPTMRatio * GTKG_RATIO);
+		b2Vec2 b2Location(location.x * InvPTMRatio, location.y * InvPTMRatio);
 		
-		// if the force should be an instantaneous impulse
-		if (impulse)
-		{
-			// apply an instant linear impulse
-			_body->ApplyLinearImpulse(b2Force, b2Location);
-		}
-		else
-		{
-			// apply the force
-			_body->ApplyForce(b2Force, b2Location);
-		}
+		if (impulse){
+            self.body->ApplyLinearImpulse(b2Force, b2Location);
+        } else{
+            self.body->ApplyForce(b2Force, b2Location);
+        }
+			
 	}
 }
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location
 {
+        if(DEBUGSPRITE) NSLog(@"applyForce");
 	[self applyForce:force atLocation:location asImpulse:NO];
 }
 
 -(void) applyForce:(CGPoint)force asImpulse:(BOOL)impulse
 {
+    if(DEBUGSPRITE) NSLog(@"applyForce asImpulse");
 	// apply force to center of object
-	b2Vec2 center = _body->GetWorldCenter();
-	[self applyForce:force atLocation:ccp(center.x * PTM_RATIO, center.y * PTM_RATIO) asImpulse:impulse];
+    if (self.body) {
+       	b2Vec2 center = self.body->GetWorldCenter();
+        [self applyForce:force atLocation:ccp(center.x * PTMRatio, center.y * PTMRatio) asImpulse:impulse]; // TODO - this needs to be cleaner.
+        
+    }
+
 }
 
 -(void) applyForce:(CGPoint)force
 {
+    if(DEBUGSPRITE) NSLog(@"applyForce");
 	[self applyForce:force asImpulse:NO];
 }
 
--(void) applyTorque:(float)torque asImpulse:(BOOL)impulse
+-(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
-	// if body exists
-	if (_body)
-	{
-		// if the torque should be an instantaneous impulse
-		if (impulse)
-		{
-			// apply an instant linear impulse
-			_body->ApplyAngularImpulse(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
-		}
-		else
-		{
-			// apply the torque
-			_body->ApplyTorque(torque / PTM_RATIO / PTM_RATIO * GTKG_RATIO);
-		}
-	}
+    if(DEBUGSPRITE) NSLog(@"applyTorque");
+	if (self.body)
+		if (impulse){
+           self.body->ApplyAngularImpulse(torque * GTKG_RATIO); 
+        } else{
+           self.body->ApplyTorque(torque * GTKG_RATIO); 
+        }
+			
 }
 
--(void) applyTorque:(float)torque
+-(void) applyTorque:(Float32)torque
 {
+    if(DEBUGSPRITE) NSLog(@"applyTorque");
 	[self applyTorque:torque asImpulse:NO];
 }
 
--(void) addShape:(b2Shape *)shape withName:(NSString *)shapeName
-{
-	// set up the data for the shape
-	b2FixtureDef *shapeData = new b2FixtureDef();
-	shapeData->shape = shape;
-	shapeData->density = _density * PTM_RATIO * PTM_RATIO / GTKG_RATIO;
-	shapeData->friction = _friction;
-	shapeData->restitution = _bounce;
-	shapeData->isSensor = !_solid;
-	
-	// start with no shape object
-	b2Fixture* shapeObject = NULL;
-	
-	// if the body exists
-	if (_body)
-	{
-		// get the shape with the given name
-		b2Fixture *oldShape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-		
-		// if the shape is already in the list
-		if (oldShape)
-		{
-			// remove the old shape from the body
-			_body->DestroyFixture(oldShape);
-			
-		}
-		
-		// set the collision type of the shape
-		shapeData->filter.categoryBits = _collisionType;
-		shapeData->filter.maskBits = _collidesWithType;
-		
-		// add the shape to the body and get the shape object
-		shapeObject = _body->CreateFixture(shapeData);
+
+#pragma mark - Shapes
+- (CCShape *)shapeNamed:(NSString *)name {
+    return [_shapes objectForKey:name];
+}
+
+- (void)addShape:(CCShape *)shape named:(NSString *)name {
+    
+    CCShape *oldShape = [_shapes objectForKey:name];
+
+	if (self.body) {
+        if(oldShape)
+            [oldShape removeFixtureFromBody:self];
+		[shape addFixtureToBody:self];
 	}
-	
-	// if the shape object exists
-	if (shapeObject)
-	{
-		// add it to the list of shapes
-		[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
-		
-		// delete the shape data
-		delete shapeData->shape;
-		shapeData->shape = NULL;
-		delete shapeData;
-	}
-	else
-	{
-		// get the shape data with the given name
-		b2FixtureDef *oldShapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-		
-		// if the shape data was already in the list
-		if (oldShapeData)
-		{
-			// remove the old shape data from the list
-			[_shapeData removeObjectForKey:shapeName];
-			
-			// if the shape exists
-			if (oldShapeData->shape)
-			{
-				// delete the shape
-				delete oldShapeData->shape;
-				oldShapeData->shape = NULL;
-			}
-			
-			// delete the old shape data
-			delete oldShapeData;
-		}
-		
-		// save the new shape data
-		[_shapeData setObject:[NSValue valueWithPointer:shapeData] forKey:shapeName];
-	}			
+    
+    [_shapes setObject:shape forKey:name];
 }
 
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize atLocation:(CGPoint)shapeLocation
-{
-	// create a box shape
-	b2PolygonShape *boxShape = new b2PolygonShape();
-	boxShape->SetAsBox(shapeSize.width / 2 / PTM_RATIO, shapeSize.height / 2 / PTM_RATIO, b2Vec2((shapeLocation.x - position_.x) / PTM_RATIO, (shapeLocation.y - position_.y) / PTM_RATIO), 0);
-	
-	// add it
-	[self addShape:boxShape withName:shapeName];
+-(void) removeShapeNamed:(NSString *)name {
+    
+    CCShape *shape = [_shapes objectForKey:name];
+    
+    if(!shape) return;
+    
+    if(self.body)
+        [shape removeFixtureFromBody:self];
+    
+    [_shapes removeObjectForKey:name];
 }
 
--(void) addBoxWithName:(NSString *)shapeName ofSize:(CGSize)shapeSize
-{
-	[self addBoxWithName:shapeName ofSize:shapeSize atLocation:position_];
+-(void) removeShapes {
+    for(NSString *name in [_shapes allKeys])
+        [self removeShapeNamed:name];
 }
 
--(void) addBoxWithName:(NSString *)shapeName
+-(void) addedToJoint:(CCJointSprite *)sprite
 {
-	[self addBoxWithName:shapeName ofSize:rect_.size];
-}
-
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius atLocation:(CGPoint)shapeLocation
-{
-	// create a circle shape
-	b2CircleShape *circleShape = new b2CircleShape();
-	circleShape->m_radius = shapeRadius / PTM_RATIO;
-	circleShape->m_p.Set((shapeLocation.x - position_.x) / PTM_RATIO, (shapeLocation.y - position_.y) / PTM_RATIO);
-	
-	// add it
-	[self addShape:circleShape withName:shapeName];
-}
-
--(void) addCircleWithName:(NSString *)shapeName ofRadius:(float)shapeRadius
-{
-	[self addCircleWithName:shapeName ofRadius:shapeRadius atLocation:position_];
-}
-
--(void) addCircleWithName:(NSString *)shapeName
-{
-	float width = rect_.size.width;
-	float height = rect_.size.height;
-	float diameter = (width < height) ? width : height;
-	[self addCircleWithName:shapeName ofRadius:(diameter / 2)];
-}
-
--(void) addPolygonWithName:(NSString *)shapeName withVertices:(CCArray *)shapeVertices
-{
-	// the number of vertices should be within limits
-	assert([shapeVertices count] <= b2_maxPolygonVertices);
-	
-	// create a new array of vertices
-	b2Vec2 vertices[b2_maxPolygonVertices];
-	
-	// convert the array of vertices into world coordinates
-	int i = 0;
-	NSValue *vertex;
-	CCARRAY_FOREACH(shapeVertices, vertex)
-	{
-		// save the vertex in world coordinates
-		CGPoint point = [vertex CGPointValue];
-		vertices[i] = b2Vec2((point.x - position_.x) / PTM_RATIO, (point.y - position_.y) / PTM_RATIO);
-		
-		// next vertex
-		i++;
-	}
-	
-	// create a polygon shape
-	b2PolygonShape *polygonShape = new b2PolygonShape();
-	polygonShape->Set(vertices, [shapeVertices count]);
-	
-	// add it
-	[self addShape:polygonShape withName:shapeName];
-}
-
--(void) removeShapeWithName:(NSString *)shapeName
-{
-	// if body exists
-	if (_body)
-	{
-		// get the shape with the given name
-		b2Fixture *oldShape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-		
-		// if the shape is already in the list
-		if (oldShape)
-		{
-			// remove the shape from the list
-			[_shapes removeObjectForKey:shapeName];
-			
-			// remove the old shape from the body
-			_body->DestroyFixture(oldShape);
-		}
-	}
-	else
-	{
-		// get the shape data with the given name
-		b2FixtureDef *oldShapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-		
-		// remove the old shape data from the list
-		[_shapeData removeObjectForKey:shapeName];
-		
-		// if the shape data was already in the list
-		if (oldShapeData)
-		{
-			// if the shape exists
-			if (oldShapeData->shape)
-			{
-				// delete the shape
-				delete oldShapeData->shape;
-				oldShapeData->shape = NULL;
-			}
-			
-			// delete the old shape data
-			delete oldShapeData;
-		}
-	}
-}
-
--(void) removeShapes
-{
-	// if body exists
-	if (_body)
-	{
-		// for each shape in the body
-		NSArray *shapeNames = [_shapes allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape
-			b2Fixture *shape = (b2Fixture *)[[_shapes objectForKey:shapeName] pointerValue];
-			
-			// remove the shape from the list
-			[_shapes removeObjectForKey:shapeName];
-			
-			// remove the shape from the body
-			_body->DestroyFixture(shape);
-		}
-		
-		// clear the list
-		[_shapes removeAllObjects];
-	}
-	else
-	{
-		// for each shape data in the body
-		NSArray *shapeNames = [_shapeData allKeys];
-		for (NSString *shapeName in shapeNames)
-		{
-			// get the shape data
-			b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-			
-			// remove the shape data from the list
-			[_shapeData removeObjectForKey:shapeName];
-			
-			// if the shape exists
-			if (shapeData->shape)
-			{
-				// delete the shape
-				delete shapeData->shape;
-				shapeData->shape = NULL;
-			}
-			
-			// delete the shape data
-			delete shapeData;
-		}
-		
-		// clear the list
-		[_shapeData removeAllObjects];
-	}
-}
-
--(void) addedToJoint:(CCSprite<CCJointSprite> *)sprite
-{
-	// if the body does not yet exist
-	if (!_body)
-	{
-		// if joint list does not exist
+	if (!self.body) {
 		if (!_joints)
-		{
 			_joints = [[CCArray array] retain];
-		}
 		
-		// add the joint to the list of joints
 		[_joints addObject:sprite];
 	}
 	else
-	{
-		// activate the joint
 		[sprite onEnter];
-	}
-
 }
 
+- (NSString *)shapeDescription {
+    
+    NSMutableArray *strings = [NSMutableArray array];
+    
+    for(NSString *name in _shapes) {
+        [strings addObject:[NSString stringWithFormat:@"%@: %@", name, [[_shapes objectForKey:name] shapeDescription]]];
+    }
+    for(CCNode *node in self.children) {
+        if([node isKindOfClass:[CCBodySprite class]]) {
+            [strings addObject:[(CCBodySprite *)node shapeDescription]];
+        }
+    }
+
+    return [strings componentsJoinedByString:@", "];
+}
+
+- (CGPoint)setPhysicsPosition {
+    
+    b2Vec2 b2Position = b2Vec2(self.position.x/PTM_RATIO,
+                               self.position.y/PTM_RATIO);
+    float32 b2Angle = -1 * CC_DEGREES_TO_RADIANS(self.rotation);
+    
+   
+    b2Vec2 vec;
+    if(self.body){
+        self.body->SetTransform(b2Position, b2Angle);
+    }else{
+        self.bodyDef->position = b2Position;
+
+    }
+}
+- (CGPoint)physicsPosition {
+    
+    b2Vec2 vec;
+        
+    if(self.body){
+       vec = self.body->GetPosition();
+    }else{
+       vec = self.bodyDef->position;       
+    }
+ 
+    return CGPointMake(vec.x, vec.y);
+}
+
+
+#pragma mark - Body Management
 -(void) destroyBody
 {
-	// if body exists
-	if (_body)
-	{
+	if (self.body) {
+        
 		// for each attached joint
 		b2JointEdge *nextJoint;
-		for (b2JointEdge *joint = _body->GetJointList(); joint; joint = nextJoint)
+		for (b2JointEdge *joint = self.body->GetJointList(); joint; joint = nextJoint)
 		{
 			// get the next joint ahead of time to avoid a bad pointer when joint is destroyed
 			nextJoint = joint->next;
 			
 			// get the joint sprite
-			CCSprite<CCJointSprite> *sprite = (CCSprite<CCJointSprite> *)(joint->joint->GetUserData());
+			CCJointSprite *sprite = (CCJointSprite *)(joint->joint->GetUserData());
 			
-			// if the sprite exists
 			if (sprite)
-			{
-				// remove the sprite
 				[sprite removeFromParentAndCleanup:YES];
-			}
 		}
 		
 		// destroy the body
-		_body->GetWorld()->DestroyBody(_body);
-		_body = NULL;
+		self.body->GetWorld()->DestroyBody(self.body);
+		self.body = NULL;
+        self.bodyDef = new b2BodyDef();
+        
+        [self removeShapes];
 	}
-	
-	// be inactive
-	_active = false;
 }
 
 -(void) createBody
 {
-	// if physics manager exists
-	if (_world)
-	{
-		// if the world exists
-		if (_world.world)
-		{
-			// if body exists
-			if (_body)
-			{
-				// destroy it first
-				[self destroyBody];
-			}
-			
-			// set up the data for the body
-			b2BodyDef bodyData;
-			bodyData.linearVelocity = b2Vec2(_velocity.x / PTM_RATIO, _velocity.y / PTM_RATIO);
-			bodyData.angularVelocity = CC_DEGREES_TO_RADIANS(-_angularVelocity);
-			bodyData.angularDamping = _angularDamping;
-			bodyData.linearDamping = _damping;
-			bodyData.position = b2Vec2(position_.x / PTM_RATIO, position_.y / PTM_RATIO);
-			bodyData.angle = CC_DEGREES_TO_RADIANS(-rotation_);
-			_active = true;
-			bodyData.active = _active;
-			bodyData.allowSleep = _sleepy;
-			bodyData.awake = _awake;
-			bodyData.fixedRotation = _fixed;
-			bodyData.bullet = _bullet;
-			bodyData.type = (_physicsType == kStatic ? b2_staticBody :
-							  _physicsType == kKinematic ? b2_kinematicBody :
-							  _physicsType == kDynamic ? b2_dynamicBody :
-							  bodyData.type);
-			
-			// create the body
-			_body = _world.world->CreateBody(&bodyData);
-			
-			// give it a reference to this sprite
-			_body->SetUserData(self);
-			
-			// add all the shapes to the body
-			NSArray *shapeNames = [_shapeData allKeys];
-			for (NSString *shapeName in shapeNames)
-			{
-				// get the shape data
-				b2FixtureDef *shapeData = (b2FixtureDef *)[[_shapeData objectForKey:shapeName] pointerValue];
-				
-				// set the collision type of the shape
-				shapeData->filter.categoryBits = _collisionType;
-				shapeData->filter.maskBits = _collidesWithType;
-				
-				// add the shape to the body and get the shape object
-				b2Fixture* shapeObject = _body->CreateFixture(shapeData);
-				
-				// add the shape object to the map
-				[_shapes setObject:[NSValue valueWithPointer:shapeObject] forKey:shapeName];
-				
-				// remove the shape data from the list
-				[_shapeData removeObjectForKey:shapeName];
-				
-				// if the shape exists
-				if (shapeData->shape)
-				{
-					// delete the shape
-					delete shapeData->shape;
-					shapeData->shape = NULL;
-				}
-				
-				// delete the shape data
-				delete shapeData;
-			}
-			
-			// clear the old shape data
-			[_shapeData removeAllObjects];
-			
-			// if there are any joints
-			if (_joints)
-			{
-				// for each associated joint sprite
-				CCSprite *sprite;
-				CCARRAY_FOREACH(_joints, sprite)
-				{
-					// if the joint is already added
-					if (sprite.parent)
-					{
-						// reactivate the joint?
-						[sprite onEnter];
-					}
-				}
-			}
-			
-			// update every frame
-			[self scheduleUpdate];
-		}
-	}
+    if (_world)
+    {
+        if (self.body) [self destroyBody];
+         
+        CGPoint position = _position;
+        
+        if([_parent isKindOfClass:[CCBodySprite class]])
+            position = CGPointApplyAffineTransform(_position, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
+        
+        self.bodyDef->position = b2Vec2(position.x * InvPTMRatio, position.y * InvPTMRatio);
+       // self.bodyDef->position.Set(0.0f, 10.0f);
+        self.body = _world->CreateBody(self.bodyDef);
+        
+        delete self.bodyDef;
+        self.bodyDef = NULL;
+        
+        self.body->SetUserData(self);
+        
+        for (NSString *key in [_shapes allKeys])
+            [[_shapes objectForKey:key] addFixtureToBody:self userData:key];
+        
+        for (CCSprite *sprite in _joints)
+            if (sprite.parent) [sprite onEnter];
+        
+        [self scheduleUpdate];
+    }
+}
+
+
+#pragma mark - NSObject
+- (void) dealloc {
+	[self destroyBody];
+    [_joints release], _joints = nil;
+    [_shapes release], _shapes = nil;
+    self.startContact = nil;
+    self.onTouchDownBlock = nil;
+    self.endContact = nil;
+    self.collision = nil;
+	[super dealloc];
 }
 
 -(id) init
 {
 	if ((self = [super init]))
 	{
-		_physicsType = kDynamic;
-		_collisionType = 0xFFFF;
-		_collidesWithType = 0xFFFF;
-		_active = NO;
-		_sleepy = YES;
-		_awake = YES;
-		_solid = YES;
-		_fixed = NO;
-		_bullet = NO;
-		_density = 1.0;
-		_friction = 0.3;
-		_bounce = 0.2;
-		_damping = 0.0;
-		_angularDamping = 0.0;
-		_angularVelocity = 0.0;
-		_velocity = CGPointZero;
-		_body = NULL;
-		_joints = nil;
-		_world = nil;
-		
+
+        self.bodyDef = new b2BodyDef();
+        
+        self.bodyDef->type = b2_dynamicBody;
+        self.bodyDef->awake = YES;
+        self.bodyDef->allowSleep = YES;
+        self.bodyDef->userData = self;
+
+        _wasActive = self.bodyDef->active = YES;
+
 		_shapes = [[NSMutableDictionary alloc] init];
-		_shapeData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
 
+-(id) initWithWorld:(b2World*)world bodyType:(b2BodyType)type {
+    
+	if ((self = [super init]))
+	{
+
+        self.bodyDef = new b2BodyDef();
+        _world = world;
+        self.bodyDef->type = type;
+        self.bodyDef->awake = YES;
+        self.bodyDef->allowSleep = YES;
+        self.bodyDef->userData = self;
+        
+        _wasActive = self.bodyDef->active = YES;
+        
+        _shapes = [[NSMutableDictionary alloc] init];
+
+        [self createBody];
+	}
+	return self;
+}
+-(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef 
+{
+
+    if (self.body) [self destroyBody];
+    
+    self.bodyDef = new b2BodyDef(bodyDef);
+    _wasActive = self.bodyDef->active = YES;
+    _world = world;
+
+    
+    [self createBody];
+
+}
+
+
+
+#pragma mark - Updating
 -(void) update:(ccTime)delta
 {
-	// if body exists
-	if (_body)
-	{
-		// check if the body is active
-		BOOL wasActive = _active;
-		_active = _body->IsActive();
-		
-		// if the body is or was active
-		if (_active || wasActive)
-		{
-			// update the display properties to match
-			b2Vec2 bodyPosition = _body->GetPosition();
-			[self setPosition:ccp(bodyPosition.x * PTM_RATIO, bodyPosition.y * PTM_RATIO)];
-			[self setRotation:CC_RADIANS_TO_DEGREES(-_body->GetAngle())];
-			
-			// check if the body is awake
-			_awake = _body->IsAwake();
-		}
-	}
+	if(!self.body)
+        return;
+    
+    BOOL active = self.body->IsActive();
+    
+    if(!active && !_wasActive)
+        return;
+    
+
+    b2Vec2 newBodyPos = self.body->GetPosition();
+    CGPoint position = ccp(newBodyPos.x * PTMRatio, newBodyPos.y * PTMRatio);
+    
+    if([_parent isKindOfClass:[CCBodySprite class]])
+        position = CGPointApplyAffineTransform(position, [(CCBodySprite *)_parent worldTransform]);
+    
+    if(!CGPointEqualToPoint(position, _position)) {
+      //  NSLog(@"_scaleFactorMoving:%f",self.scaleFactorMoving);
+        [super setPosition: ccpMult(position,InvPTMRatio)];
+         
+       ;
+        [self recursiveMarkTransformDirty];
+    }
+    
+    [super setRotation:CC_RADIANS_TO_DEGREES(-self.body->GetAngle())];
+    
+    _wasActive = active;
 }
 
-- (void) dealloc
-{
-	// remove body from world
-	[self destroyBody];
-	
-	// remove joints array
-	if (_joints)
-		[_joints release];
-	
-	// remove the shape dictionary
-	if (_shapes)
-		[_shapes release];
-	
-	// remove the shape data dictionary
-	if (_shapeData)
-		[_shapeData release];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
 
--(void) onEnter
-{
+#pragma mark - CCNode
+-(void) onEnter {
 	[super onEnter];
 	
-	// skip if the body already exists
-	if (_body)
+	if (self.body)
 		return;
 	
-	// if physics manager is not defined
-	if (!_world)
-	{
-		// if parent is a physics manager
-		if ([parent_ isKindOfClass:[CCWorldLayer class]])
-		{
-			// use the parent as the physics manager
-			_world = (CCWorldLayer *)parent_;
-		}
-	}
+	if (!_worldLayer && [_parent isKindOfClass:[CCWorldLayer class]])
+        self.worldLayer = (CCWorldLayer *)_parent;
 	
-	// if physics manager is defined now
 	if (_world)
-	{
-		// create the body
 		[self createBody];
-	}
 }
 
--(void) onExit
-{
+-(void) onExit {
+    [self destroyBody];
+	self.worldLayer = nil;
 	[super onExit];
-	
-	// destroy the body
-	[self destroyBody];
-	
-	// get rid of the physics manager reference too
-	_world = nil;
 }
 
--(void) onOverlapBody:(CCBodySprite *)sprite
-{
+
+-(void)setScale:(float)scale{
+    [super setScale:scale];
+    
+    
 }
 
--(void) onSeparateBody:(CCBodySprite *)sprite
+
+// N.B. when initialising this class with super methods - in order to get the setPosition to catch - you must overide these methods
+/*+(id)spriteWithTexture:(CCTexture2D*)texture
 {
+	return [[[self alloc] initWithTexture:texture] autorelease];
 }
 
--(void) onCollideBody:(CCBodySprite *)sprite withForce:(float)force withFrictionForce:(float)frictionForce
++(id)spriteWithTexture:(CCTexture2D*)texture rect:(CGRect)rect
 {
+	return [[[self alloc] initWithTexture:texture rect:rect] autorelease];
 }
+
++(id)spriteWithFile:(NSString*)filename
+{
+	return [[[self alloc] initWithFile:filename] autorelease];
+}*/
+
++(id)spriteWithFile:(NSString*)filename rect:(CGRect)rect
+{
+	return [[[self alloc] initWithFile:filename rect:rect] autorelease];
+}
+
+/*+(id)spriteWithSpriteFrame:(CCSpriteFrame*)spriteFrame
+{
+	return [[[self alloc] initWithSpriteFrame:spriteFrame] autorelease];
+}
+
++(id)spriteWithSpriteFrameName:(NSString*)spriteFrameName
+{
+	CCSpriteFrame *frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName];
+    
+	NSAssert1(frame!=nil, @"Invalid spriteFrameName: %@", spriteFrameName);
+	return [self spriteWithSpriteFrame:frame];
+}
+
++(id)spriteWithCGImage:(CGImageRef)image key:(NSString*)key
+{
+	return [[[self alloc] initWithCGImage:image key:key] autorelease];
+}*/
+
 
 @end

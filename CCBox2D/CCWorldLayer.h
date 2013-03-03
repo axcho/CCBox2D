@@ -22,17 +22,26 @@
  
  */
 
-#import "Box2D.h"
 #import "cocos2d.h"
 
 // pixels to meters ratio
-#define PTM_RATIO 32
+#define PTM_RATIO 32.0f
 
 // grams to kilograms ratio
-#define GTKG_RATIO 1000
+#define GTKG_RATIO 1
 
 
 @class CCBodySprite;
+
+
+typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
+
+@protocol CCDestructionListenizer
+
+//-(void) sayGoodbye(b2Fixture* fixture);
+//-(void) sayGoodbye(b2Joint* joint);
+
+@end
 
 @protocol ContactListenizer
 
@@ -42,44 +51,27 @@
 
 @end
 
-class ContactConduit : public b2ContactListener
-{
-public:
-    ContactConduit(id<ContactListenizer> listenizer);
-    
-	virtual void BeginContact(b2Contact* contact);
-	virtual void EndContact(b2Contact* contact);
-	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
-	
-	id<ContactListenizer> listener;
-};
-
 @interface CCWorldLayer : CCLayer <ContactListenizer>
 {
 	int _positionIterations, _velocityIterations;
 	CGPoint _gravity;
-	b2World *_world;
-	
-	ContactConduit *_conduit;
 }
 
+// size of box around the point used for hit testing in -bodyAtPoint:queryTest:; defaults to 16x16 points
+// smallest value supported is 2x2
+@property (nonatomic) CGSize hitTestSize;
+
+@property (nonatomic) CGPoint gravity;
 @property (nonatomic) int positionIterations;
 @property (nonatomic) int velocityIterations;
-@property (nonatomic) CGPoint gravity;
-@property (nonatomic, readonly) b2World *world;
+@property (nonatomic) BOOL debugDrawing;
 
--(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+@property (nonatomic, readonly) BOOL locked;
 
-@end
+// queryTest should return YES to continue searching
+- (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 
-@protocol CCJointSprite
-
-@property (nonatomic) BOOL fixed;
-@property (nonatomic, readonly) b2Joint *joint;
-@property (nonatomic, readonly) CCBodySprite *body1;
-@property (nonatomic, readonly) CCBodySprite *body2;
-@property (nonatomic, assign) CCWorldLayer *world;
++ (void)setPixelsToMetresRatio:(CGFloat)ratio;
++ (CGFloat)pixelsToMetresRatio;
 
 @end

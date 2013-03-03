@@ -32,47 +32,9 @@ If you want to see how CCBox2D works in an actual sample project, you can try ou
 If you don't have Xcode at all, you can download it here for free:
 http://developer.apple.com/xcode/
 
-INSTRUCTIONS FOR XCODE 3
 
-If you have Xcode 3, you'll need cocos2d v1.0.0-beta for iPhone:
-http://www.cocos2d-iphone.org/archives/1404
 
-Follow the instructions here to download and install it:
-http://www.cocos2d-iphone.org/wiki/doku.php/prog_guide:lesson_1._install_test
 
-Once you've run install-templates.sh according to those instructions, this folder will have been created for you automatically:
-~/Library/Application Support/Developer/Shared/Xcode/Project Templates/cocos2d 1.0.0/
-
-Now you are ready to install CCBox2D.
-
-Inside the "Xcode 3" folder, there is a folder called "cocos2d CCBox2D Application" - that's the project template.
-
-To install it, copy the "cocos2d CCBox2D Application" folder into ~/Library/Application Support/Developer/Shared/Xcode/Project Templates/cocos2d 1.0.0/ alongside the other cocos2d template folders.
-
-Then whenever you start a new project in Xcode 3, you can click on the "cocos2d 1.0.0" category under User Templates, and choose "cocos2d CCBox2D Application" as your project template.
-
-This will give you a starting point for working with CCBox2D. If you click the "Build and Run" button, a simple physics demo should appear in the iPhone simulator. You can then poke around in the HelloWorldLayer.mm code to get a feel for how CCBox2D can be used.
-
-INSTRUCTIONS FOR XCODE 4
-
-If you have Xcode 4, you'll need cocos2d v1.0.0-rc for iPhone:
-http://www.cocos2d-iphone.org/archives/1422
-
-Follow the instructions here to download and install it:
-http://www.cocos2d-iphone.org/wiki/doku.php/prog_guide:lesson_1._install_test
-
-Once you've run install-templates.sh according to those instructions, this folder will have been created for you automatically:
-~/Library/Developer/Xcode/Templates/cocos2d/
-
-Now you are ready to install CCBox2D.
-
-Inside the "Xcode 4" folder, there is a folder called "cocos2d_ccbox2d.xctemplate" - that's the project template.
-
-To install it, copy the "cocos2d_ccbox2d.xctemplate" folder into ~/Library/Developer/Xcode/Templates/cocos2d/ alongside the other cocos2d template folders.
-
-Then whenever you start a new project in Xcode 4, you can click on the "cocos2d category under iOS, and choose "cocos2d_ccbox2d" as your project template.
-
-This will give you a starting point for working with CCBox2D. If you click the "Run" button, a simple physics demo should appear in the iPhone simulator. You can then poke around in the HelloWorldLayer.mm code to get a feel for how CCBox2D can be used.
 
 NOTES
 
@@ -86,6 +48,30 @@ http://www.box2d.org/manual.html
 Because the whole point of CCBox2D is to smooth over all the tricky concepts and techniques discussed in the Box2D manual, reading it may just confuse you more. Sadly that's all I can offer so far.
 
 But still, if enough people are interested, who knows what could happen! :)
+
+
+
+
+This will get your project up and running with pods.
+
+Just create a Podfile in your existing project and include the following
+
+
+Podfile
+=======================
+platform :ios, '5.0'
+
+# Using the Default
+pod 'box2d'
+pod 'cocos2d'
+pod 'CCBox2D' , :podspec => 'https://raw.github.com/jdp-global/CCBox2D/master/CCBox2D.podspec'
+
+
+
+run pod install from terminal. 
+
+
+
 
 CREDITS
 

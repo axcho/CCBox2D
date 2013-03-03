@@ -1,45 +1,20 @@
-/*
- 
- CCBox2D for iPhone: https://github.com/axcho/CCBox2D
- 
- Copyright (c) 2011 axcho and Fugazo, Inc.
- 
- This software is provided 'as-is', without any express or implied
- warranty. In no event will the authors be held liable for any damages
- arising from the use of this software.
- 
- Permission is granted to anyone to use this software for any purpose,
- including commercial applications, and to alter it and redistribute it
- freely, subject to the following restrictions:
- 
- 1. The origin of this software must not be misrepresented; you must not
- claim that you wrote the original software. If you use this software
- in a product, an acknowledgment in the product documentation would be
- appreciated but is not required.
- 2. Altered source versions must be plainly marked as such, and must not be
- misrepresented as being the original software.
- 3. This notice may not be removed or altered from any source distribution.
- 
- */
+
 
 #import "CCSpringSprite.h"
 #import "CCBodySprite.h"
+#import "CCBox2DPrivate.h"
+#import <Box2D/Box2D.h>
 
 
-@implementation CCSpringSprite
+@implementation CCSpringSprite {
+    b2DistanceJoint *_distanceJoint;
+}
 
-@synthesize fixed = _fixed;
 @synthesize length = _length;
 @synthesize damping = _damping;
 @synthesize frequency = _frequency;
-@synthesize body1 = _body1;
-@synthesize body2 = _body2;
-@synthesize world = _world;
 
--(b2Joint *) joint
-{
-	return (b2Joint *)_distanceJoint;
-}
+
 
 -(void) setLength:(float)newLength
 {
@@ -49,7 +24,7 @@
 	if (_distanceJoint)
 	{
 		// set the distance joint length
-		_distanceJoint->SetLength(_length / PTM_RATIO);
+		_distanceJoint->SetLength(_length * InvPTMRatio);
 	}
 }
 
@@ -115,7 +90,7 @@
 	if (_world)
 	{
 		// if the world and bodies exist
-		if (_world.world && _body1.body && _body2.body)
+		if (_world && _body1.body && _body2.body)
 		{
 			// if the distance joint exists
 			if (_distanceJoint)
@@ -126,19 +101,20 @@
 			
 			// set up the data for the joint
 			b2DistanceJointDef jointData;
-			b2Vec2 anchor1(_anchor1.x / PTM_RATIO, _anchor1.y / PTM_RATIO);
-			b2Vec2 anchor2(_anchor2.x / PTM_RATIO, _anchor2.y / PTM_RATIO);
+            // TODO: update to support setting joints as children of bodies
+			b2Vec2 anchor1(_anchor1.x * InvPTMRatio, _anchor1.y * InvPTMRatio);
+			b2Vec2 anchor2(_anchor2.x * InvPTMRatio, _anchor2.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor1, anchor2);
 			if (_length >= 0)
-				jointData.length = _length / PTM_RATIO;
+				jointData.length = _length * InvPTMRatio;
 			else
-				_length = jointData.length * PTM_RATIO;
+				_length = jointData.length * PTMRatio;
 			jointData.dampingRatio = _damping;
 			jointData.frequencyHz = _frequency;
 			jointData.collideConnected = true;
 			
 			// create the joint
-			_distanceJoint = (b2DistanceJoint *)(_world.world->CreateJoint(&jointData));
+			_distanceJoint = (b2DistanceJoint *)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_distanceJoint->SetUserData(self);
@@ -162,10 +138,45 @@
 		_distanceJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
-		_world = nil;
+		_worldLayer = nil;
 	}
 	return self;
 }
+
+
+
+-(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1  body2:(CCBodySprite*)body2
+{
+	if ((self = [super init]))
+	{
+		_fixed = NO;
+		_length = -1;
+		_damping = 0;
+		_frequency = 0;
+        //_distanceJoint = distanceJointDef;
+        
+        b2Vec2 anchorA = distanceJointDef.localAnchorA;
+        _anchor1 = CGPointMake(anchorA.x * PTMRatio, anchorA.y * PTMRatio);
+
+        b2Vec2 anchorB = distanceJointDef.localAnchorB;
+        _anchor2 = CGPointMake(anchorB.x * PTMRatio, anchorB.y * PTMRatio);
+		_body1 = body1;
+		_body2 = body2;
+		_worldLayer = nil;
+        _world = world;
+        
+        // if both sprites exist
+       /* if (_body1 && _body2)
+        {
+            // notify them that they are attached to this joint
+            [_body1 addedToJoint:self];
+            [_body2 addedToJoint:self];
+        }*/
+        
+	}
+	return self;
+}
+
 
 -(void) update:(ccTime)delta
 {
@@ -175,10 +186,10 @@
 		// update the anchor position
 		b2Vec2 anchor1 = _distanceJoint->GetAnchorA();
 		b2Vec2 anchor2 = _distanceJoint->GetAnchorB();
-		_anchor1.x = anchor1.x * PTM_RATIO;
-		_anchor1.y = anchor1.y * PTM_RATIO;
-		_anchor2.x = anchor2.x * PTM_RATIO;
-		_anchor2.y = anchor2.y * PTM_RATIO;
+		_anchor1.x = anchor1.x * PTMRatio;
+		_anchor1.y = anchor1.y * PTMRatio;
+		_anchor2.x = anchor2.x * PTMRatio;
+		_anchor2.y = anchor2.y * PTMRatio;
 		
 		// update the display properties to match
 		[self setPosition:ccp((_anchor1.x + _anchor2.x) / 2, (_anchor1.y + _anchor2.y) / 2)];
@@ -192,52 +203,4 @@
 		}
 	}
 }
-
-- (void) dealloc
-{
-	// remove joint from world
-	[self destroyJoint];
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
-
--(void) onEnter
-{
-	[super onEnter];
-	
-	// skip if the joint already exists
-	if (_distanceJoint)
-		return;
-	
-	// if physics manager is not defined
-	if (!_world)
-	{
-		// if parent is a physics manager
-		if ([super.parent isKindOfClass:[CCWorldLayer class]])
-		{
-			// use the parent as the physics manager
-			_world = (CCWorldLayer *)super.parent;
-		}
-	}
-	
-	// if physics manager is defined now
-	if (_world)
-	{
-		// create the joint
-		[self createJoint];
-	}
-}
-
--(void) onExit
-{
-	[super onExit];
-	
-	// destroy the joint
-	[self destroyJoint];
-	
-	// get rid of the physics manager reference too
-	_world = nil;
-}
-
 @end
