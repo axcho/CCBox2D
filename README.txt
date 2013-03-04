@@ -10,7 +10,7 @@ CCBox2D makes it easy to use rigid bodies, springs, and motors in your cocos2d a
 
 CCBodySprite wraps a Box2D b2Body in a cocos2d CCSprite.
 CCMotorSprite wraps a Box2D b2RevoluteJoint in a cocos2d CCSprite.
-CCPistonSprite wraps a Box2D b2PrismaticJoint in a cocose2d CCSprite.
+CCPistonSprite wraps a Box2D b2PrismaticJoint in a cocos2d CCSprite.
 CCSpringSprite wraps a Box2D b2DistanceJoint in a cocos2d CCSprite.
 CCWorldLayer wraps a Box2D b2World in a cocos2d CCLayer.
 
