@@ -4,16 +4,13 @@ CCBox2D is a cocos2d-flavored wrapper for Box2D, written by axcho on behalf of F
 
 In other words, *actual* integrated Box2D support for cocos2d, for the first time ever. Yay, easy physics! :D
 
-The classes I've added are CCBodySprite, CCMotorSprite, CCSpringSprite, and CCWorldLayer. These make up CCBox2D. The rest are not mine and I don't mean to claim them as such. I include them here only so that you can easily test out CCBox2D and understand how it works in a sample project.
-
-The files HelloWorldLayer.h and HelloWorldLayer.mm are modified versions of the originals in the "cocos2d Box2D Application" template, rewritten to use my CCBox2D wrapper instead of straight, unfiltered Box2D.
-
 FEATURES
 
 CCBox2D makes it easy to use rigid bodies, springs, and motors in your cocos2d applications for iOS. It takes the powerful but complicated functionality of the Box2D physics engine, and wraps it all up inside familiar cocos2d objects.
 
 CCBodySprite wraps a Box2D b2Body in a cocos2d CCSprite.
 CCMotorSprite wraps a Box2D b2RevoluteJoint in a cocos2d CCSprite.
+CCPistonSprite wraps a Box2D b2PrismaticJoint in a cocose2d CCSprite.
 CCSpringSprite wraps a Box2D b2DistanceJoint in a cocos2d CCSprite.
 CCWorldLayer wraps a Box2D b2World in a cocos2d CCLayer.
 
@@ -27,14 +24,24 @@ GETTING STARTED
 
 If you just want the CCBox2D code, you can find it in the "CCBox2D" folder.
 
-If you want to see how CCBox2D works in an actual sample project, you can try out the included Xcode project templates. The instructions for getting that to work depends on which version of Xcode you have.
-
-If you don't have Xcode at all, you can download it here for free:
+First of all, you need Xcode to edit and compile your code into an actual app, so if you don't have Xcode at all, you can download it here for free:
 http://developer.apple.com/xcode/
 
+John Pope added support for CocoaPods, so now you can easily combine CCBox2D, Box2D, and cocos2d in your project!
 
+Follow the instructions here to download and install CocoaPods:
+http://cocoapods.org/
 
+Then create a Podfile in your project and include the following:
 
+ platform :ios, '5.0'
+ 
+ pod 'box2d'
+ pod 'cocos2d'
+ pod 'CCBox2D', :podspec => 'https://raw.github.com/axcho/CCBox2D/master/CCBox2D.podspec'
+
+Then run "pod install" from the Mac OS X Terminal. Read this if you need more help:
+https://github.com/CocoaPods/CocoaPods/wiki/A-Podfile
 
 NOTES
 
@@ -42,36 +49,12 @@ Keep in mind that when you create a new class that inherits from one of the CCBo
 
 Also, I apologize for the lack of documentation with CCBox2D! If there's enough interest I might take the time to put some sort of API reference together.
 
-For now, look at the .h files and example project. If you really need to know more about the physics involved, I reluctantly refer you to the Box2D manual:
+If you really need to know more about the physics involved, I reluctantly refer you to the Box2D manual:
 http://www.box2d.org/manual.html
 
 Because the whole point of CCBox2D is to smooth over all the tricky concepts and techniques discussed in the Box2D manual, reading it may just confuse you more. Sadly that's all I can offer so far.
 
 But still, if enough people are interested, who knows what could happen! :)
-
-
-
-
-This will get your project up and running with pods.
-
-Just create a Podfile in your existing project and include the following
-
-
-Podfile
-=======================
-platform :ios, '5.0'
-
-# Using the Default
-pod 'box2d'
-pod 'cocos2d'
-pod 'CCBox2D' , :podspec => 'https://raw.github.com/jdp-global/CCBox2D/master/CCBox2D.podspec'
-
-
-
-run pod install from terminal. 
-
-
-
 
 CREDITS
 
@@ -84,6 +67,12 @@ https://github.com/axcho/CCBox2D
 I wrote CCBox2D as an employee of Fugazo, Inc.
 My boss let me share it with everyone for free! Cool!
 http://www.fugazo.com/
+
+Brent Gulanowski updated CCBox2D to wrap the C++:
+https://github.com/bgulanowski/CCBox2D
+
+John Pope updated CCBox2D to work with CocoaPod:
+https://github.com/jdp-global
 
 Erin Catto wrote the code for Box2D:
 http://www.box2d.org/

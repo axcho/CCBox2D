@@ -36,26 +36,23 @@ typedef enum
 
 typedef void (^OnTouchBlock)();
 
-typedef void (^ContactBlock)(CCBodySprite *other, NSString *shapeName, NSString *otherShapeName);
-typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 friction);
-
-
+typedef void (^ContactBlock)(CCBodySprite* other, NSString* shapeName, NSString* otherShapeName);
+typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 friction);
 
 @interface CCBodySprite : CCSprite
 {
-	CCArray *_joints;
-	//CCWorldLayer *_world;
+	CCArray* _joints;
 	
-	NSMutableDictionary *_shapes;
-    
-    ContactBlock _startContact;
-    ContactBlock _endContact;
-    CollideBlock _collision;
-    
-    CGAffineTransform _worldTransform;
-    
-    BOOL _wasActive;
-    BOOL _worldTransformDirty;
+	NSMutableDictionary* _shapes;
+	
+	ContactBlock _startContact;
+	ContactBlock _endContact;
+	CollideBlock _collision;
+	
+	CGAffineTransform _worldTransform;
+	
+	BOOL _wasActive;
+	BOOL _worldTransformDirty;
 }
 
 @property (nonatomic) PhysicsType physicsType;
@@ -77,14 +74,13 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 @property (nonatomic, readonly) Float32 mass;
 @property (nonatomic, readonly) Float32 inertia;
 @property (nonatomic) CGPoint velocity;
-@property (nonatomic, readonly, copy) NSDictionary *shapes;
+@property (nonatomic, readonly, copy) NSDictionary* shapes;
 
 // -setWorld: recursively sets the world on any body or joint children
-@property (nonatomic, assign) CCWorldLayer *worldLayer;
-@property (nonatomic, assign) b2World *world;
-@property (nonatomic,assign)  b2Body *body;
-@property (nonatomic,assign) b2BodyDef *bodyDef;
-
+@property (nonatomic, assign) CCWorldLayer* worldLayer;
+@property (nonatomic, assign) b2World* world;
+@property (nonatomic,assign)  b2Body* body;
+@property (nonatomic,assign) b2BodyDef* bodyDef;
 
 @property (nonatomic, copy) OnTouchBlock onTouchDownBlock;
 @property (nonatomic, copy) ContactBlock startContact;
@@ -100,17 +96,17 @@ typedef void (^CollideBlock)(CCBodySprite *other, Float32 force, Float32 frictio
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse;
 -(void) applyTorque:(Float32)torque;
 
-- (CCShape *)shapeNamed:(NSString *)name;
-- (void)addShape:(CCShape *)shape named:(NSString *)name;
--(void) removeShapeNamed:(NSString *)name;
+-(CCShape*) shapeNamed:(NSString*)name;
+-(void) addShape:(CCShape*)shape named:(NSString*)name;
+-(void) removeShapeNamed:(NSString*)name;
 -(void) removeShapes;
 
-- (NSString *)shapeDescription;
-- (CGPoint)centerPoint;
+-(NSString*)shapeDescription;
+-(CGPoint)centerPoint;
 
--(void) addedToJoint:(CCJointSprite *)sprite;
+-(void) addedToJoint:(CCJointSprite*)sprite;
 -(void) update:(ccTime)delta;
--(void) createBody; //automatically called - don't use 
+-(void) createBody; // automatically called - don't use 
 
 -(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef;
 @end

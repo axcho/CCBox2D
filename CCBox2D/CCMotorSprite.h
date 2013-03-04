@@ -23,9 +23,7 @@
  */
 
 #import "CCWorldLayer.h"
-
 #import "CCJointSprite.h"
-
 
 @interface CCMotorSprite : CCJointSprite
 {
@@ -41,7 +39,7 @@
 @property (nonatomic) float minRotation;
 @property (nonatomic) float maxRotation;
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor;
 
 @end

@@ -24,7 +24,7 @@
 
 #import "CCBodySprite.h"
 #import "CCMotorSprite.h"
+#import "CCPistonSprite.h"
+#import "CCShape.h"
 #import "CCSpringSprite.h"
 #import "CCWorldLayer.h"
-#import "CCSliderJoint.h"
-#import "CCShape.h"

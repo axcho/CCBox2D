@@ -26,8 +26,9 @@
 #import "CCBodySprite.h"
 #import "CCBox2DPrivate.h"
 
-@implementation CCMotorSprite {
-	b2RevoluteJoint *_revoluteJoint;
+@implementation CCMotorSprite
+{
+	b2RevoluteJoint* _revoluteJoint;
 }
 
 @synthesize running = _running;
@@ -37,9 +38,9 @@
 @synthesize minRotation = _minRotation;
 @synthesize maxRotation = _maxRotation;
 
--(b2Joint *) joint
+-(b2Joint*) joint
 {
-	return (b2Joint *)_revoluteJoint;
+	return (b2Joint*)_revoluteJoint;
 }
 
 -(void) setRunning:(BOOL)newRunning
@@ -114,12 +115,12 @@
 	}
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2
 {
 	[self setBody:sprite1 andBody:sprite2 atAnchor:ccp((sprite1.position.x + sprite2.position.x) / 2, (sprite1.position.y + sprite2.position.y) / 2)];
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor
 {
 	_body1 = sprite1;
 	_body2 = sprite2;
@@ -162,10 +163,10 @@
 			
 			// set up the data for the joint
 			b2RevoluteJointDef jointData;
-            CGPoint anchor = _anchor;
-            
-            if([_parent isKindOfClass:[CCBodySprite class]])
-                anchor = CGPointApplyAffineTransform(_anchor, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
+			CGPoint anchor = _anchor;
+			
+			if ([_parent isKindOfClass:[CCBodySprite class]])
+				anchor = CGPointApplyAffineTransform(_anchor, CGAffineTransformInvert([(CCBodySprite*)_parent worldTransform]));
 
 			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio));
 			jointData.enableMotor = _running;
@@ -177,7 +178,7 @@
 			jointData.collideConnected = false;
 			
 			// create the joint
-			_revoluteJoint = (b2RevoluteJoint *)(_worldLayer.world->CreateJoint(&jointData));
+			_revoluteJoint = (b2RevoluteJoint*)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_revoluteJoint->SetUserData(self);
@@ -213,18 +214,17 @@
 	// if revolute joint exists
 	if (_revoluteJoint)
 	{
-        
-        b2Vec2 newAnchor = _revoluteJoint->GetAnchorA();
-        CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
+		b2Vec2 newAnchor = _revoluteJoint->GetAnchorA();
+		CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
 
-        if([_parent isKindOfClass:[CCBodySprite class]])
-            anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)_parent worldTransform]);
+		if ([_parent isKindOfClass:[CCBodySprite class]])
+			anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite*)_parent worldTransform]);
 		
-        _anchor = anchor;
+		_anchor = anchor;
 		
 		if (!_fixed)
 		{
-			// adjust the angle to zmatch too
+			// adjust the angle to match too
 			[self setRotation:CC_RADIANS_TO_DEGREES(-_revoluteJoint->GetJointAngle())];
 		}
 	}

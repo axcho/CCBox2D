@@ -22,25 +22,25 @@
  
  */
 
-#import "cocos2d.h"
-#import "CCBodySprite.h"
+#import "CCWorldLayer.h"
+#import "CCJointSprite.h"
 
-@interface CCJointSprite : CCSprite
+@interface CCPistonSprite : CCJointSprite
 {
-	CCBodySprite* _body1;
-	CCBodySprite* _body2;
-	CCWorldLayer* _worldLayer;
-	b2World* _world;
-	BOOL _fixed;
+	BOOL _running, _limited;
+	float _motorSpeed, _maxForce, _minTranslation, _maxTranslation;
+	CGPoint _anchor;
+	CGPoint _axis;
 }
 
-@property (nonatomic, readonly) CCBodySprite* body1;
-@property (nonatomic, readonly) CCBodySprite* body2;
-@property (nonatomic, assign) CCWorldLayer* worldLayer;
-@property (nonatomic, assign) b2World* world;
-@property (nonatomic) BOOL fixed;
+@property (nonatomic) BOOL running;
+@property (nonatomic) BOOL limited;
+@property (nonatomic) float speed;
+@property (nonatomic) float power;
+@property (nonatomic) float minTranslation;
+@property (nonatomic) float maxTranslation;
 
--(void) createJoint;
--(void) destroyJoint;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 axis:(CGPoint)axis;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor axis:(CGPoint)axis;
 
 @end

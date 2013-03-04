@@ -23,9 +23,7 @@
  */
 
 #import "CCWorldLayer.h"
-
 #import "CCJointSprite.h"
-
 
 @interface CCSpringSprite : CCJointSprite
 {
@@ -37,11 +35,9 @@
 @property (nonatomic) float damping;
 @property (nonatomic) float frequency;
 
+-(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1 body2:(CCBodySprite*)body2;
 
--(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1  body2:(CCBodySprite*)body2;
-
-
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2;
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2;
 
 @end

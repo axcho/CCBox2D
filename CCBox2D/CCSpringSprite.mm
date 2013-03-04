@@ -1,20 +1,40 @@
-
+/*
+ 
+ CCBox2D for iPhone: https://github.com/axcho/CCBox2D
+ 
+ Copyright (c) 2011 axcho and Fugazo, Inc.
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgment in the product documentation would be
+ appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
 
 #import "CCSpringSprite.h"
 #import "CCBodySprite.h"
 #import "CCBox2DPrivate.h"
 #import <Box2D/Box2D.h>
 
-
-@implementation CCSpringSprite {
-    b2DistanceJoint *_distanceJoint;
+@implementation CCSpringSprite
+{
+	b2DistanceJoint* _distanceJoint;
 }
 
 @synthesize length = _length;
 @synthesize damping = _damping;
 @synthesize frequency = _frequency;
-
-
 
 -(void) setLength:(float)newLength
 {
@@ -52,12 +72,12 @@
 	}
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2
 {
 	[self setBody:sprite1 andBody:sprite2 atAnchor:sprite1.position andAnchor:sprite2.position];
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor1 andAnchor:(CGPoint)anchor2
 {
 	_body1 = sprite1;
 	_body2 = sprite2;
@@ -101,7 +121,6 @@
 			
 			// set up the data for the joint
 			b2DistanceJointDef jointData;
-            // TODO: update to support setting joints as children of bodies
 			b2Vec2 anchor1(_anchor1.x * InvPTMRatio, _anchor1.y * InvPTMRatio);
 			b2Vec2 anchor2(_anchor2.x * InvPTMRatio, _anchor2.y * InvPTMRatio);
 			jointData.Initialize(_body1.body, _body2.body, anchor1, anchor2);
@@ -114,7 +133,7 @@
 			jointData.collideConnected = true;
 			
 			// create the joint
-			_distanceJoint = (b2DistanceJoint *)(_worldLayer.world->CreateJoint(&jointData));
+			_distanceJoint = (b2DistanceJoint*)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_distanceJoint->SetUserData(self);
@@ -143,9 +162,7 @@
 	return self;
 }
 
-
-
--(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1  body2:(CCBodySprite*)body2
+-(id) initWithWorld:(b2World*)world distanceJointDef:(b2FrictionJointDef)distanceJointDef body1:(CCBodySprite*)body1 body2:(CCBodySprite*)body2
 {
 	if ((self = [super init]))
 	{
@@ -153,30 +170,19 @@
 		_length = -1;
 		_damping = 0;
 		_frequency = 0;
-        //_distanceJoint = distanceJointDef;
-        
-        b2Vec2 anchorA = distanceJointDef.localAnchorA;
-        _anchor1 = CGPointMake(anchorA.x * PTMRatio, anchorA.y * PTMRatio);
+		
+		b2Vec2 anchorA = distanceJointDef.localAnchorA;
+		_anchor1 = CGPointMake(anchorA.x * PTMRatio, anchorA.y * PTMRatio);
 
-        b2Vec2 anchorB = distanceJointDef.localAnchorB;
-        _anchor2 = CGPointMake(anchorB.x * PTMRatio, anchorB.y * PTMRatio);
+		b2Vec2 anchorB = distanceJointDef.localAnchorB;
+		_anchor2 = CGPointMake(anchorB.x * PTMRatio, anchorB.y * PTMRatio);
 		_body1 = body1;
 		_body2 = body2;
 		_worldLayer = nil;
-        _world = world;
-        
-        // if both sprites exist
-       /* if (_body1 && _body2)
-        {
-            // notify them that they are attached to this joint
-            [_body1 addedToJoint:self];
-            [_body2 addedToJoint:self];
-        }*/
-        
+		_world = world;
 	}
 	return self;
 }
-
 
 -(void) update:(ccTime)delta
 {
@@ -203,4 +209,5 @@
 		}
 	}
 }
+
 @end

@@ -21,11 +21,11 @@
 #include <TargetConditionals.h>
 
 #ifdef __APPLE__
-    #if TARGET_OS_IPHONE
-        #include <OpenGLES/ES1/gl.h>
-    #else
-        #include <GLUT/glut.h>
-    #endif
+	#if TARGET_OS_IPHONE
+		#include <OpenGLES/ES1/gl.h>
+	#else
+		#include <GLUT/glut.h>
+	#endif
 #else
 	#include "freeglut/freeglut.h"
 #endif
@@ -38,11 +38,11 @@ using namespace std;
 void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
 	glColor4f(color.r, color.g, color.b, 1.0f);
-    
+	
 #if TARGET_OS_IPHONE
-    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
+	glVertexPointer(2, GL_FLOAT, 0, (void*)vertices);
+	glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+	
 #else
 	glBegin(GL_LINE_LOOP);
 	for (int32 i = 0; i < vertexCount; ++i)
@@ -58,12 +58,12 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 	glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
 
 #if TARGET_OS_IPHONE    
-    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+	glVertexPointer(2, GL_FLOAT, 0, (void*)vertices);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
 
-    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
+	glVertexPointer(2, GL_FLOAT, 0, (void*)vertices);
 	glColor4f(color.r, color.g, color.b, 1.0f);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+	glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 
 #else
 	glBegin(GL_TRIANGLE_FAN);
@@ -89,23 +89,23 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 	const int32 k_segments = 16;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
-    
+	
 	glColor4f(color.r, color.g, color.b, 1.0f);
-    
+	
 #if TARGET_OS_IPHONE
-    GLfloat * vertices = new GLfloat[k_segments*2];
-    
-    for(int32 i = 0; i< k_segments; ++i) {
+	GLfloat * vertices = new GLfloat[k_segments*2];
+	
+	for (int32 i = 0; i< k_segments; ++i) {
 		b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        vertices[2*i] = v.x; vertices[2*i+1] = v.y;
+		vertices[2*i] = v.x; vertices[2*i+1] = v.y;
 		theta += k_increment;
-    }
-    
-    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, k_segments);
-    
-    delete [] vertices;
-    
+	}
+	
+	glVertexPointer(2, GL_FLOAT, 0, (void*)vertices);
+	glDrawArrays(GL_LINE_LOOP, 0, k_segments);
+	
+	delete [] vertices;
+	
 #else
 	glBegin(GL_LINE_LOOP);
 	for (int32 i = 0; i < k_segments; ++i)
@@ -123,36 +123,36 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 	const int32 k_segments = 16;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
-    
+	
 	glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
-    
+	
 #if TARGET_OS_IPHONE
-    GLfloat * vertices = new GLfloat[k_segments*2];
-    
-    for(int32 i = 0; i< k_segments; ++i) {
+	GLfloat * vertices = new GLfloat[k_segments*2];
+	
+	for (int32 i = 0; i< k_segments; ++i) {
 		b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        vertices[2*i] = v.x; vertices[2*i+1] = v.y;
+		vertices[2*i] = v.x; vertices[2*i+1] = v.y;
 		theta += k_increment;
-    }
-    
-    glVertexPointer(2, GL_FLOAT, 0, (void *)vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, k_segments);    
+	}
+	
+	glVertexPointer(2, GL_FLOAT, 0, (void*)vertices);
+	glDrawArrays(GL_LINE_LOOP, 0, k_segments);    
 
-    delete [] vertices;
-    
-    
+	delete [] vertices;
+	
+	
 	b2Vec2 p = center + radius * axis;
-    GLfloat line[4];
+	GLfloat line[4];
 
-    line[0] = center.x;
-    line[1] = center.y;
-    line[2] = p.x;
-    line[3] = p.y;
-    
+	line[0] = center.x;
+	line[1] = center.y;
+	line[2] = p.x;
+	line[3] = p.y;
+	
 	glColor4f(color.r, color.g, color.b, 1.0f);
-    glVertexPointer(2, GL_FLOAT, 0, line);
-    glDrawArrays(GL_LINES, 0, 2);
-    
+	glVertexPointer(2, GL_FLOAT, 0, line);
+	glDrawArrays(GL_LINES, 0, 2);
+	
 #else
 	glBegin(GL_TRIANGLE_FAN);
 	for (int32 i = 0; i < k_segments; ++i)
@@ -188,13 +188,13 @@ void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& c
 	glColor4f(color.r, color.g, color.b, 1.0f);
 
 #if TARGET_OS_IPHONE
-    b2Vec2 vertices[2];
-    
-    vertices[0] = p1;
-    vertices[1] = p2;
-    
-    glVertexPointer(2, GL_FLOAT, 0, vertices);
-    glDrawArrays(GL_LINES, 0, 2);
+	b2Vec2 vertices[2];
+	
+	vertices[0] = p1;
+	vertices[1] = p2;
+	
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
+	glDrawArrays(GL_LINES, 0, 2);
    
 #else
 	glBegin(GL_LINES);
@@ -207,23 +207,23 @@ void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& c
 void DebugDraw::DrawTransform(const b2Transform& xf)
 {
 	const float32 k_axisScale = 0.4f;
-    
+	
 #if TARGET_OS_IPHONE
-    b2Vec2 vertices[2];
-    
-    glVertexPointer(2, GL_FLOAT, 0, vertices);
-    
-    vertices[0] = xf.p;
-    vertices[1] = k_axisScale * xf.q.GetXAxis();
-    
-    glDrawArrays(GL_LINES, 0, 2);
-    
-    vertices[1] = vertices[0] + k_axisScale * xf.q.GetYAxis();
+	b2Vec2 vertices[2];
+	
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
+	
+	vertices[0] = xf.p;
+	vertices[1] = k_axisScale * xf.q.GetXAxis();
+	
+	glDrawArrays(GL_LINES, 0, 2);
+	
+	vertices[1] = vertices[0] + k_axisScale * xf.q.GetYAxis();
 
-    glDrawArrays(GL_LINES, 0, 2);
+	glDrawArrays(GL_LINES, 0, 2);
 
 #else
-    b2Vec2 p1 = xf.p, p2;
+	b2Vec2 p1 = xf.p, p2;
 
 	glBegin(GL_LINES);
 	
@@ -244,11 +244,11 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
 	glPointSize(size);
-    
+	
 #if TARGET_OS_IPHONE
-    glVertexPointer(2, GL_FLOAT, 0, &p);
-    glDrawArrays(GL_POINTS, 0, 1);
-    
+	glVertexPointer(2, GL_FLOAT, 0, &p);
+	glDrawArrays(GL_POINTS, 0, 1);
+	
 #else
 	glBegin(GL_POINTS);
 	glColor3f(color.r, color.g, color.b);
@@ -261,10 +261,10 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 void DebugDraw::DrawString(int x, int y, const char *string, ...)
 {
 #if TARGET_OS_IPHONE
-    // FIXME
+	// FIXME
 	
 #else
-    char buffer[128];
+	char buffer[128];
 
 	va_list arg;
 	va_start(arg, string);
@@ -274,10 +274,10 @@ void DebugDraw::DrawString(int x, int y, const char *string, ...)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-    
-    GLfloat params[4];
-    glGetFloatv(GL_VIEWPORT, params);
-    glOrthof(0, params[2], 0, params[3], 1, 2);
+	
+	GLfloat params[4];
+	glGetFloatv(GL_VIEWPORT, params);
+	glOrthof(0, params[2], 0, params[3], 1, 2);
 	int w = glutGet(GLUT_WINDOW_WIDTH);
 	int h = glutGet(GLUT_WINDOW_HEIGHT);
 	gluOrtho2D(0, w, h, 0);
@@ -305,7 +305,7 @@ void DebugDraw::DrawString(int x, int y, const char *string, ...)
 void DebugDraw::DrawString(const b2Vec2& p, const char *string, ...)
 {
 #if TARGET_OS_IPHONE
-    // FIXME
+	// FIXME
 
 #else
 	char buffer[128];
@@ -333,16 +333,16 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
 	glColor4f(c.r, c.g, c.b, 1.0f);
 
 #if TARGET_OS_IPHONE
-    b2Vec2 vertices[4];
+	b2Vec2 vertices[4];
 
-    vertices[0] = b2Vec2(aabb->lowerBound.x, aabb->lowerBound.y);
-    vertices[1] = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
-    vertices[2] = b2Vec2(aabb->upperBound.x, aabb->upperBound.y);
-    vertices[3] = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
-    
-    glVertexPointer(2, GL_FLOAT, 0, vertices);
-    glDrawArrays(GL_LINES, 0, 4);
-    
+	vertices[0] = b2Vec2(aabb->lowerBound.x, aabb->lowerBound.y);
+	vertices[1] = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
+	vertices[2] = b2Vec2(aabb->upperBound.x, aabb->upperBound.y);
+	vertices[3] = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
+	
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
+	glDrawArrays(GL_LINES, 0, 4);
+	
 #else
 	glBegin(GL_LINE_LOOP);
 	glVertex2f(aabb->lowerBound.x, aabb->lowerBound.y);

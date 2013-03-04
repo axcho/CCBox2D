@@ -1,17 +1,34 @@
-//
-//  CCSliderJoint.m
-//  CCBox2DJoints
-//
-//  Created by Chris Lowe on 8/7/11.
-//  Copyright 2011 Chris Lowe. All rights reserved.
-//
-
-#import "CCSliderJoint.h"
+/*
+ 
+ CCBox2D for iPhone: https://github.com/axcho/CCBox2D
+ 
+ Copyright (c) 2011 axcho and Fugazo, Inc.
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgment in the product documentation would be
+ appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
+ 
+#import "CCPistonSprite.h"
 #import "CCBodySprite.h"
 #import "CCBox2DPrivate.h"
 
-@implementation CCSliderJoint {
-    b2PrismaticJoint *_prismaticJoint;
+@implementation CCPistonSprite
+{
+	b2PrismaticJoint* _prismaticJoint;
 }
 
 @synthesize running = _running;
@@ -21,9 +38,9 @@
 @synthesize minTranslation = _minTranslation;
 @synthesize maxTranslation = _maxTranslation;
 
--(b2Joint *) joint
+-(b2Joint*) joint
 {
-	return (b2Joint *)_prismaticJoint;
+	return (b2Joint*)_prismaticJoint;
 }
 
 -(void) setRunning:(BOOL)newRunning
@@ -98,19 +115,18 @@
 	}
 }
 
-
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 axis:(CGPoint)axis
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 axis:(CGPoint)axis
 {
-    CGPoint anchor = ccp((sprite1.position.x + sprite2.position.x) / 2, (sprite1.position.y + sprite2.position.y) / 2);
+	CGPoint anchor = ccp((sprite1.position.x + sprite2.position.x) / 2, (sprite1.position.y + sprite2.position.y) / 2);
 	[self setBody:sprite1 andBody:sprite2 atAnchor:anchor axis:axis];
 }
 
--(void) setBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 atAnchor:(CGPoint)anchor axis:(CGPoint)axis
+-(void) setBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 atAnchor:(CGPoint)anchor axis:(CGPoint)axis
 {
 	_body1 = sprite1;
 	_body2 = sprite2;
 	_anchor = anchor;
-    _axis = axis;
+	_axis = axis;
 	
 	// if both sprites exist
 	if (_body1 && _body2)
@@ -120,7 +136,6 @@
 		[_body2 addedToJoint:self];
 	}
 }
-
 
 -(void) destroyJoint
 {
@@ -150,11 +165,11 @@
 			
 			// set up the data for the joint
 			b2PrismaticJointDef jointData;
-            CGPoint anchor = _anchor;
+			CGPoint anchor = _anchor;
 
-            if([_parent isKindOfClass:[CCBodySprite class]])
-                anchor = CGPointApplyAffineTransform(anchor, CGAffineTransformInvert([(CCBodySprite *)_parent worldTransform]));
-            
+			if ([_parent isKindOfClass:[CCBodySprite class]])
+				anchor = CGPointApplyAffineTransform(anchor, CGAffineTransformInvert([(CCBodySprite*)_parent worldTransform]));
+			
 			jointData.Initialize(_body1.body, _body2.body, b2Vec2(anchor.x * InvPTMRatio, anchor.y * InvPTMRatio), b2Vec2(_axis.x, _axis.y));
 			jointData.enableMotor = _running;
 			jointData.enableLimit = _limited;
@@ -165,7 +180,7 @@
 			jointData.collideConnected = false;
 			
 			// create the joint
-			_prismaticJoint = (b2PrismaticJoint *)(_worldLayer.world->CreateJoint(&jointData));
+			_prismaticJoint = (b2PrismaticJoint*)(_worldLayer.world->CreateJoint(&jointData));
 			
 			// give it a reference to this sprite
 			_prismaticJoint->SetUserData(self);
@@ -180,7 +195,7 @@
 {
 	if ((self = [super init]))
 	{
-        _prismaticJoint = NULL;
+		_prismaticJoint = NULL;
 		_body1 = nil;
 		_body2 = nil;
 		_worldLayer = nil;
@@ -195,12 +210,12 @@
 	{
 		// update the anchor position
 		b2Vec2 newAnchor = _prismaticJoint->GetAnchorA();
-        CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
-        
-        if([_parent isKindOfClass:[CCBodySprite class]])
-            anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite *)_parent worldTransform]);
+		CGPoint anchor = CGPointMake(newAnchor.x * PTMRatio, newAnchor.y * PTMRatio);
 		
-        _anchor = anchor;
+		if ([_parent isKindOfClass:[CCBodySprite class]])
+			anchor = CGPointApplyAffineTransform(anchor, [(CCBodySprite*)_parent worldTransform]);
+		
+		_anchor = anchor;
 		
 		// update the display properties to match
 		[self setPosition:ccp(_anchor.x, _anchor.y)];

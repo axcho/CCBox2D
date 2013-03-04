@@ -30,24 +30,15 @@
 // grams to kilograms ratio
 #define GTKG_RATIO 1
 
-
 @class CCBodySprite;
 
-
-typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
-
-@protocol CCDestructionListenizer
-
-//-(void) sayGoodbye(b2Fixture* fixture);
-//-(void) sayGoodbye(b2Joint* joint);
-
-@end
+typedef BOOL (^QueryTest)(CCBodySprite* bodySprite, NSString* shapeName);
 
 @protocol ContactListenizer
 
--(void) onOverlapBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onSeparateBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2;
--(void) onCollideBody:(CCBodySprite *)sprite1 andBody:(CCBodySprite *)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
+-(void) onOverlapBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2;
+-(void) onSeparateBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2;
+-(void) onCollideBody:(CCBodySprite*)sprite1 andBody:(CCBodySprite*)sprite2 withForce:(float)force withFrictionForce:(float)frictionForce;
 
 @end
 
@@ -69,9 +60,9 @@ typedef BOOL (^QueryTest)(CCBodySprite *bodySprite, NSString *shapeName);
 @property (nonatomic, readonly) BOOL locked;
 
 // queryTest should return YES to continue searching
-- (CCBodySprite *)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
+- (CCBodySprite*)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 
-+ (void)setPixelsToMetresRatio:(CGFloat)ratio;
-+ (CGFloat)pixelsToMetresRatio;
++ (void)setPixelsToMetersRatio:(CGFloat)ratio;
++ (CGFloat)pixelsToMetersRatio;
 
 @end
