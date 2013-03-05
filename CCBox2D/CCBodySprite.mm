@@ -108,6 +108,10 @@
 
 -(void) setCollisionTypes:(NSArray*)collisionTypes
 {
+	// skip if the collision types are the same
+	if (_collisionTypes == collisionTypes)
+		return;
+	
 	// if there was a previous list of collision types
 	if (_collisionTypes)
 	{
@@ -130,22 +134,8 @@
 		// if the world layer exists
 		if (self.worldLayer)
 		{
-			// for each collision type
-			for (NSString* collisionType in _collisionTypes)
-			{
-				// get the index for the collision type
-				NSUInteger index = [[self worldLayer] collisionTypeIndex:collisionType];
-
-				// add it to the collision category
-				_collisionCategory |= 1 << index;
-			}
-			
-			// if the list of collision types is empty
-			if ([_collisionTypes count] == 0)
-			{
-				// collide as everything
-				_collisionCategory = 0xFFFF;
-			}
+			// get the collision type bits
+			_collisionCategory = [[self worldLayer] collisionTypeBits:_collisionTypes];
 			
 			// for each shape in the body
 			for (NSString* name in _shapes)
@@ -173,6 +163,10 @@
 
 -(void) setCollidesWithTypes:(NSArray*)collidesWithTypes
 {
+	// skip if the collides with types are the same
+	if (_collidesWithTypes == collidesWithTypes)
+		return;
+	
 	// if there was a previous list of collides with types
 	if (_collidesWithTypes)
 	{
@@ -195,22 +189,8 @@
 		// if the world layer exists
 		if (self.worldLayer)
 		{
-			// for each collides with type
-			for (NSString* collidesWithType in _collidesWithTypes)
-			{
-				// get the index for the collision type
-				NSUInteger index = [[self worldLayer] collisionTypeIndex:collidesWithType];
-
-				// add it to the collision mask
-				_collisionMask |= 1 << index;
-			}
-			
-			// if the list of collides with types is empty
-			if ([_collidesWithTypes count] == 0)
-			{
-				// collide with everything
-				_collisionMask = 0xFFFF;
-			}
+			// get the collides with type bits
+			_collisionMask = [[self worldLayer] collisionTypeBits:_collidesWithTypes];
 			
 			// for each shape in the body
 			for (NSString* name in _shapes)
@@ -612,7 +592,6 @@
 
 - (CGPoint)physicsPosition
 {
-	
 	b2Vec2 vec;
 	
 	if (self.body)

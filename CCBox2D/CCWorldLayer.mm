@@ -311,6 +311,32 @@ bool QueryCallback::ReportFixture(b2Fixture* fixture)
 	return index;
 }
 
+-(UInt16) collisionTypeBits:(NSSArray*)collisionTypes
+{
+	// reset the collision type bits
+	UInt16 bits = 0;
+	
+	// for each collision type
+	for (NSString* collisionType in collisionTypes)
+	{
+		// get the index for the collision type
+		NSUInteger index = [self collisionTypeIndex:collisionType];
+
+		// add it to the collision type bits
+		bits |= 1 << index;
+	}
+	
+	// if the list of collision types is empty
+	if ([collisionTypes count] == 0)
+	{
+		// collide with everything
+		bits = 0xFFFF;
+	}
+	
+	// return the resulting bits
+	return bits;
+}
+
 +(void) setPixelsToMetersRatio:(CGFloat)ratio
 {
 	NSAssert(ratio > 1.0f, @"A pixels-to-meters ratio of less than 1 is not supported");
