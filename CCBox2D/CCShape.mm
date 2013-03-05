@@ -109,16 +109,13 @@ static b2BlockAllocator* _allocator;
 
 -(Float32) density
 {
-	Float32 density;
-	
 	if (_fixtureDef)
-		density = _fixtureDef->density;
+		return _fixtureDef->density;
 	else if (_fixture)
-		density = _fixture->GetDensity();
+		return _fixture->GetDensity();
 	else
 		THROW_MISSING_FIXTURE_EXCEPTION();
-	
-	return density;
+	return 0;
 }
 
 -(void) setDensity:(Float32)density
@@ -388,7 +385,6 @@ static b2BlockAllocator* _allocator;
 		_fixtureDef->filter.maskBits = [aDecoder decodeIntForKey:@"mask"];
 		_fixtureDef->isSensor = [aDecoder decodeBoolForKey:@"is_sensor"];
 	}
-	
 	return self;
 }
 

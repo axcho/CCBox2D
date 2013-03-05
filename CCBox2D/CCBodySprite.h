@@ -101,8 +101,8 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 -(void) removeShapeNamed:(NSString*)name;
 -(void) removeShapes;
 
--(NSString*)shapeDescription;
--(CGPoint)centerPoint;
+-(NSString*) shapeDescription;
+-(CGPoint) centerPoint;
 
 -(void) addedToJoint:(CCJointSprite*)sprite;
 -(void) update:(ccTime)delta;
