@@ -109,4 +109,5 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 -(void) createBody; // automatically called - don't use 
 
 -(void) configureSpriteForWorld:(b2World*)world bodyDef:(b2BodyDef)bodyDef;
+
 @end

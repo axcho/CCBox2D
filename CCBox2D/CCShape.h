@@ -27,7 +27,6 @@
 
 @class CCBodySprite;
 
-// CCShape represents a fixture definition, which includes a shape
 @interface CCShape : NSObject<NSCoding>
 
 @property (nonatomic, assign) b2FixtureDef* fixtureDef;
@@ -60,4 +59,5 @@
 
 // helpers
 + (CCShape*)polygonWithVecVertices:(b2Vec2*)vertices count:(int)count;
+
 @end
