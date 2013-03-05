@@ -55,7 +55,7 @@
 + (CCShape*)circleWithCenter:(CGPoint)center radius:(Float32)radius;
 + (CCShape*)polygonWithVertices:(CCArray*)shapeVertices;
 + (CCShape*)chainWithVertices:(CGPoint*)chainVertices count:(NSUInteger)count;
-+ (CCShape*)edgeWithVec1:(b2Vec2 )vec1 vec2:(b2Vec2 )vec2;
++ (CCShape*)edgeWithVec1:(b2Vec2)vec1 vec2:(b2Vec2)vec2;
 
 // helpers
 + (CCShape*)polygonWithVecVertices:(b2Vec2*)vertices count:(int)count;
