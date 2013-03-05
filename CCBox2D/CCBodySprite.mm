@@ -30,8 +30,6 @@
 #import "CCJointSprite.h"
 #import "CCBox2DPrivate.h"
 
-#define DEBUGSPRITE 0
-
 #pragma mark -
 
 @implementation CCBodySprite
@@ -289,9 +287,6 @@
 {
 	super.position = newPosition;
 	
-	if (DEBUGSPRITE)
-		NSLog(@"Set new sprite position: %@", NSStringFromCGPoint(newPosition));
-	
 	if (_world)
 	{
 		if (self.body)
@@ -300,9 +295,6 @@
 			
 			if ([_parent isKindOfClass:[CCBodySprite class]])
 				worldPosition = CGPointApplyAffineTransform(newPosition, CGAffineTransformInvert([(CCBodySprite*)_parent worldTransform]));
-			
-			if (DEBUGSPRITE)
-				NSLog(@"Setting new body position: %@", NSStringFromCGPoint(worldPosition));
 			
 			b2Vec2 vec = b2Vec2(worldPosition.x * InvPTMRatio, worldPosition.y * InvPTMRatio);
 			float32 angle = self.body->GetAngle();
@@ -336,9 +328,6 @@
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location asImpulse:(BOOL)impulse
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyForce");
-	
 	if (self.body)
 	{
 		// get force and location in world coordinates
@@ -359,17 +348,11 @@
 
 -(void) applyForce:(CGPoint)force atLocation:(CGPoint)location
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyForce");
-	
 	[self applyForce:force atLocation:location asImpulse:NO];
 }
 
 -(void) applyForce:(CGPoint)force asImpulse:(BOOL)impulse
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyForce asImpulse");
-		
 	// apply force to center of object
 	if (self.body)
 	{
@@ -380,17 +363,11 @@
 
 -(void) applyForce:(CGPoint)force
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyForce");
-	
 	[self applyForce:force asImpulse:NO];
 }
 
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyTorque");
-		
 	if (self.body)
 	{
 		if (impulse)
@@ -406,9 +383,6 @@
 
 -(void) applyTorque:(Float32)torque
 {
-	if (DEBUGSPRITE)
-		NSLog(@"applyTorque");
-	
 	[self applyTorque:torque asImpulse:NO];
 }
 
