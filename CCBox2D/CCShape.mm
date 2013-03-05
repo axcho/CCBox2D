@@ -582,7 +582,7 @@ static b2BlockAllocator* _allocator;
 +(CCShape*) polygonWithVertices:(CCArray*)shapeVertices
 {
 	// the number of vertices should be within limits
-	assert([shapeVertices count] <= b2_maxPolygonVertices);
+	NSAssert([shapeVertices count] <= b2_maxPolygonVertices, @"A polygon can have no more than %d vertices", b2_maxPolygonVertices);
 	
 	// create a new array of vertices
 	b2Vec2 vertices[b2_maxPolygonVertices];

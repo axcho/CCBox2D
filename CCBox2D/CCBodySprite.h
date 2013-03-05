@@ -44,6 +44,10 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 	CCArray* _joints;
 	
 	NSMutableDictionary* _shapes;
+	NSArray* _collisionTypes;
+	NSArray* _collidesWithTypes;
+	UInt16 _collisionCategory;
+	UInt16 _collisionMask;
 	
 	ContactBlock _startContact;
 	ContactBlock _endContact;
@@ -56,6 +60,8 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 }
 
 @property (nonatomic) PhysicsType physicsType;
+@property (nonatomic) NSArray* collisionTypes;
+@property (nonatomic) NSArray* collidesWithTypes;
 
 @property (nonatomic) BOOL active;
 @property (nonatomic) BOOL sleepy;
@@ -79,8 +85,8 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 // -setWorld: recursively sets the world on any body or joint children
 @property (nonatomic, assign) CCWorldLayer* worldLayer;
 @property (nonatomic, assign) b2World* world;
-@property (nonatomic,assign)  b2Body* body;
-@property (nonatomic,assign) b2BodyDef* bodyDef;
+@property (nonatomic, assign) b2Body* body;
+@property (nonatomic, assign) b2BodyDef* bodyDef;
 
 @property (nonatomic, copy) OnTouchBlock onTouchDownBlock;
 @property (nonatomic, copy) ContactBlock startContact;
@@ -95,6 +101,9 @@ typedef void (^CollideBlock)(CCBodySprite* other, Float32 force, Float32 frictio
 -(void) applyForce:(CGPoint)force;
 -(void) applyTorque:(Float32)torque asImpulse:(BOOL)impulse;
 -(void) applyTorque:(Float32)torque;
+
+-(void) setCollisionTypesFromString:(NSString*)collisionTypesString;
+-(void) setCollidesWithTypesFromString:(NSString*)collidesWithTypesString;
 
 -(CCShape*) shapeNamed:(NSString*)name;
 -(void) addShape:(CCShape*)shape named:(NSString*)name;

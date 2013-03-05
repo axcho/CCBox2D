@@ -210,6 +210,9 @@ bool QueryCallback::ReportFixture(b2Fixture* fixture)
 {
 	if ((self = [super init]))
 	{
+		// create list of collision type strings
+		_collisionTypes = [NSMutableArray arrayWithCapacity:16];
+	
 		// set up Box2D stuff for collisions
 		_world = new b2World(b2Vec2());
 		_conduit = new ContactConduit(self);
@@ -254,14 +257,11 @@ bool QueryCallback::ReportFixture(b2Fixture* fixture)
 
 -(void) dealloc
 {
-	// delete Box2D stuff
 	delete _conduit;
 	delete _world;
-	
 	if (_debugDraw)
 		delete _debugDraw;
-	
-	// don't forget to call "super dealloc"
+	[_collisionTypes release], _collisionTypes = nil;
 	[super dealloc];
 }
 
@@ -287,6 +287,28 @@ bool QueryCallback::ReportFixture(b2Fixture* fixture)
 	_world->QueryAABB(&callback, aabb);
 	
 	return bodySprite;
+}
+
+-(NSUInteger) collisionTypeIndex:(NSString*)collisionType
+{
+	// find the index of the collision type
+	NSUInteger index = [_collisionTypes indexOfObject:collisionType];
+	
+	// if the collision type is new
+	if (index == NSNotFound)
+	{
+		// add the collision type to the list
+		[_collisionTypes addObject:collisionType];
+		
+		// get its index
+		index = [_collisionTypes count] - 1;
+	}
+	
+	// make sure the index is small enough
+	NSAssert(index < 16, @"There cannot be more than 16 different collision types");
+	
+	// return the index
+	return index;
 }
 
 +(void) setPixelsToMetersRatio:(CGFloat)ratio

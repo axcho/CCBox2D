@@ -44,6 +44,8 @@ typedef BOOL (^QueryTest)(CCBodySprite* bodySprite, NSString* shapeName);
 
 @interface CCWorldLayer : CCLayer <ContactListenizer>
 {
+	NSMutableArray* _collisionTypes;
+
 	int _positionIterations, _velocityIterations;
 	CGPoint _gravity;
 }
@@ -60,9 +62,10 @@ typedef BOOL (^QueryTest)(CCBodySprite* bodySprite, NSString* shapeName);
 @property (nonatomic, readonly) BOOL locked;
 
 // queryTest should return YES to continue searching
-- (CCBodySprite*)bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
+-(CCBodySprite*) bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
+-(NSUInteger) collisionTypeIndex:(NSString*)collisionType;
 
-+ (void)setPixelsToMetersRatio:(CGFloat)ratio;
-+ (CGFloat)pixelsToMetersRatio;
++(void) setPixelsToMetersRatio:(CGFloat)ratio;
++(CGFloat) pixelsToMetersRatio;
 
 @end

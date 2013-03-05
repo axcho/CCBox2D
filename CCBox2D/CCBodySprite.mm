@@ -50,6 +50,8 @@
 @synthesize physicsPosition;
 
 @dynamic physicsType;
+@dynamic collisionTypes;
+@dynamic collidesWithTypes;
 @dynamic active;
 @dynamic sleepy;
 @dynamic awake;
@@ -99,9 +101,138 @@
 -(PhysicsType) physicsType
 {
 	if (self.body)
-		return (PhysicsType) self.body->GetType();
+		return (PhysicsType)self.body->GetType();
 	else
-		return (PhysicsType) self.bodyDef->type;
+		return (PhysicsType)self.bodyDef->type;
+}
+
+-(void) setCollisionTypes:(NSArray*)collisionTypes
+{
+	// if there was a previous list of collision types
+	if (_collisionTypes)
+	{
+		// release it
+		[_collisionTypes release], _collisionTypes = nil;
+	}
+	
+	// save the new list of collision types
+	_collisionTypes = collisionTypes;
+	
+	// reset the corresponding collision category
+	_collisionCategory = 0;
+	
+	// if a list of collision types is specified
+	if (_collisionTypes)
+	{
+		// keep it around in memory
+		[_collisionTypes retain];
+		
+		// if the world layer exists
+		if (self.worldLayer)
+		{
+			// for each collision type
+			for (NSString* collisionType in _collisionTypes)
+			{
+				// get the index for the collision type
+				NSUInteger index = [[self worldLayer] collisionTypeIndex:collisionType];
+
+				// add it to the collision category
+				_collisionCategory |= 1 << index;
+			}
+			
+			// if the list of collision types is empty
+			if ([_collisionTypes count] == 0)
+			{
+				// collide as everything
+				_collisionCategory = 0xFFFF;
+			}
+			
+			// for each shape in the body
+			for (NSString* name in _shapes)
+			{
+				// get the shape
+				CCShape* shape = [_shapes objectForKey:name];
+			
+				// set the collision category for the shape
+				shape.collisionCategory = _collisionCategory;
+			}
+		}
+		
+	}
+}
+
+-(void) setCollisionTypesFromString:(NSString*)collisionTypesString
+{
+	[self setCollisionTypes:[collisionTypesString componentsSeparatedByString:@","]];
+}
+
+-(NSArray*) collisionTypes
+{
+	return _collisionTypes;
+}
+
+-(void) setCollidesWithTypes:(NSArray*)collidesWithTypes
+{
+	// if there was a previous list of collides with types
+	if (_collidesWithTypes)
+	{
+		// release it
+		[_collidesWithTypes release], _collidesWithTypes = nil;
+	}
+	
+	// save the new list of collides with types
+	_collidesWithTypes = collidesWithTypes;
+	
+	// reset the corresponding collision mask
+	_collisionMask = 0;
+	
+	// if a list of collides with types is specified
+	if (_collidesWithTypes)
+	{
+		// keep it around in memory
+		[_collidesWithTypes retain];
+		
+		// if the world layer exists
+		if (self.worldLayer)
+		{
+			// for each collides with type
+			for (NSString* collidesWithType in _collidesWithTypes)
+			{
+				// get the index for the collision type
+				NSUInteger index = [[self worldLayer] collisionTypeIndex:collidesWithType];
+
+				// add it to the collision mask
+				_collisionMask |= 1 << index;
+			}
+			
+			// if the list of collides with types is empty
+			if ([_collidesWithTypes count] == 0)
+			{
+				// collide with everything
+				_collisionMask = 0xFFFF;
+			}
+			
+			// for each shape in the body
+			for (NSString* name in _shapes)
+			{
+				// get the shape
+				CCShape* shape = [_shapes objectForKey:name];
+			
+				// set the collision mask for the shape
+				shape.collisionMask = _collisionMask;
+			}
+		}
+	}
+}
+
+-(void) setCollidesWithTypesFromString:(NSString*)collisionTypesString
+{
+	[self setCollidesWithTypes:[collisionTypesString componentsSeparatedByString:@","]];
+}
+
+-(NSArray*) collidesWithTypes
+{
+	return _collisionTypes;
 }
 
 -(BOOL) active
@@ -405,6 +536,12 @@
 	}
 	
 	[_shapes setObject:shape forKey:name];
+	
+	// set the collision category and mask if they are explicitly defined
+	if (_collisionTypes)
+		shape.collisionCategory = _collisionCategory;
+	if (_collidesWithTypes)
+		shape.collisionMask = _collisionMask;
 }
 
 -(void) removeShapeNamed:(NSString*)name
@@ -556,6 +693,10 @@
 	[self destroyBody];
 	[_joints release], _joints = nil;
 	[_shapes release], _shapes = nil;
+	if (_collisionTypes)
+		[_collisionTypes release], _collisionTypes = nil;
+	if (_collidesWithTypes)
+		[_collidesWithTypes release], _collidesWithTypes = nil;
 	self.startContact = nil;
 	self.onTouchDownBlock = nil;
 	self.endContact = nil;
@@ -568,7 +709,6 @@
 	if ((self = [super init]))
 	{
 		self.bodyDef = new b2BodyDef();
-		
 		self.bodyDef->type = b2_dynamicBody;
 		self.bodyDef->awake = YES;
 		self.bodyDef->allowSleep = YES;
@@ -577,6 +717,10 @@
 		_wasActive = self.bodyDef->active = YES;
 
 		_shapes = [[NSMutableDictionary alloc] init];
+		_collisionTypes = nil;
+		_collidesWithTypes = nil;
+		_collisionCategory = 0;
+		_collisionMask = 0;
 	}
 	return self;
 }
@@ -586,15 +730,20 @@
 	if ((self = [super init]))
 	{
 		self.bodyDef = new b2BodyDef();
-		_world = world;
 		self.bodyDef->type = type;
 		self.bodyDef->awake = YES;
 		self.bodyDef->allowSleep = YES;
 		self.bodyDef->userData = self;
 		
+		_world = world;
+		
 		_wasActive = self.bodyDef->active = YES;
 		
 		_shapes = [[NSMutableDictionary alloc] init];
+		_collisionTypes = nil;
+		_collidesWithTypes = nil;
+		_collisionCategory = 0;
+		_collisionMask = 0;
 
 		[self createBody];
 	}
