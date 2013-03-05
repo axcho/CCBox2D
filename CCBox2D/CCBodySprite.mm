@@ -604,7 +604,6 @@
 
 		_shapes = [[NSMutableDictionary alloc] init];
 	}
-	
 	return self;
 }
 
@@ -625,7 +624,6 @@
 
 		[self createBody];
 	}
-	
 	return self;
 }
 

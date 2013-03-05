@@ -71,7 +71,8 @@ static b2BlockAllocator* _allocator;
 -(id) initWithShape:(b2Shape*)shape
 {
 	self = [super init];
-	if (self) {
+	if (self)
+	{
 		_fixtureDef = new b2FixtureDef();
 		_fixtureDef->shape = shape;
 		_fixtureDef->filter.categoryBits = 0xFFFF;
@@ -559,6 +560,7 @@ static b2BlockAllocator* _allocator;
 	ccShape.fixtureDef = new b2FixtureDef(mFixtureDef);
 	return [ccShape autorelease];
 }
+
 +(CCShape*) boxWithRect:(CGRect)rect
 {
 	b2PolygonShape* polygon = new b2PolygonShape();
@@ -609,7 +611,6 @@ static b2BlockAllocator* _allocator;
 
 	return [[[self alloc] initWithShape:polygonShape] autorelease];
 }
-
 
 +(CCShape*) polygonWithVecVertices:(b2Vec2*)vertices count:(int)count
 {
