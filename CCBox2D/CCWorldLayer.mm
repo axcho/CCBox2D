@@ -311,7 +311,7 @@ bool QueryCallback::ReportFixture(b2Fixture* fixture)
 	return index;
 }
 
--(UInt16) collisionTypeBits:(NSSArray*)collisionTypes
+-(UInt16) collisionTypeBits:(NSArray*)collisionTypes
 {
 	// reset the collision type bits
 	UInt16 bits = 0;

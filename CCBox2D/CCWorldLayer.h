@@ -64,7 +64,7 @@ typedef BOOL (^QueryTest)(CCBodySprite* bodySprite, NSString* shapeName);
 // queryTest should return YES to continue searching
 -(CCBodySprite*) bodyAtPoint:(CGPoint)point queryTest:(QueryTest)queryTest;
 -(NSUInteger) collisionTypeIndex:(NSString*)collisionType;
--(UInt16) collisionTypeBits:(NSSArray*)collisionTypes;
+-(UInt16) collisionTypeBits:(NSArray*)collisionTypes;
 
 +(void) setPixelsToMetersRatio:(CGFloat)ratio;
 +(CGFloat) pixelsToMetersRatio;
